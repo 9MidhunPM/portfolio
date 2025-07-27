@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-500">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Midhun | Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    #backToTop {
+      transition: opacity 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100 font-sans transition-colors duration-500">
+
+  <!-- THEME TOGGLE BUTTON -->
+  <div class="fixed top-4 right-4 z-50">
+    <button onclick="toggleTheme()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-md">
+      Toggle Theme
+    </button>
+  </div>
+
+  <!-- HERO -->
+  <section class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-br from-blue-100 to-purple-200 dark:from-gray-800 dark:to-gray-700 text-center px-4 transition-colors duration-500">
+    <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Hi, I'm <span class="text-blue-600 dark:text-blue-400">Midhun</span></h1>
+    <p class="text-xl sm:text-2xl mb-6 max-w-xl">Aspiring Software Engineer | Passionate about Game Dev, Systems, and Clean Code.</p>
+    <a href="#about" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-transform transform hover:scale-105">
+      Explore Portfolio
+    </a>
+  </section>
+
+  <!-- ABOUT ME -->
+  <section id="about" class="pt-32 pb-20 px-6 bg-white dark:bg-gray-800 transition-colors" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-4">About Me</h2>
+      <p class="text-lg">Hey! I'm a 3rd semester CSE student at Sahrdaya College of Engineering and Technology. I love building software — whether it’s games, websites, or just playing with systems.</p>
+      <p class="mt-4">Languages I know well: <strong>Python, C, C++</strong>.<br/> Basics of: <strong>HTML, JavaScript</strong>.<br/> I also mess with SDL2 and Raylib when making games.</p>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="py-20 px-6 bg-gray-100 dark:bg-gray-900 transition-colors" data-aos="fade-up">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-4">Education</h2>
+      <p class="text-lg">🎓 B.Tech in Computer Science & Engineering</p>
+      <p class="mt-2">📍 Sahrdaya College of Engineering and Technology</p>
+      <p class="mt-2">🧠 SGPA: 9.53 (S1), 9.80 (S2)</p>
+      <p class="mt-2 font-semibold">📊 CGPA: 9.67</p>
+    </div>
+  </section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-20 px-6 bg-white dark:bg-gray-800 transition-colors" data-aos="fade-up">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-bold mb-8">Projects</h2>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      
+      <!-- Artificial Synapse -->
+      <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-2xl shadow hover:shadow-lg transition" data-aos="zoom-in">
+        <h3 class="text-xl font-semibold mb-2">Artificial Synapse</h3>
+        <p>Simulated neural transmission using logic gates and circuits. Emulates how a real synapse might transmit signals digitally — built as part of a systems project.</p>
+      </div>
+
+      <!-- Job Portal -->
+      <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-2xl shadow hover:shadow-lg transition" data-aos="zoom-in" data-aos-delay="100">
+        <h3 class="text-xl font-semibold mb-2">Job Portal</h3>
+        <p>Login/signup system using AWS stack (Lambda, S3, DynamoDB, API Gateway). Employer and Job Seeker dashboards with real-time listings.</p>
+      </div>
+
+      <!-- C++ Game Projects -->
+      <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-2xl shadow hover:shadow-lg transition" data-aos="zoom-in" data-aos-delay="200">
+        <h3 class="text-xl font-semibold mb-2">C++ Game Projects</h3>
+        <p>Built a Mario-style platformer and an FNF rhythm game from scratch using Raylib — no engines, just raw code. Physics, animation, input — all manually implemented.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+  <!-- TECH STACK -->
+  <section id="tech" class="py-20 px-6 bg-gray-100 dark:bg-gray-900 transition-colors" data-aos="fade-up">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold mb-6">Tech Stack</h2>
+      <p class="text-lg">I’m currently building skills in:</p>
+      <div class="mt-4 flex flex-wrap justify-center gap-4">
+        <span class="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-300 px-4 py-2 rounded-full">Python</span>
+        <span class="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300 px-4 py-2 rounded-full">C</span>
+        <span class="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-300 px-4 py-2 rounded-full">C++</span>
+        <span class="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-300 px-4 py-2 rounded-full">HTML</span>
+        <span class="bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-300 px-4 py-2 rounded-full">JavaScript</span>
+        <span class="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-300 px-4 py-2 rounded-full">Raylib</span>
+        <span class="bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 px-4 py-2 rounded-full">AWS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BACK TO TOP BUTTON -->
+  <button onclick="scrollToTop()" id="backToTop"
+    class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-opacity duration-300 opacity-0 z-50">
+    ↑ Back to Top
+  </button>
+
+  <!-- FOOTER -->
+  <footer class="text-center py-6 bg-white dark:bg-gray-800 text-sm text-gray-500 dark:text-gray-400 transition-colors">
+    &copy; 2025 Midhun. Built with ❤️ and TailwindCSS.
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+
+    const backToTopBtn = document.getElementById("backToTop");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.remove("hidden");
+        backToTopBtn.style.opacity = 1;
+      } else {
+        backToTopBtn.style.opacity = 0;
+        setTimeout(() => backToTopBtn.classList.add("hidden"), 300);
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+    }
+  </script>
+</body>
+</html>
