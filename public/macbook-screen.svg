@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" fill="none">
+  <rect width="1200" height="800" fill="#08090A"/>
+  <rect x="20" y="20" width="1160" height="760" rx="12" fill="#0F1110" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+  <!-- Top bar -->
+  <rect x="20" y="20" width="1160" height="40" rx="12" fill="#16181B"/>
+  <circle cx="50" cy="40" r="6" fill="#FF4D6D"/>
+  <circle cx="70" cy="40" r="6" fill="#EAB308"/>
+  <circle cx="90" cy="40" r="6" fill="#00DC82"/>
+  <text x="120" y="44" fill="#52525B" font-family="monospace" font-size="14">midhun@arch-laptop: ~/projects/wc-predict-26</text>
+
+  <!-- Terminal Content -->
+  <text x="50" y="100" fill="#00DC82" font-family="monospace" font-size="20" font-weight="bold">$ pnpm dev --host 0.0.0.0</text>
+  <text x="50" y="140" fill="#ECEDEE" font-family="monospace" font-size="16">&gt; WC Predict &apos;26 v2.4.0 (FIFA World Cup Prediction Platform)</text>
+  <text x="50" y="170" fill="#52525B" font-family="monospace" font-size="16">  Local:   http://localhost:3000/</text>
+  <text x="50" y="200" fill="#52525B" font-family="monospace" font-size="16">  Network: http://192.168.1.45:3000/</text>
+
+  <rect x="50" y="240" width="1100" height="480" rx="8" fill="#121417" stroke="rgba(0,220,130,0.2)"/>
+  
+  <!-- Dashboard UI preview mockup inside terminal -->
+  <rect x="80" y="270" width="320" height="120" rx="8" fill="#1A1D21"/>
+  <text x="100" y="300" fill="#52525B" font-family="monospace" font-size="14">TOTAL BETS PLACED</text>
+  <text x="100" y="345" fill="#00DC82" font-family="monospace" font-size="36" font-weight="bold">737+</text>
+  <text x="100" y="375" fill="#ECEDEE" font-family="sans-serif" font-size="13">Across 58 active players</text>
+
+  <rect x="430" y="270" width="320" height="120" rx="8" fill="#1A1D21"/>
+  <text x="450" y="300" fill="#52525B" font-family="monospace" font-size="14">ACADEMIC RECORD</text>
+  <text x="450" y="345" fill="#ECEDEE" font-family="monospace" font-size="36" font-weight="bold">9.75 CGPA</text>
+  <text x="450" y="375" fill="#00DC82" font-family="sans-serif" font-size="13">S4 SGPA: 9.53 (Top 1%)</text>
+
+  <rect x="780" y="270" width="340" height="120" rx="8" fill="#1A1D21"/>
+  <text x="800" y="300" fill="#52525B" font-family="monospace" font-size="14">LOCAL AI ENGINE</text>
+  <text x="800" y="345" fill="#FF4D6D" font-family="monospace" font-size="36" font-weight="bold">Thursday 8B</text>
+  <text x="800" y="375" fill="#ECEDEE" font-family="sans-serif" font-size="13">Vulkan GPU · Quantized LLM</text>
+
+  <!-- Live Code / Leaderboard view -->
+  <rect x="80" y="420" width="1040" height="270" rx="8" fill="#16181C"/>
+  <text x="110" y="455" fill="#00DC82" font-family="monospace" font-size="16"># LIVE LEADERBOARD &amp; SYSTEM METRICS</text>
+  <text x="110" y="495" fill="#ECEDEE" font-family="monospace" font-size="15">[01] Midhun P M       7,420 pts  |  FastAPI + Supabase  | STATUS: ONLINE</text>
+  <text x="110" y="530" fill="#ECEDEE" font-family="monospace" font-size="15">[02] MetroMind AI     6,890 pts  |  LangChain + Playwright | STATUS: BOT ACTIVE</text>
+  <text x="110" y="565" fill="#ECEDEE" font-family="monospace" font-size="15">[03] ETLabPro Agent   6,310 pts  |  Flutter + Supabase  | STATUS: SYNCED</text>
+  <text x="110" y="600" fill="#52525B" font-family="monospace" font-size="15">[04] Raylib Engine    5,940 pts  |  C++ Physical Simulation | STATUS: IDLE</text>
+  <text x="110" y="640" fill="#00DC82" font-family="monospace" font-size="14">&gt; 100% test coverage · zero breaking changes · Ready for production deployment</text>
+</svg>
