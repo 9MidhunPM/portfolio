@@ -1,0 +1,39 @@
+---
+title: "WC Predict '26"
+description: "FIFA World Cup 2026 prediction platform for IEEE Sahrdaya — pool and fixed-odds markets, live leaderboard, automated settlement. 58+ players placed 737+ bets."
+tech: ["Next.js", "Appwrite"]
+live: "https://ieeesahrdaya.com/fifa"
+featured: false
+order: 6
+---
+
+## The problem
+
+World Cup season at college means every group chat turns into a prediction contest, scored by someone in a spreadsheet who inevitably gives up by the quarterfinals. As IEEE Sahrdaya's Technical Coordinator, I wanted the branch to run something real instead.
+
+## What I built
+
+WC Predict '26 is a prediction platform hosted on the branch site. Players sign in, bet on match outcomes, and climb a live leaderboard. Settlement is automated — when a match ends, scores update and the leaderboard reshuffles without anyone touching it.
+
+The numbers: 58+ players, 737+ bets placed over the tournament.
+
+Two market types kept it interesting:
+
+- **Pool markets** — everyone's stake goes into a shared pot, winners split it. Rewards being right when others are wrong.
+- **Fixed-odds markets** — you know your payout when you bet. Rewards calling upsets early.
+
+## Tech decisions
+
+**Same stack as the branch site — Next.js and Appwrite.** One auth system, one deployment, no new infrastructure for a month-long event. Players were already signed into ieeesahrdaya.com; making them create another account would have halved participation.
+
+**Automated settlement over admin panels.** Any system that needs a volunteer to manually score 64 matches will fail by the round of 16. Settlement runs itself when results come in.
+
+## What I learned
+
+Betting mechanics are a UX problem before they're a math problem. The fixed-odds vs pool distinction had to be obvious from the bet slip, not explained in a rules page — most players never read one.
+
+Also, leaderboards are engagement rocket fuel. Most of the 737 bets came from people checking their rank and deciding they needed one more prediction to catch a friend.
+
+## Links
+
+- [Live site](https://ieeesahrdaya.com/fifa)

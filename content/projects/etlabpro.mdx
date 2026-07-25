@@ -1,0 +1,43 @@
+---
+title: "EtlabPro"
+description: "Full-stack student companion for Sahrdaya's ETLAB portal — Flutter app, FastAPI backend, attendance risk analysis, CAT projections, self-hosted on Dokploy."
+tech: ["Flutter", "FastAPI", "Supabase", "JWT", "Docker", "Dokploy"]
+github: "https://github.com/9MidhunPM/EtlabPro"
+featured: true
+order: 3
+---
+
+## The problem
+
+Our college runs on ETLAB — attendance, internal marks, timetable, results. It's also a desktop-era web portal that students check multiple times a day from their phones. Every check means logging in, waiting, and tapping through screens designed in another decade. Everyone complained. Nobody built anything.
+
+## What I built
+
+EtlabPro is a full-stack student companion: a Flutter mobile app backed by a FastAPI server that syncs your ETLAB data into proper storage and serves it the way a phone app should.
+
+- **Attendance tracking with risk analysis** — not just "72%" but which subjects put you below the cutoff if you miss the next class.
+- **CAT result breakdown with projection** — what your internal marks mean for where you'll land.
+- **University result history** by semester, timetable, and a monthly attendance calendar.
+- **JWT auth** with access/refresh tokens, and encrypted secure storage for credentials on the device.
+
+The backend scrapes ETLAB — profile, attendance, marks, timetable, university results — normalizes everything into Supabase, and controls refresh policies through a service layer so a hundred students opening the app at once doesn't mean a hundred scrapes hammering the portal.
+
+It's self-hosted in Bangalore on my Dokploy setup: containerized FastAPI/Uvicorn, secrets in environment variables, CORS allow-list, API docs disabled in production.
+
+## Tech decisions
+
+**Scrape once, serve many.** ETLAB is session-based and brittle. The service layer owns sync lifecycle and refresh policy — clients never trigger scrapes directly. Normalized Supabase tables sit between the scraper and the app, so a portal outage doesn't take the app down with it.
+
+**Flutter for the app.** One codebase, and Dart's been good to me. Local cached state keeps the app usable on bad campus wifi — open it in a basement classroom and you still see your data.
+
+**Safe-by-default backend.** Bearer-token dependency checks on every protected route, the Supabase service-role key only ever server-side, concise logging so sensitive data doesn't leak into log files. The security model is in the code, not in a wiki page.
+
+## What I learned
+
+Scraping a session-based ERP is a fight against expiry. Sessions die mid-sync, pages change shape, and the portal goes down exactly when everyone needs it — results day. Retries, re-auth, and graceful staleness matter more than scraping speed.
+
+I also learned to write the schema down first. The database normalization and migration plan lives in `Backend/docs/dbms`, and having it documented saved me twice when the data model had to evolve.
+
+## Links
+
+- [GitHub](https://github.com/9MidhunPM/EtlabPro)

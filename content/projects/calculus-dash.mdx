@@ -1,0 +1,43 @@
+---
+title: "Calculus Dash"
+description: "Geometry Dash-inspired platformer in pure C++ with Raylib — custom physics, gravity inversion, collision system, compiled to the web with Emscripten. Hard as hell."
+tech: ["C++", "Raylib", "Emscripten"]
+github: "https://github.com/9MidhunPM/CalculusDash"
+live: "https://9midhunpm.github.io/CaclulusDash/webBuild"
+featured: false
+order: 7
+---
+
+## The problem
+
+I wanted to know what a game engine actually does. Not use one — understand one. The only honest way I know is to build the thing yourself: game loop, physics, collision, rendering, all of it. Geometry Dash is the perfect target — one button, ruthless difficulty, no room for sloppy code to hide.
+
+## What I built
+
+Calculus Dash is a Geometry Dash-inspired platformer written in pure C++ with Raylib. No engine, no framework magic. Jump over spikes, survive, rage, retry.
+
+Under the hood:
+
+- **Custom physics engine** — gravity, velocity, and jump arcs tuned by hand until the game felt right instead of floaty.
+- **Gravity inversion** — some sections flip you to the ceiling, which sounds simple until your collision code has opinions about it.
+- **A collision system** built from scratch — axis-aligned hitboxes that have to be pixel-fair, because in a game like this, a bullshit death is a bug, not a feature.
+- **World scrolling** — the camera chases the player through the level, with all the coordinate-system bookkeeping that implies.
+
+The desktop build compiles with g++. The web build goes through Emscripten and runs in the browser on GitHub Pages — same C++ code.
+
+## Tech decisions
+
+**Raylib, full stop.** It's a thin, honest C library — opens a window, draws sprites, plays sounds, gets out of the way. Exactly the right level of abstraction when the point is learning what's underneath.
+
+**Emscripten for the web build.** Writing C++ once and shipping it to both desktop and browser felt like cheating. It mostly works — mostly. Getting the build flags right took longer than the first playable version.
+
+## What I learned
+
+Game code punishes sloppiness faster than any other kind I've written. A frame that runs 16ms of physics has no forgiveness for a memory leak or an off-by-one in collision. I came out of this project writing tighter C++ everywhere else.
+
+Also: game feel is engineering. The difference between "responsive" and "mushy" was a few constants and a coyote-time window. Players feel physics tuning even when they can't name it.
+
+## Links
+
+- [Play in your browser](https://9midhunpm.github.io/CaclulusDash/webBuild)
+- [GitHub](https://github.com/9MidhunPM/CalculusDash)

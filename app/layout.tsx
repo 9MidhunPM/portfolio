@@ -1,58 +1,45 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { ScrollToTop } from "@/components/ScrollToTop";
+import { TerminalEasterEgg } from "@/components/TerminalEasterEgg";
+import { SITE } from "@/lib/data";
 import "./globals.css";
-import { SmoothScrolling } from "@/components/SmoothScrolling";
-import { CustomCursor } from "@/components/CustomCursor";
-import { ScrollProgress } from "@/components/ScrollProgress";
 
-const inter = Inter({
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-instrument-serif",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Midhun P M",
-  description:
-    "CS sophomore building AI systems, full-stack apps, and low-level games.",
-  keywords: [
-    "Midhun P M",
-    "Portfolio",
-    "Full-stack Developer",
-    "AI Systems",
-    "Next.js",
-    "React",
-    "Python",
-    "FastAPI",
-    "LLaMA.cpp",
-    "C++",
-  ],
-  authors: [{ name: "Midhun P M" }],
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: `${SITE.name} — Software Developer`,
+    template: `%s | ${SITE.name}`,
+  },
+  description: SITE.description,
   openGraph: {
-    title: "Midhun P M",
-    description:
-      "CS sophomore building AI systems, full-stack apps, and low-level games.",
-    type: "website",
+    title: `${SITE.name} — Software Developer`,
+    description: SITE.description,
+    url: SITE.url,
+    siteName: SITE.name,
     locale: "en_US",
-    siteName: "Midhun P M",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Midhun P M",
-    description:
-      "CS sophomore building AI systems, full-stack apps, and low-level games.",
+    title: `${SITE.name} — Software Developer`,
+    description: SITE.description,
+  },
+  alternates: {
+    canonical: SITE.url,
   },
 };
 
@@ -64,12 +51,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} scroll-smooth`}
+      suppressHydrationWarning
+      className={`${GeistSans.variable} ${GeistMono.variable} ${instrumentSerif.variable}`}
     >
-      <body className="antialiased bg-[#08090A] text-[#ECEDEE] min-h-screen selection:bg-[#00DC82]/30 selection:text-white">
-        <ScrollProgress />
-        <CustomCursor />
-        <SmoothScrolling>{children}</SmoothScrolling>
+      <body className="flex min-h-screen flex-col bg-background font-sans text-foreground">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <ScrollToTop />
+          <TerminalEasterEgg />
+        </ThemeProvider>
       </body>
     </html>
   );

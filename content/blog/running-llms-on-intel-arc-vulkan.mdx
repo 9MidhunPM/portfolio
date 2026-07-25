@@ -1,0 +1,50 @@
+---
+title: "Running local LLMs on an Intel Arc GPU with Vulkan and LLaMA.cpp"
+date: "2026-07-20"
+description: "Most LLM guides assume you have an NVIDIA GPU. I don't. Here's what actually works for running quantized 8B models on Intel Arc using Vulkan-accelerated LLaMA.cpp."
+tags: ["ai", "llm", "llama.cpp", "intel-arc", "vulkan", "local-ai"]
+published: true
+---
+
+Every "run LLMs locally" guide starts the same way: install CUDA. Except I don't have an NVIDIA GPU. My machine runs an Intel Arc, which puts me in underdog territory — capable hardware that most AI tooling politely ignores. I wanted a fully offline assistant anyway, so I made it work. This is what I learned building Thursday, my local-first AI assistant, on Vulkan-accelerated LLaMA.cpp.
+
+## Why local at all
+
+Partly privacy — my notes, files, and shell history shouldn't flow through someone else's API. Partly stubbornness — rate limits and per-token pricing offend me on principle. And partly curiosity: I wanted to know if consumer Intel graphics could actually carry daily AI workloads. Short answer: yes, with caveats.
+
+## The stack that works
+
+LLaMA.cpp is the runtime, and here's the part most guides skip: it has a Vulkan backend. Vulkan is cross-vendor, so the same compute shaders run on NVIDIA, AMD, and Intel. You don't get a prebuilt binary with it enabled — you compile it yourself with the Vulkan flag:
+
+```bash
+cmake -B build -DGGML_VULKAN=1
+cmake --build build --config Release -j
+```
+
+That gives you `llama-server` with GPU offloading through Vulkan. From there, everything else in the ecosystem treats it like any other server, because it exposes an OpenAI-compatible API.
+
+Model choice matters more than hardware. I run quantized 7-8B GGUFs — Qwen2.5-7B-Instruct is my daily driver — at Q4_K_M quantization. That lands around 5GB of weights, fits in VRAM, and generates at a speed that feels instant for chat and tool use. Bigger quants (Q5, Q6) are slightly smarter and noticeably slower. Below Q4, quality falls off a cliff in my experience.
+
+Thursday sits on top of this: an OpenAI-compatible client pointing at the local `llama-server`, a tool-using agent loop, SQLite long-term memory with automatic fact extraction, and a React web UI streaming tokens over SSE. The same client can point at OpenAI or OpenRouter by changing an env var — local by default, cloud when I want a bigger brain.
+
+## What actually matters: context, not compute
+
+The biggest lesson wasn't about the GPU at all. With an 8B local model, context budget is the scarce resource. Attach every tool definition to every turn and you've burned half the window before the model thinks.
+
+Thursday's answer is smart tool filtering — each turn, only the tools relevant to the request get sent. Fewer tokens, faster turns, and the model picks the right tool more often because there are fewer wrong options. This one change did more for responsiveness than any hardware tweak.
+
+## The honest gotchas
+
+Vulkan on Intel Arc works, but it's not CUDA. Some operations still fall back to CPU, and when they do, you feel it — prompt processing on long inputs is the most visible slowdown. The inference itself is fine; it's the ingestion of a big system prompt that makes you wait.
+
+Driver maturity is the other tax. I've hit weirdness after kernel updates that required rebuilding LLaMA.cpp against the new Vulkan headers. Keep your build script close. And don't expect every GGUF to behave identically — different model families quantize differently, and a quant that flies for Llama might crawl for another architecture. Benchmark before committing.
+
+Memory is also real. An 8B model at Q4 plus an 8k context window puts you near the edge of a small GPU. Watch your context budget or watch layers spill to system RAM and your tokens-per-second drop by half.
+
+## Why I'd do it again
+
+The total cost of my setup is the electricity. No API keys in my dotfiles, no usage dashboard, no terms-of-service reading. It works on a train with no wifi — I know, because I've literally done it.
+
+More than that: when the model runs on your metal, you can trust it with different work. Thursday reads my files, runs guarded shell commands, and remembers things across sessions in a local SQLite database. I'd never wire that kind of access to a cloud API comfortably. Local-first isn't just cheaper — it's what makes a real assistant possible.
+
+If you're sitting on an Intel Arc or AMD card thinking local LLMs aren't for you: they are. Compile with the Vulkan flag, grab a Q4 7B, and start. The tooling has gaps, but they're narrower than the guides would have you believe.

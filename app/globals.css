@@ -1,149 +1,95 @@
-@import "tailwindcss";
-
-@theme {
-  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
-
-  --color-bg: #08090A;
-  --color-surface: #0F1110;
-  --color-accent-primary: #00DC82;
-  --color-accent-secondary: #FF4D6D;
-  --color-text-primary: #ECEDEE;
-  --color-text-muted: #52525B;
-  --color-border-card: rgba(255, 255, 255, 0.06);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --bg: #08090A;
-  --surface: #0F1110;
-  --border-card: rgba(255, 255, 255, 0.06);
-  --accent-primary: #00DC82;
-  --accent-secondary: #FF4D6D;
-  --text-primary: #ECEDEE;
-  --text-muted: #52525B;
+  /* Light mode */
+  --background: 250 250 249;
+  --surface: 255 255 255;
+  --foreground: 20 20 20;
+  --muted: 107 107 107;
+  --border: 228 228 226;
+  --accent: 232 255 89;
 }
 
-html {
-  scroll-behavior: smooth;
-  background-color: var(--bg);
-  color: var(--text-primary);
-  font-family: var(--font-inter), system-ui, sans-serif;
+.dark {
+  /* Dark mode (default) */
+  --background: 10 10 10;
+  --surface: 19 19 19;
+  --foreground: 237 237 237;
+  --muted: 138 138 138;
+  --border: 38 38 38;
+  --accent: 232 255 89;
 }
 
-body {
-  background-color: var(--bg);
-  color: var(--text-primary);
-  overflow-x: hidden;
-}
-
-@media (min-width: 768px) {
+@layer base {
   * {
-    cursor: none !important;
+    border-color: rgb(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgb(var(--accent));
+    color: rgb(var(--background));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgb(var(--border));
+    border-radius: 9999px;
+    border: 2px solid rgb(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(var(--muted));
   }
 }
 
-/* Custom Scrollbar - thin green thumb #00DC82 */
-::-webkit-scrollbar {
-  width: 5px;
-}
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
 
-::-webkit-scrollbar-track {
-  background: #08090A;
-}
+  /* Accent stat numbers — readable dark lime on light bg, electric lime on dark */
+  .stat-number {
+    color: rgb(92 124 10);
+  }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 220, 130, 0.35);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 220, 130, 0.8);
-}
-
-/* Typography helper utilities */
-.font-display {
-  font-family: var(--font-space-grotesk), var(--font-sans), sans-serif;
-}
-
-.font-mono {
-  font-family: var(--font-jetbrains), ui-monospace, monospace;
-}
-
-/* Gradient accent text */
-.text-gradient {
-  background: linear-gradient(120deg, #ECEDEE 0%, #00DC82 60%, #ECEDEE 100%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Section radial glow backdrop */
-.section-glow {
-  position: relative;
-}
-.section-glow::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    55% 45% at 50% 0%,
-    rgba(0, 220, 130, 0.06),
-    transparent 70%
-  );
-}
-
-/* Hairline divider that can sit at the top of sections */
-.section-rule {
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.08) 20%,
-    rgba(255, 255, 255, 0.08) 80%,
-    transparent
-  );
-}
-
-/* Keyframes & Animations */
-@keyframes shimmerSlide {
-  to {
-    transform: translate(calc(100cqw - 100%), 0);
+  .dark .stat-number {
+    color: rgb(var(--accent));
   }
 }
 
-.animate-shimmer-slide {
-  animation: shimmerSlide var(--speed, 2s) ease-in-out infinite alternate;
+/* Shiki dual theme (light default, dark overrides) */
+pre code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style, inherit);
 }
 
-@keyframes meteor {
-  0% {
-    transform: rotate(215deg) translateX(0);
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
-    transform: rotate(215deg) translateX(-500px);
-    opacity: 0;
-  }
-}
-
-.animate-meteor {
-  animation: meteor 5s linear infinite;
-}
-
-/* Reduced Motion Override */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.dark pre code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style, inherit);
 }

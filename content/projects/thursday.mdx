@@ -1,0 +1,43 @@
+---
+title: "Thursday"
+description: "Local-first, JARVIS-style AI assistant — quantized 8B LLMs on an Intel Arc GPU via Vulkan, a full toolset, SQLite long-term memory, and a React web UI. Fully offline if you want it to be."
+tech: ["Python", "LLaMA.cpp", "Vulkan", "React", "SQLite", "SSE"]
+github: "https://github.com/9MidhunPM/thursday-local-assistant"
+featured: true
+order: 2
+---
+
+## The problem
+
+Every assistant I used wanted my data in someone else's cloud. My notes, my files, my shell history — all of it flowing through an API I don't control, with rate limits on top. I run quantized 8B models on my Intel Arc GPU via Vulkan for fun anyway, so the obvious question was: how good can a fully local assistant actually get?
+
+## What I built
+
+Thursday is a local-first, JARVIS-style assistant. It talks to any OpenAI-compatible endpoint — llama.cpp on my own machine by default, or cloud providers like OpenAI, OpenRouter, and Groq when I want a smarter model and don't mind the data leaving.
+
+It's a real tool-using agent, not a chat wrapper:
+
+- **Files, apps, and shell** — reads and writes inside sandboxed roots, launches apps, runs shell commands behind a denylist policy.
+- **Web and Spotify** — searches, fetches pages, controls playback.
+- **Memory** — SQLite long-term storage with automatic fact extraction, plus session history. Tell it something once and it remembers across restarts.
+- **Voice** — Edge TTS for speech out, SpeechRecognition for speech in. Optional, but talking to your machine is fun.
+
+Two interfaces: a fast CLI for the terminal, and a React web UI over HTTP with server-sent events — streaming tokens, tool cards showing what the agent is doing, and confirmation prompts for dangerous actions.
+
+## Tech decisions
+
+**One OpenAI-compatible abstraction.** Every provider — local llama-server or a dozen cloud APIs — speaks the same protocol. Swapping brains is an env var, not a refactor. The local path runs `llama-server` built with Vulkan support, which is what makes an Intel Arc GPU usable for inference.
+
+**Smart tool filtering.** Sending every tool definition every turn eats context fast, and context is the scarce resource on a 8B local model. Thursday sends only the tools relevant to the current turn. Faster, cheaper, and the model picks the right tool more often.
+
+**Safety by default, not by documentation.** Loopback-only binding unless you explicitly allow remote. Path tools restricted to `read_roots` and `write_roots`. Shell commands go through a denylist, and destructive ones can require a confirmation click in the web UI. An API token guards the port if you expose it. An agent that can touch your filesystem has to earn trust architecturally.
+
+## What I learned
+
+Context budget is the whole game with local models. A 7-8B model with smart tool filtering and tight prompts outperforms the same model with a giant system prompt and every tool attached. What you leave out matters more than what you put in.
+
+I also learned that memory is harder than it looks. Automatic fact extraction sounds simple until the model confidently stores "user's favorite language is Java" because you asked it to debug one Spring Boot file. Extraction needs conservative prompts and easy ways to forget.
+
+## Links
+
+- [GitHub](https://github.com/9MidhunPM/thursday-local-assistant)

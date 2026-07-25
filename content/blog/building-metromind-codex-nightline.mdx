@@ -1,0 +1,41 @@
+---
+title: "How I built an AI agent for Kochi Metro in a 6-hour sprint"
+date: "2026-07-25"
+description: "What it was like building MetroMind at OpenAI Codex Nightline — the world's first AI build sprint inside a moving metro. What we built, what broke, and what we learned."
+tags: ["ai", "hackathon", "python", "langchain", "openai"]
+published: true
+---
+
+Earlier this month I stood on a moving Kochi Metro train with a laptop, a hotspot, and 6 hours to build something worth presenting. The event was OpenAI Codex Nightline — billed as the world's first AI build sprint inside a moving metro system — with 100 curated builders on board. I came out the other side with MetroMind, an autonomous WhatsApp agent that plans routes, books real tickets, and watches your commute. It placed Top 10. Here's what actually happened.
+
+## The idea
+
+I ride the metro enough to know its rough edges. Planning a trip means cross-referencing station lists, fare tables, and timings in different places. Booking a ticket means a kiosk queue or a web portal that clearly wasn't designed for a phone. And if you commute daily, nothing warns you about disruptions until you're already at the station watching your train leave.
+
+The pitch I wrote on the train: message a WhatsApp number like you'd message a friend — "Aluva to MG Road at 6pm" — and an agent handles the rest. Route, fare, nearest station, ticket booking, the lot.
+
+## The architecture
+
+MetroMind is three decoupled layers. Twilio webhooks bring WhatsApp messages in. An n8n orchestration layer runs a LangChain ReAct agent — the brain — which keeps conversational memory and decides which tool to call. The tools live behind a FastAPI server that does the heavy work.
+
+The route engine was the first win. KMRL publishes GTFS data — the standard transit feed format — so I loaded the whole dataset into memory at startup and exposed endpoints for fares, stations, and travel times. When someone drops their live WhatsApp location, a Haversine query finds the nearest station. No external geocoding API, just math.
+
+The ambitious part was ticket booking. There's no public ticketing API, so MetroMind drives the official KMRL portal with a headless Playwright browser — fills the form, navigates the flow, and gets past Razorpay's bot detection to generate a valid UPI checkout deep-link, which the agent then hands back to you in chat. One tap and you've paid. A regex-based extractor pulls the transaction ID and deep-link out of the page DOM and feeds them to the agent.
+
+On top of that: a commute engine. "Save my commute — Aluva to MG Road, weekdays at 9am" writes a temporal profile to persistent storage, and a cron workflow checks it against GTFS schedules and OpenWeather data, pinging you 15 minutes before departure. Tourist mode rounds it out — "half-day for shopping" becomes an itinerary mapped against stations with Google Maps links.
+
+## What broke
+
+Bot evasion was the wall I hit hardest. Razorpay's detection doesn't care how clever your selectors are. What finally worked wasn't a trick — it was slowing down. Realistic delays between actions, proper session handling, behaving like a patient human instead of a script in a hurry. The moment I stopped trying to be fast, the success rate went to effectively 100%.
+
+GTFS data has sharp edges too. Operational hours in the feed don't always match reality, and my first fare calculations came out wrong because I trusted the matrix blindly instead of validating against a few known trips. Spatial queries are easy until someone shares a location from inside a station — the "nearest station" is the one they're standing in, and the agent has to be smart enough to ask where they're going instead.
+
+And demoing on a moving train means your network is a suggestion. I learned to make the agent resilient to dropped webhook retries — idempotency keys everywhere — because Twilio will absolutely deliver the same message twice when your tunnel hiccups mid-tunnel. The metro kind and the network kind.
+
+## The result
+
+Top 10 out of 100 builders, and a badge I'll probably keep longer than I should. But the better outcome is that MetroMind is real software — the code is public, the architecture is documented, and the agent still works.
+
+The big lesson matches what I keep relearning: agents are 20% model, 80% plumbing. The LLM picked the right tool from the first hour. Everything else — the remaining hours of the sprint — was webhooks, sessions, edge cases, and making failure boring. Six hours sounds short until you try to fit a working ticket-booking agent into it.
+
+Also, WhatsApp is the most underrated interface in software. No install, no signup, no onboarding. People just talked to it. If you're building something for normal humans in India, that's the lesson I'd steal first.

@@ -1,0 +1,39 @@
+---
+title: "ETLab+"
+description: "The original ETLAB companion app — React Native (Expo) with a Spring Boot backend, real-time scraping, analytics, and AI query answering. Best S3 Project."
+tech: ["React Native", "Expo", "Spring Boot", "JWT", "Docker"]
+github: "https://github.com/9MidhunPM/ETLAB-Plus"
+featured: false
+order: 4
+---
+
+## The problem
+
+Same enemy as EtlabPro: the ETLAB portal every Sahrdaya student fights daily. ETLab+ was my first shot at it, back in semester three — before I knew what a service layer was or why you shouldn't let clients trigger scrapes.
+
+## What I built
+
+A cross-platform mobile app in React Native (Expo) with a Spring Boot backend, distributed straight to classmates as an APK:
+
+- **JWT-based auth** against the backend.
+- **Attendance, timetable, and results** — including end-semester results — pulled from ETLAB with real-time scraping.
+- **An analytics dashboard** for the numbers students actually care about.
+- **AI query answering** — ask questions about your own academic data in plain language, backed by a separate AI API service I built alongside it.
+
+It won Best S3 Project.
+
+## Tech decisions
+
+**Spring Boot for the backend.** I wanted to learn Java properly, and nothing teaches you structure like Spring. Controllers per domain — auth, attendance, timetable, results — JWT secret and expiry in environment config, CORS locked down, and a Dockerfile so deployment was one command.
+
+**Expo for the app.** React Native let me reuse what I knew from React, and Expo made APK builds and distribution to classmates painless. No Play Store review queue, just a file people install.
+
+## What I learned
+
+This project taught me that "it works on my phone" and "it works for fifty students" are different engineering problems. Real users on real networks found every unhandled edge: expired sessions, portal timeouts, stale data presented as fresh.
+
+Everything ETLab+ taught me the hard way — sync policies, normalization, separating the scraper from the API surface — became the foundation for EtlabPro, its successor. This is the project I grew up on.
+
+## Links
+
+- [GitHub](https://github.com/9MidhunPM/ETLAB-Plus)

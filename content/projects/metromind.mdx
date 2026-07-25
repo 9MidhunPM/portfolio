@@ -1,0 +1,48 @@
+---
+title: "MetroMind"
+description: "Autonomous AI agent for Kochi Metro — route planning, live GPS lookup, ticket booking with Razorpay bot-evasion, and commute alerts, all over WhatsApp. Top 10 at the OpenAI Codex Nightline Hackathon."
+tech: ["Python", "FastAPI", "LangChain", "n8n", "Playwright", "Twilio", "GTFS", "Docker"]
+github: "https://github.com/9MidhunPM/MetroMind"
+featured: true
+order: 1
+award: "Top 10 Finalist — OpenAI Codex Nightline Hackathon 2026"
+---
+
+## The problem
+
+I built this at the OpenAI Codex Nightline Hackathon — the Kochi Metro AI Sprint, where 100 builders got to create something inside a moving metro system. The brief was open: make Kochi Metro better with AI.
+
+Here's what annoyed me as a rider: planning a trip means checking station lists, fares, and timings in three different places. Booking a ticket means standing at a machine or fighting a portal that assumes you're on a desktop. And if you ride the same route daily, nobody tells you anything useful until you're already late.
+
+## What I built
+
+MetroMind is an autonomous agent that lives entirely in WhatsApp. You talk to it in plain language — "Aluva to MG Road at 6pm" — and it handles the rest:
+
+- **Route planning** from static GTFS data, with live operational hours, travel times, and the fare matrix. Drop your live WhatsApp location and it finds your nearest station with a Haversine spatial query.
+- **Actual ticket booking.** It drives the official KMRL portal with a headless Playwright browser, gets past Razorpay's bot detection, and hands you a UPI checkout deep-link in chat. One tap, ticket paid, QR pass delivered.
+- **Recurring commute alerts.** "Save my commute — Aluva to MG Road, weekdays at 9am." A cron engine watches saved commutes, cross-references GTFS schedules and OpenWeather data, and pings you 15 minutes before departure.
+- **Tourist mode.** "Half-day for shopping" becomes a time-optimized itinerary mapped against metro stations, with Google Maps links for every leg.
+
+It finished Top 10 at the hackathon.
+
+## Tech decisions
+
+**Three layers, fully decoupled.** Twilio webhooks feed an n8n orchestration layer, which runs a LangChain ReAct brain, which calls a FastAPI execution engine. Each piece is independently replaceable — the n8n workflows are exportable JSON, so the whole agent logic can be rebuilt by importing files.
+
+**LangChain ReAct for the brain.** The agent keeps conversational memory, decides which tool workflow to invoke (trip planner, booking, commute manager), and asks clarifying questions when intent is ambiguous instead of guessing a station.
+
+**FastAPI for the heavy lifting.** The `kmrl.json` GTFS dataset loads into memory at startup, so fare lookups, station lists, and Haversine distance queries are effectively instant. The Playwright booking engine runs here too — stealth parameters and human-like timing to survive Razorpay's anti-bot checks, plus a regex-based extractor that pulls transaction IDs and UPI deep-links out of the DOM.
+
+**Docker for deployment.** One container builds the FastAPI server with the full Playwright environment baked in. Booking automation has enough dependencies that "works on my machine" was not an option.
+
+## What I learned
+
+Agents are 20% model, 80% plumbing. The LLM decided the right tool almost immediately; the rest of the time went into webhook payload normalization, phone number edge cases, and making the booking flow idempotent.
+
+Bot evasion is an arms race fought with timing, not code. What actually worked was behaving like a slow human — realistic delays between actions, proper session handling — not clever tricks.
+
+And WhatsApp is an underrated app platform. No install, no signup, no UI to design. People just got it.
+
+## Links
+
+- [GitHub](https://github.com/9MidhunPM/MetroMind)
