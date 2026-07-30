@@ -5,8 +5,7 @@ import { getAllProjects, getAllTags } from "@/lib/projects";
 import { SITE } from "@/lib/data";
 
 const title = "Projects";
-const description =
-  "Projects built by Midhun P M — web apps, AI agents, and self-hosted infrastructure, with case studies for each.";
+const description = `Projects built by ${SITE.name} — web apps, AI agents, and self-hosted infrastructure, with case studies for each.`;
 
 export const metadata: Metadata = {
   title,
@@ -33,8 +32,36 @@ export default function ProjectsPage() {
   const projects = getAllProjects();
   const tags = getAllTags();
 
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: `${title} | ${SITE.name}`,
+    description,
+    url: `${SITE.url}/projects`,
+    author: {
+      "@type": "Person",
+      name: SITE.name,
+      url: SITE.url,
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: projects.length,
+      itemListElement: projects.map((project, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        name: project.title,
+        description: project.description,
+        url: `${SITE.url}/projects/${project.slug}`,
+      })),
+    },
+  };
+
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
       <div className="space-y-14">
         <PageHeader
           eyebrow={title}

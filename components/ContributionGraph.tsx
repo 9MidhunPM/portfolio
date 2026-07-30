@@ -54,13 +54,30 @@ export function ContributionGraph({
   const cell = size === "sm" ? "h-2.5 w-2.5" : "h-3.5 w-3.5";
   const gap = size === "sm" ? "gap-[3px]" : "gap-1";
 
+  // Per-cell data lives in title attributes, which are invisible on touch
+  // and unreliable for assistive tech. Summarise the real numbers instead.
+  const realDays = weeks.flat().filter((day) => day.count >= 0);
+  const totalEvents = realDays.reduce((sum, day) => sum + day.count, 0);
+  const activeDays = realDays.filter((day) => day.count > 0).length;
+  const busiest = realDays.reduce(
+    (max, day) => (day.count > max.count ? day : max),
+    { date: new Date(), count: 0 }
+  );
+
+  const summary =
+    totalEvents === 0
+      ? "No public GitHub activity recorded in the last 90 days."
+      : `${totalEvents} public GitHub events across ${activeDays} active days in the last 90 days. Busiest day: ${busiest.date
+          .toISOString()
+          .slice(0, 10)} with ${busiest.count} events.`;
+
   return (
     <figure className="space-y-3">
       <div className="overflow-x-auto pb-1">
         <div
           className={cn("flex w-max", gap)}
           role="img"
-          aria-label="GitHub activity grid, last 90 days"
+          aria-label={summary}
         >
           {weeks.map((week, wi) => (
             <div key={wi} className={cn("flex flex-col", gap)}>
@@ -83,11 +100,11 @@ export function ContributionGraph({
           ))}
         </div>
       </div>
-      {caption && (
+      {caption ? (
         <figcaption className="font-mono text-[11px] text-muted">
           {caption}
         </figcaption>
-      )}
+      ) : null}
     </figure>
   );
 }

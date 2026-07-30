@@ -10,6 +10,20 @@ export interface Post extends PostMeta {
   content: string;
 }
 
+/**
+ * Last filesystem modification time for a post's source file, used for
+ * accurate sitemap <lastmod> values. Falls back to the frontmatter date.
+ */
+export function getPostLastModified(slug: string): Date {
+  const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
+  try {
+    return fs.statSync(filePath).mtime;
+  } catch {
+    const post = getPost(slug);
+    return post ? new Date(post.date) : new Date();
+  }
+}
+
 export function getAllPosts(): PostMeta[] {
   if (!fs.existsSync(BLOG_DIR)) return [];
 

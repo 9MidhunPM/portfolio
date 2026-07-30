@@ -1,3 +1,5 @@
+import { SITE } from "@/lib/data";
+
 export interface GitHubStats {
   publicRepos: number;
   followers: number;
@@ -10,9 +12,9 @@ export interface GitHubStats {
   recentEvents: number;
 }
 
-const USER = "9midhunpm";
+const USER = SITE.github.replace("https://github.com/", "");
 const HEADERS = {
-  "User-Agent": "midhunpm.in",
+  "User-Agent": new URL(SITE.url).hostname,
   Accept: "application/vnd.github+json",
 };
 

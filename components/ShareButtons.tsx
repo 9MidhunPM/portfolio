@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Link2 } from "lucide-react";
 import { LinkedinIcon } from "@/components/icons";
+import { SOCIAL_SHARE } from "@/lib/data";
 
 export function ShareButtons({
   url,
@@ -12,30 +13,31 @@ export function ShareButtons({
   title: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const resetTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => () => clearTimeout(resetTimer.current), []);
 
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      clearTimeout(resetTimer.current);
+      resetTimer.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       // Clipboard unavailable — no-op
     }
   };
 
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    title
-  )}&url=${encodeURIComponent(url)}`;
-
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-    url
-  )}`;
+  const twitterUrl = SOCIAL_SHARE.twitter(title, url);
+  const linkedinUrl = SOCIAL_SHARE.linkedin(url);
 
   const buttonClass =
     "flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-muted hover:text-foreground";
 
   return (
-    <div className="flex items-center gap-2" aria-label="Share this post">
+    // role="group" is required for aria-label to apply — on a bare div the
+    // label is dropped by assistive tech.
+    <div className="flex items-center gap-2" role="group" aria-label="Share this post">
       <a
         href={twitterUrl}
         target="_blank"
@@ -59,11 +61,14 @@ export function ShareButtons({
       <button
         type="button"
         onClick={copyLink}
-        aria-label={copied ? "Link copied" : "Copy link"}
+        aria-label="Copy link to this post"
         className={buttonClass}
       >
-        {copied ? <Check size={15} /> : <Link2 size={15} />}
+        {copied ? <Check size={15} aria-hidden="true" /> : <Link2 size={15} aria-hidden="true" />}
       </button>
+      <span aria-live="polite" className="sr-only">
+        {copied ? "Link copied to clipboard" : ""}
+      </span>
     </div>
   );
 }

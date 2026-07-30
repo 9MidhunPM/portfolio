@@ -1,33 +1,40 @@
-"use client";
-
-import { motion, type Variants } from "framer-motion";
 import { PostCard } from "@/components/PostCard";
+import { cn } from "@/lib/utils";
 import type { PostMeta } from "@/lib/types";
 
-const container: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-};
-
-const item: Variants = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" } },
-};
+/**
+ * Server component. The staggered reveal is CSS-driven rather than Framer
+ * Motion so the list renders without JS — the previous version started at
+ * opacity: 0 and only revealed on whileInView, which left the blog index
+ * visually empty if hydration ever failed.
+ *
+ * Class names are spelled out in full because Tailwind tree-shakes custom
+ * @layer utilities based on source scanning; a `stagger-${i}` template
+ * would get purged.
+ */
+const STAGGER = [
+  "stagger-1",
+  "stagger-2",
+  "stagger-3",
+  "stagger-4",
+  "stagger-5",
+  "stagger-6",
+] as const;
 
 export function BlogList({ posts }: { posts: PostMeta[] }) {
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      className="grid gap-4 sm:grid-cols-2"
-    >
-      {posts.map((post) => (
-        <motion.div key={post.slug} variants={item}>
+    <div className="grid gap-4 sm:grid-cols-2">
+      {posts.map((post, index) => (
+        <div
+          key={post.slug}
+          className={cn(
+            "animate-fade-up",
+            STAGGER[Math.min(index, STAGGER.length - 1)]
+          )}
+        >
           <PostCard post={post} />
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 }

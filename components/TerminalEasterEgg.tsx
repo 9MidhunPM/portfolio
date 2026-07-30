@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { SITE } from "@/lib/data";
 
 const LINES: { kind: "cmd" | "out" | "gap"; text: string }[] = [
   { kind: "cmd", text: "sudo access --user=midhunpm" },
@@ -14,7 +15,7 @@ const LINES: { kind: "cmd" | "out" | "gap"; text: string }[] = [
   { kind: "cmd", text: "cat current_status.txt" },
   { kind: "out", text: "S5 @ Sahrdaya · CGPA 9.70" },
   { kind: "out", text: "IEEE Technical Coordinator" },
-  { kind: "out", text: "Open to internships" },
+  { kind: "out", text: SITE.availability },
   { kind: "gap", text: "" },
   { kind: "cmd", text: "ls ./projects" },
   { kind: "out", text: "MetroMind/  Thursday/  EtlabPro/" },
@@ -33,12 +34,22 @@ const LINES: { kind: "cmd" | "out" | "gap"; text: string }[] = [
 const TYPE_MS = 14;
 const LINE_PAUSE_MS = 90;
 
+const TERMINAL_BG = "#0A0A0A";
+const TERMINAL_FG = "#EDEDED";
+const TRAFFIC_RED = "#FF5F57";
+const TRAFFIC_YELLOW = "#FEBC2E";
+const TRAFFIC_GREEN = "#28C840";
+
 export function TerminalEasterEgg() {
   const [open, setOpen] = useState(false);
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
   const [done, setDone] = useState(false);
   const buffer = useRef("");
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  /** Element focused before the dialog opened, so focus can be returned. */
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
 
   const clearTimers = () => {
     timers.current.forEach(clearTimeout);
@@ -93,6 +104,9 @@ export function TerminalEasterEgg() {
   }, []);
 
   const launch = useCallback(() => {
+    const active = document.activeElement;
+    restoreFocusRef.current =
+      active instanceof HTMLElement ? active : null;
     setOpen(true);
     runTypewriter();
   }, [runTypewriter]);
@@ -114,6 +128,17 @@ export function TerminalEasterEgg() {
         close();
         return;
       }
+
+      // Trap Tab inside the dialog. The panel holds a single focusable
+      // element (the close button), so cycling is just "keep it focused".
+      if (open && e.key === "Tab") {
+        e.preventDefault();
+        closeButtonRef.current?.focus();
+        return;
+      }
+
+      // Swallow the sudo buffer while open so re-typing does not relaunch.
+      if (open) return;
 
       if (e.key.length === 1) {
         buffer.current = (buffer.current + e.key.toLowerCase()).slice(-8);
@@ -144,6 +169,31 @@ export function TerminalEasterEgg() {
     };
   }, [open]);
 
+  // Move focus into the dialog on open, and back out on close.
+  useEffect(() => {
+    if (!open) return;
+    closeButtonRef.current?.focus();
+    const restoreTo = restoreFocusRef.current;
+    // Captured now rather than read in cleanup — by then the ref may point
+    // at a different node (or none).
+    const panel = panelRef.current;
+    return () => {
+      // Only restore if focus is still inside the dialog we are closing,
+      // otherwise we would steal it from wherever the user moved on to.
+      if (
+        restoreTo &&
+        document.body.contains(restoreTo) &&
+        (document.activeElement === document.body ||
+          panel?.contains(document.activeElement))
+      ) {
+        restoreTo.focus();
+      }
+    };
+  }, [open]);
+
+  // Discard pending typewriter timers if the component unmounts mid-run.
+  useEffect(() => clearTimers, []);
+
   return (
     <AnimatePresence>
       {open && (
@@ -159,19 +209,28 @@ export function TerminalEasterEgg() {
           aria-label="Hidden terminal"
         >
           <motion.div
+            ref={panelRef}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="w-full max-w-xl overflow-hidden rounded-lg border border-border bg-[#0A0A0A] shadow-2xl"
+            className="w-full max-w-xl overflow-hidden rounded-lg border border-border shadow-2xl"
+            style={{ backgroundColor: TERMINAL_BG }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={close}
+                aria-label="Close terminal"
+                className="h-2.5 w-2.5 rounded-full transition-opacity hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                style={{ backgroundColor: TRAFFIC_RED }}
+              />
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: TRAFFIC_YELLOW }} aria-hidden="true" />
+              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: TRAFFIC_GREEN }} aria-hidden="true" />
               <span className="ml-2 font-mono text-[11px] text-muted">
-                visitor@midhunpm.in — zsh
+                visitor@{new URL(SITE.url).hostname} — zsh
               </span>
             </div>
             <div className="min-h-[320px] p-5 font-mono text-[13px] leading-relaxed">
@@ -183,19 +242,20 @@ export function TerminalEasterEgg() {
                     key={i}
                     className={
                       line.startsWith("$ ")
-                        ? "text-[#EDEDED]"
+                        ? ""
                         : "text-accent"
                     }
+                    style={line.startsWith("$ ") ? { color: TERMINAL_FG } : undefined}
                   >
                     {line}
                   </p>
                 )
               )}
               {done && (
-                <p className="text-[#EDEDED]">
+                <p style={{ color: TERMINAL_FG }}>
                   ${" "}
                   <span
-                    className="ml-0.5 inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-accent"
+                    className="ml-0.5 inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-accent motion-reduce:animate-none"
                     aria-hidden="true"
                   />
                 </p>
@@ -206,6 +266,9 @@ export function TerminalEasterEgg() {
                 esc or click outside to close
               </p>
             </div>
+            <span className="sr-only" role="status">
+              {done ? "Terminal output finished." : "Terminal output typing."}
+            </span>
           </motion.div>
         </motion.div>
       )}

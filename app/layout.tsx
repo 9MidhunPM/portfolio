@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Instrument_Serif } from "next/font/google";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -41,6 +41,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE.url,
   },
+};
+
+export const viewport: Viewport = {
+  // Matches --background in globals.css so mobile browser chrome blends in.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FAFAF9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
+  ],
+  colorScheme: "dark light",
 };
 
 export default function RootLayout({

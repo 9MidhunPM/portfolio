@@ -6,8 +6,7 @@ import { SITE } from "@/lib/data";
 export const revalidate = 86400;
 
 const title = "Open";
-const description =
-  "Open stats and numbers from Midhun P M's projects, GitHub, and academic record.";
+const description = `Open stats and numbers from ${SITE.name}'s projects, GitHub, and academic record.`;
 
 export const metadata: Metadata = {
   title,
@@ -110,7 +109,7 @@ export default async function OpenPage() {
                 rel="noopener noreferrer"
                 className="text-foreground underline decoration-border underline-offset-4"
               >
-                github.com/9MidhunPM
+                {SITE.github.replace("https://", "")}
               </a>{" "}
               directly.
             </p>

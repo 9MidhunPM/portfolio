@@ -17,12 +17,12 @@ function AvailabilityBadge({ mobileOnly = false }: { mobileOnly?: boolean }) {
       aria-label="Open to internships — go to contact page"
     >
       <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75 motion-reduce:animate-none" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
       </span>
       {!mobileOnly && (
         <span className="font-mono text-[13px] text-muted transition-colors hover:text-foreground">
-          Open to internships
+          {SITE.availability}
         </span>
       )}
     </Link>

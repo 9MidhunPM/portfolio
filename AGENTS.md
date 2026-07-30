@@ -24,7 +24,7 @@
 - **One accent color:** `#E8FF59` (electric lime), used sparingly — one element per section max, never as a background fill. `#FF4D6D` for form error states only.
 - **Fonts:** Instrument Serif (`--font-instrument-serif`, hero H1 + pull quotes only), Geist Sans (`--font-geist-sans`, all UI), Geist Mono (`--font-geist-mono`, code + tech tags). Geist comes from the `geist` npm package; Instrument Serif from `next/font/google`.
 - **Dark mode is the default**, light mode available, toggled via `next-themes` (`components/theme-provider.tsx`, `defaultTheme="dark"`, `enableSystem={false}`).
-- **No default exports** except `page.tsx`, `layout.tsx`, `template.tsx`, `sitemap.ts`, `robots.ts`.
+- **No default exports** except `page.tsx`, `layout.tsx`, `template.tsx`, `sitemap.ts`, `manifest.ts`, `opengraph-image.tsx`, `apple-icon.tsx`.
 - **No inline styles.** No gradients. No glassmorphism.
 - **Data lives in `lib/data.ts`** (site config, nav). Types in `lib/types/index.ts`. Do not hardcode content in components.
 - **No backend / no Supabase.** The site is fully static. Contact is a mailto link + copy-to-clipboard button (`components/CopyEmailButton.tsx`). Do not re-add a form backend without asking.
@@ -65,7 +65,8 @@ public/images/          # Real photos (midhun-pm.jpg, codex hackathon shots). No
 - Every page: metadata with title (`"Page | Midhun P M"`), description, openGraph, twitter card, `alternates.canonical`.
 - Every page: exactly one `<h1>` containing the string `Midhun P M` (use `components/PageHeader.tsx` or the eyebrow-span pattern).
 - JSON-LD: Person + WebSite on homepage, Article + BreadcrumbList on blog posts, SoftwareApplication + BreadcrumbList on project pages.
-- `app/sitemap.ts` + `app/robots.ts` are the live implementation. `next-sitemap.config.js` is a fallback only — do not run its postbuild while the app routes exist (route conflict).
+- `app/sitemap.ts` is the live sitemap (dynamic, real MDX mtimes for `lastmod`). `public/robots.txt` is the live robots file — there is **no** `app/robots.ts`, and it should not be created (it would conflict with the static file). `next-sitemap.config.js` is a fallback only — do not run its postbuild while `app/sitemap.ts` exists (route conflict).
+- OG images are generated at build time by `app/opengraph-image.tsx`, `app/blog/[slug]/opengraph-image.tsx`, and `app/projects/[slug]/opengraph-image.tsx` via the shared renderer in `lib/og/render.tsx`. Do not hand-write `openGraph.images` in page metadata — the file-based routes are inherited down the segment tree and override it. Satori cannot read `.woff2`, so the fonts are vendored `.ttf` files in `lib/og/fonts/`, kept in the standalone bundle by `experimental.outputFileTracingIncludes` in `next.config.mjs`.
 
 ## Design Direction
 

@@ -1,10 +1,11 @@
 /**
  * next-sitemap — fallback sitemap generator.
  *
- * The live sitemap and robots.txt are generated dynamically by
- * app/sitemap.ts and app/robots.ts (includes blog posts and project
- * case studies from the content pipeline). This config is kept as a
- * fallback: if the app routes are ever removed, run
+ * The live sitemap is generated dynamically by app/sitemap.ts (includes
+ * blog posts and project case studies from the content pipeline), and
+ * robots.txt is served statically from public/robots.txt. There is no
+ * app/robots.ts. This config is kept as a fallback: if the app route is
+ * ever removed, run
  * `npx next-sitemap --config next-sitemap.config.js` after `next build`
  * to emit static public/sitemap.xml + public/robots.txt instead.
  */

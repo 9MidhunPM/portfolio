@@ -21,7 +21,8 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const post = getPost(params.slug);
-  if (!post) return {};
+  // notFound() fires in the component body; keep this response out of the index.
+  if (!post) return { title: "Post not found", robots: { index: false, follow: false } };
 
   const url = `${SITE.url}/blog/${post.slug}`;
 
@@ -87,7 +88,7 @@ export default function BlogPostPage({ params }: Props) {
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
       { "@type": "ListItem", position: 2, name: "Blog", item: `${SITE.url}/blog` },
-      { "@type": "ListItem", position: 3, name: post.title },
+      { "@type": "ListItem", position: 3, name: post.title, item: url },
     ],
   };
 

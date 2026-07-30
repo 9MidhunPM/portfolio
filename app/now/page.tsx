@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { SITE } from "@/lib/data";
 
 const title = "Now";
-const description =
-  "What Midhun P M is currently working on, learning, and thinking about.";
+const description = `What ${SITE.name} is currently working on, learning, and thinking about.`;
 
 export const metadata: Metadata = {
   title,

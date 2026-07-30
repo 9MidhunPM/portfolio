@@ -18,7 +18,9 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const project = getProject(params.slug);
-  if (!project) return {};
+  // notFound() fires in the component body; keep this response out of the index.
+  if (!project)
+    return { title: "Project not found", robots: { index: false, follow: false } };
 
   const url = `${SITE.url}/projects/${project.slug}`;
 
@@ -76,7 +78,7 @@ export default function ProjectPage({ params }: Props) {
         name: "Projects",
         item: `${SITE.url}/projects`,
       },
-      { "@type": "ListItem", position: 3, name: project.title },
+      { "@type": "ListItem", position: 3, name: project.title, item: `${SITE.url}/projects/${project.slug}` },
     ],
   };
 

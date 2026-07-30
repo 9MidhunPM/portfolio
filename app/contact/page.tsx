@@ -6,8 +6,7 @@ import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { SITE } from "@/lib/data";
 
 const title = "Contact";
-const description =
-  "Get in touch with Midhun P M — internships, collaboration, or questions about a project. Email midhun.titan@gmail.com; replies within a day or two.";
+const description = `Get in touch with ${SITE.name} — internships, collaboration, or questions about a project. Email ${SITE.email}; replies within a day or two.`;
 
 export const metadata: Metadata = {
   title,
@@ -31,8 +30,28 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: `${title} | ${SITE.name}`,
+    description,
+    url: `${SITE.url}/contact`,
+    mainEntity: {
+      "@type": "Person",
+      name: SITE.name,
+      url: SITE.url,
+      email: SITE.email,
+      jobTitle: SITE.jobTitle,
+      sameAs: [SITE.github, SITE.linkedin],
+    },
+  };
+
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
       <div className="space-y-14">
         <PageHeader
           eyebrow={title}

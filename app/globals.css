@@ -31,6 +31,12 @@
     scroll-behavior: smooth;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
@@ -80,6 +86,43 @@
 
   .dark .stat-number {
     color: rgb(var(--accent));
+  }
+
+  /*
+    Stagger offsets for CSS-driven list reveals. Used instead of an inline
+    animation-delay so components can stay server-rendered (AGENTS.md forbids
+    inline styles). Index-capped by the consumer.
+  */
+  .stagger-1 {
+    animation-delay: 0ms;
+  }
+  .stagger-2 {
+    animation-delay: 70ms;
+  }
+  .stagger-3 {
+    animation-delay: 140ms;
+  }
+  .stagger-4 {
+    animation-delay: 210ms;
+  }
+  .stagger-5 {
+    animation-delay: 280ms;
+  }
+  .stagger-6 {
+    animation-delay: 350ms;
+  }
+}
+
+/*
+  Reduced motion: force the resting state of every entrance animation.
+  Content must never depend on an animation completing to be visible.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  [class*="stagger-"] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 

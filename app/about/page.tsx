@@ -3,13 +3,12 @@ import Image from "next/image";
 import { PageHeader } from "@/components/PageHeader";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { getGitHubStats } from "@/lib/github";
-import { SITE } from "@/lib/data";
+import { SITE, SKILLS, EXPERIENCE, ACHIEVEMENTS, TIMELINE } from "@/lib/data";
 
 export const revalidate = 86400;
 
 const title = "About";
-const description =
-  "About Midhun P M — CS undergrad at Sahrdaya building AI agents, mobile apps, and low-level C++ projects. IEEE Technical Coordinator, hackathon winner.";
+const description = `About ${SITE.name} — CS undergrad at Sahrdaya building AI agents, mobile apps, and low-level C++ projects. IEEE Technical Coordinator, hackathon winner.`;
 
 export const metadata: Metadata = {
   title,
@@ -21,124 +20,16 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "profile",
-    images: [
-      {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "Midhun P M — Software Developer from Kerala",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} | ${SITE.name}`,
     description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
   },
   alternates: {
     canonical: `${SITE.url}/about`,
   },
 };
-
-const SKILLS: { group: string; items: string[] }[] = [
-  {
-    group: "Languages",
-    items: ["Python", "C", "C++", "Java", "JavaScript", "Dart"],
-  },
-  {
-    group: "Frontend",
-    items: ["React", "Next.js 15", "React Native (Expo)", "Flutter", "HTML/CSS"],
-  },
-  {
-    group: "Backend",
-    items: ["FastAPI", "Spring Boot", "Node.js", "Supabase", "Appwrite"],
-  },
-  {
-    group: "Tools",
-    items: ["Git", "Arch Linux", "LangChain", "n8n", "Playwright", "LLaMA.cpp", "Raylib", "Twilio"],
-  },
-  {
-    group: "Cloud & Infra",
-    items: ["AWS (S3, Lambda, API Gateway, DynamoDB)", "Docker", "Dokploy", "Tailscale", "Ubuntu home server"],
-  },
-];
-
-const EXPERIENCE: {
-  role: string;
-  org: string;
-  period: string;
-  detail: string;
-}[] = [
-  {
-    role: "Technical Coordinator",
-    org: "IEEE Sahrdaya Student Branch",
-    period: "Jan 2026 — Present",
-    detail:
-      "Leading the branch's technical initiatives and shipping production features to ieeesahrdaya.com. Built WC Predict '26, the chapter's FIFA World Cup prediction platform — 58+ players placed 737+ bets across pool and fixed-odds markets, with a live leaderboard and automated settlement.",
-  },
-  {
-    role: "Frontend Developer Intern",
-    org: "Narrowlabs Technologies Pvt. Ltd",
-    period: "Jun 2025 — Aug 2025",
-    detail:
-      "Built the login and dashboard UI for a job portal serving both recruiter and applicant roles. React, responsive components, real users — my first code that shipped to a production product.",
-  },
-];
-
-const ACHIEVEMENTS: { title: string; detail: string; image?: boolean }[] = [
-  {
-    title: "Top 10 Finalist — OpenAI Codex Nightline Hackathon",
-    detail:
-      "Kochi Metro AI Sprint, July 2026. Built MetroMind with 100 curated builders in the world's first AI build sprint inside a moving metro system.",
-    image: true,
-  },
-  {
-    title: "Best S1 Project — RyMeds",
-    detail:
-      "Pharmacy inventory system in Python and Tkinter, built with Team RYNEM.",
-  },
-  {
-    title: "Best S3 Project — ETLab+",
-    detail:
-      "Full-stack student companion for the college ERP — React Native, Spring Boot, real users.",
-  },
-  {
-    title: "Winner — College Hackathon, Semester 1",
-    detail: "PYHACK, with Team RYNEM. The one that started all of this.",
-  },
-  {
-    title: "CGPA 9.70",
-    detail: "B.Tech CSE, Sahrdaya College of Engineering and Technology.",
-  },
-];
-
-const TIMELINE: { period: string; title: string; detail: string }[] = [
-  {
-    period: "S1",
-    title: "RyMeds and a first hackathon win",
-    detail:
-      "Team RYNEM built a pharmacy inventory system in Python and Tkinter at PYHACK — expiry tracking, stock alerts, SQLite. We won the hackathon, and the project was later named Best S1 Project.",
-  },
-  {
-    period: "S2",
-    title: "Foundations",
-    detail:
-      "Went deeper on the unglamorous stuff — Java, data structures, and my first real React apps. Landed the Narrowlabs internship off the back of it.",
-  },
-  {
-    period: "S3",
-    title: "ETLab+",
-    detail:
-      "Built a full student companion for our college ERP — React Native app, Spring Boot backend, real-time scraping, AI query answering. Classmates installed the APK. Best S3 Project.",
-  },
-  {
-    period: "S4",
-    title: "Internship, IEEE, and WC Predict",
-    detail:
-      "Shipped production UI at Narrowlabs, became IEEE Technical Coordinator, and launched WC Predict '26 — 58+ players, 737+ bets. Built Thursday, a local-first AI assistant, on the side.",
-  },
-];
 
 export default async function AboutPage() {
   const gh = await getGitHubStats();
@@ -155,8 +46,37 @@ export default async function AboutPage() {
     },
   };
 
+  const profileSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    mainEntity: {
+      "@type": "Person",
+      name: SITE.name,
+      url: SITE.url,
+      image: `${SITE.url}/images/midhun-pm.jpg`,
+      email: SITE.email,
+      jobTitle: SITE.jobTitle,
+      description: SITE.description,
+      alumniOf: {
+        "@type": "CollegeOrUniversity",
+        name: SITE.almaMater,
+      },
+      address: {
+        "@type": "PostalAddress",
+        addressRegion: SITE.region,
+        addressCountry: SITE.country,
+      },
+      knowsAbout: SKILLS.flatMap((group) => group.items),
+      sameAs: [SITE.github, SITE.linkedin],
+    },
+  };
+
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileSchema) }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(imageSchema) }}

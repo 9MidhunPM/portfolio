@@ -5,18 +5,23 @@ import type { Project } from "@/lib/types";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group flex h-full flex-col justify-between rounded-lg border border-border p-6 transition-colors duration-200 hover:border-muted">
+    <article className="group relative flex h-full flex-col justify-between rounded-lg border border-border p-6 transition-colors duration-200 hover:border-muted has-[a:focus-visible]:border-muted">
       <div className="space-y-3">
         <div className="flex items-start justify-between gap-4">
           <h3 className="font-medium text-foreground">
+            {/*
+              Stretched link so the whole card is clickable, matching the
+              card-wide hover state. The external links below sit above this
+              overlay via relative z-10.
+            */}
             <Link
               href={`/projects/${project.slug}`}
-              className="transition-colors group-hover:text-foreground"
+              className="after:absolute after:inset-0 after:rounded-lg focus-visible:outline-none"
             >
               {project.title}
             </Link>
           </h3>
-          <div className="flex shrink-0 items-center gap-1">
+          <div className="relative z-10 flex shrink-0 items-center gap-1">
             {project.github && (
               <a
                 href={project.github}

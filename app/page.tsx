@@ -21,20 +21,11 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "Midhun P M — Software Developer from Kerala",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — Software Developer`,
     description: SITE.description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
   },
   alternates: {
     canonical: SITE.url,
@@ -63,12 +54,12 @@ export default async function HomePage() {
     image: `${SITE.url}/images/midhun-pm.jpg`,
     url: SITE.url,
     email: SITE.email,
-    jobTitle: "Software Developer",
-    alumniOf: "Sahrdaya College of Engineering and Technology",
+    jobTitle: SITE.jobTitle,
+    alumniOf: SITE.almaMater,
     address: {
       "@type": "PostalAddress",
-      addressRegion: "Kerala",
-      addressCountry: "IN",
+      addressRegion: SITE.region,
+      addressCountry: SITE.country,
     },
     sameAs: [SITE.github, SITE.linkedin],
   };

@@ -9,6 +9,18 @@ export interface ProjectWithContent extends Project {
   content: string;
 }
 
+/**
+ * Last filesystem modification time for a project's source file, used for
+ * accurate sitemap <lastmod> values.
+ */
+export function getProjectLastModified(slug: string): Date {
+  try {
+    return fs.statSync(path.join(PROJECTS_DIR, `${slug}.mdx`)).mtime;
+  } catch {
+    return new Date();
+  }
+}
+
 function parseProject(file: string): ProjectWithContent {
   const raw = fs.readFileSync(path.join(PROJECTS_DIR, file), "utf8");
   const { data, content } = matter(raw);
