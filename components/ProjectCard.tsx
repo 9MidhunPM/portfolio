@@ -21,16 +21,16 @@ export function ProjectCard({ project }: { project: Project }) {
               {project.title}
             </Link>
           </h3>
-          <div className="relative z-10 flex shrink-0 items-center gap-1">
+          <div className="relative z-10 flex shrink-0 flex-wrap items-center justify-end gap-3 font-mono text-[11px] text-muted">
             {project.github && (
               <a
                 href={project.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${project.title} on GitHub`}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:text-foreground"
+                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
               >
                 <GithubIcon width={16} height={16} />
+                <span>View {project.title} source on GitHub</span>
               </a>
             )}
             {project.live && (
@@ -38,10 +38,10 @@ export function ProjectCard({ project }: { project: Project }) {
                 href={project.live}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${project.title} live site`}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:text-foreground"
+                className="inline-flex items-center gap-1 transition-colors hover:text-foreground"
               >
                 <ArrowUpRight size={16} strokeWidth={1.75} />
+                <span>Open {project.title} live demo</span>
               </a>
             )}
           </div>

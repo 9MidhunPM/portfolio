@@ -146,7 +146,11 @@ export default function BlogPostPage({ params }: Props) {
 
           <footer className="mt-16 flex items-center justify-between border-t border-border pt-8">
             <p className="font-mono text-[13px] text-muted">Share this post</p>
-            <ShareButtons url={url} title={post.title} />
+            <ShareButtons
+              url={url}
+              title={post.title}
+              label={`Share ${post.title}`}
+            />
           </footer>
         </article>
 

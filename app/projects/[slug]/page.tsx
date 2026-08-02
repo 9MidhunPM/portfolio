@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { MDXContent } from "@/components/MDXContent";
+import { ShareButtons } from "@/components/ShareButtons";
 import { GithubIcon } from "@/components/icons";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { SITE } from "@/lib/data";
@@ -120,7 +121,7 @@ export default function ProjectPage({ params }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[13px] text-muted transition-colors hover:text-foreground"
                 >
                   <GithubIcon width={14} height={14} />
-                  Source
+                  View {project.title} source on GitHub
                 </a>
               )}
               {project.live && (
@@ -131,7 +132,7 @@ export default function ProjectPage({ params }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[13px] text-muted transition-colors hover:text-foreground"
                 >
                   <ArrowUpRight size={14} />
-                  Live site
+                  Open {project.title} live demo
                 </a>
               )}
             </div>
@@ -152,6 +153,15 @@ export default function ProjectPage({ params }: Props) {
         <div className="mt-12">
           <MDXContent source={project.content} />
         </div>
+
+        <footer className="mt-16 flex items-center justify-between border-t border-border pt-8">
+          <p className="font-mono text-[13px] text-muted">Share this project</p>
+          <ShareButtons
+            url={`${SITE.url}/projects/${project.slug}`}
+            title={`${project.title} — ${SITE.name}`}
+            label={`Share ${project.title}`}
+          />
+        </footer>
 
         {project.slug === "metromind" && (
           <section

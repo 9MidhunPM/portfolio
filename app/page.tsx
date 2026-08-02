@@ -6,7 +6,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { PostCard } from "@/components/PostCard";
 import { getAllProjects } from "@/lib/projects";
 import { getGitHubStats } from "@/lib/github";
-import { SITE } from "@/lib/data";
+import { HOME_NARRATIVE, SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 
 export const revalidate = 86400;
@@ -21,11 +21,20 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Midhun P M — Software Developer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — Software Developer`,
     description: SITE.description,
+    images: ["/og-image.png"],
   },
   alternates: {
     canonical: SITE.url,
@@ -92,6 +101,24 @@ export default async function HomePage() {
         {/* Hero */}
         <section className="py-24 sm:py-32 lg:py-40" aria-label="Introduction">
           <Hero />
+        </section>
+
+        {/* Crawlable context for the work shown below. */}
+        <section className="border-t border-border py-16 sm:py-20" aria-label="How I build software">
+          <div className="max-w-prose space-y-14">
+            {HOME_NARRATIVE.map((section) => (
+              <div key={section.title} className="space-y-5">
+                <h2 className="text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
+                  {section.title}
+                </h2>
+                {section.paragraphs.map((paragraph) => (
+                  <p key={paragraph} className="text-base leading-relaxed text-muted">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* Featured projects */}

@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { TerminalEasterEgg } from "@/components/TerminalEasterEgg";
 import { SITE } from "@/lib/data";
+import { warnForMissingSocialAssets } from "@/lib/seo-assets";
 import "./globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -17,6 +18,8 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
   display: "swap",
 });
+
+warnForMissingSocialAssets();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -32,11 +35,29 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Midhun P M — Software Developer",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE.name} — Software Developer`,
     description: SITE.description,
+    images: ["/og-image.png"],
+  },
+  icons: {
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+      },
+    ],
   },
   alternates: {
     canonical: SITE.url,

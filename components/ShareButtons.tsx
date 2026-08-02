@@ -8,9 +8,11 @@ import { SOCIAL_SHARE } from "@/lib/data";
 export function ShareButtons({
   url,
   title,
+  label = "Share this page",
 }: {
   url: string;
   title: string;
+  label?: string;
 }) {
   const [copied, setCopied] = useState(false);
   const resetTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -37,7 +39,7 @@ export function ShareButtons({
   return (
     // role="group" is required for aria-label to apply — on a bare div the
     // label is dropped by assistive tech.
-    <div className="flex items-center gap-2" role="group" aria-label="Share this post">
+    <div className="flex items-center gap-2" role="group" aria-label={label}>
       <a
         href={twitterUrl}
         target="_blank"
@@ -48,6 +50,7 @@ export function ShareButtons({
         <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden="true">
           <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
         </svg>
+        <span className="sr-only">Share {title} on X</span>
       </a>
       <a
         href={linkedinUrl}
@@ -57,6 +60,7 @@ export function ShareButtons({
         className={buttonClass}
       >
         <LinkedinIcon width={15} height={15} />
+        <span className="sr-only">Share {title} on LinkedIn</span>
       </a>
       <button
         type="button"
