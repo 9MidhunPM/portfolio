@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { TerminalLoader } from "@/components/TerminalLoader";
 import { SITE } from "@/lib/data";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -67,6 +68,7 @@ export default function RootLayout({
           <ScrollToTop />
           <TerminalLoader />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
