@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import codexPhoto from "@/public/images/midhun-pm-codex-presenting-card.webp";
+import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -146,7 +146,7 @@ export default async function HomePage() {
           className="border-y border-border py-16 sm:py-20"
           aria-labelledby="recognition-heading"
         >
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_28rem] lg:items-start">
             <div className="max-w-2xl space-y-6">
               <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
                 Recognition
@@ -185,12 +185,13 @@ export default async function HomePage() {
             </div>
 
             <figure className="space-y-3">
-              <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
                 <Image
                   src={codexPhoto}
                   alt="Midhun P M presenting MetroMind at OpenAI Codex Nightline in Kochi"
-                  sizes="(min-width: 1024px) 352px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
-                  className="h-auto w-full"
+                  fill
+                  sizes="(min-width: 1024px) 448px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
+                  className="object-cover object-[center_60%]"
                   placeholder="blur"
                   loading="lazy"
                 />
