@@ -6,7 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
-import { TerminalEasterEgg } from "@/components/TerminalEasterEgg";
+import { TerminalLoader } from "@/components/TerminalLoader";
 import { SITE } from "@/lib/data";
 import "./globals.css";
 
@@ -21,12 +21,12 @@ const instrumentSerif = Instrument_Serif({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — Software Developer`,
+    default: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
   openGraph: {
-    title: `${SITE.name} — Software Developer`,
+    title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — Software Developer`,
+    title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
   },
   alternates: {
@@ -65,7 +65,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
           <ScrollToTop />
-          <TerminalEasterEgg />
+          <TerminalLoader />
         </ThemeProvider>
       </body>
     </html>

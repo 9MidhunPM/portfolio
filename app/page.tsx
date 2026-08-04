@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -12,10 +14,10 @@ import { getAllPosts } from "@/lib/blog";
 export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: `${SITE.name} — Software Developer`,
+  title: "Full-Stack Developer & AI Systems Builder",
   description: SITE.description,
   openGraph: {
-    title: `${SITE.name} — Software Developer`,
+    title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
@@ -32,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — Software Developer`,
+    title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
     images: [`${SITE.url}/images/midhun-pm.jpg`],
   },
@@ -48,12 +50,31 @@ export default async function HomePage() {
   const recentPosts = getAllPosts().slice(0, 2);
   const gh = await getGitHubStats();
 
-  const stats: { value: string; label: string }[] = [
-    { value: "9.70", label: "CGPA, B.Tech CSE" },
-    { value: "737+", label: "bets on WC Predict '26" },
-    { value: "1000+", label: "weekly users on the IEEE site" },
-    { value: "Top 10", label: "of 100, Codex Nightline" },
-    ...(gh ? [{ value: String(gh.publicRepos), label: "public GitHub repos" }] : []),
+  const proofPoints: { value: string; label: string; href: string }[] = [
+    {
+      value: "Top 10 / 100",
+      label: "MetroMind at OpenAI Codex Nightline",
+      href: "/projects/metromind",
+    },
+    {
+      value: "737+ bets",
+      label: "placed by 58+ players on WC Predict '26",
+      href: "/projects/wc-predict-26",
+    },
+    {
+      value: "1,000+",
+      label: "weekly users on the IEEE Sahrdaya site",
+      href: "/projects/ieee-sahrdaya-website",
+    },
+    ...(gh
+      ? [
+          {
+            value: String(gh.publicRepos),
+            label: "public repositories on GitHub",
+            href: SITE.github,
+          },
+        ]
+      : []),
   ];
 
   const personSchema = {
@@ -63,7 +84,7 @@ export default async function HomePage() {
     image: `${SITE.url}/images/midhun-pm.jpg`,
     url: SITE.url,
     email: SITE.email,
-    jobTitle: "Software Developer",
+    jobTitle: "Full-Stack Developer and AI Systems Builder",
     alumniOf: "Sahrdaya College of Engineering and Technology",
     address: {
       "@type": "PostalAddress",
@@ -120,22 +141,99 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* By the numbers */}
+        {/* Recognition and project evidence */}
         <section
-          className="border-y border-border py-14 sm:py-16"
-          aria-label="By the numbers"
+          className="border-y border-border py-16 sm:py-20"
+          aria-labelledby="recognition-heading"
         >
-          <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
-            {stats.map((stat) => (
-              <div key={stat.label}>
-                <p className="stat-number font-serif text-4xl tracking-tight sm:text-5xl">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-xs leading-relaxed text-muted">
-                  {stat.label}
-                </p>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+            <div className="max-w-2xl space-y-6">
+              <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
+                Recognition
+              </p>
+              <h2
+                id="recognition-heading"
+                className="font-serif text-4xl leading-tight tracking-tight text-foreground sm:text-5xl"
+              >
+                Built on a moving metro.{" "}
+                <span className="italic text-muted">
+                  Finished in the Top 10.
+                </span>
+              </h2>
+              <p className="max-w-prose text-base leading-relaxed text-muted">
+                I built MetroMind during OpenAI Codex Nightline, a build sprint
+                inside a moving Kochi Metro train. The WhatsApp agent plans
+                routes, finds nearby stations, and handles ticket-booking
+                flows. It finished in the Top 10 out of 100 builders.
+              </p>
+              <div className="flex flex-wrap gap-x-6 gap-y-3 font-mono text-xs">
+                <Link
+                  href="/projects/metromind"
+                  className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
+                >
+                  Read the MetroMind case study
+                </Link>
+                <a
+                  href="https://github.com/9MidhunPM/MetroMind"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-accent"
+                >
+                  View the source on GitHub
+                </a>
               </div>
-            ))}
+            </div>
+
+            <figure className="space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+                <Image
+                  src={codexPhoto}
+                  alt="Midhun P M presenting MetroMind at OpenAI Codex Nightline in Kochi"
+                  sizes="(min-width: 1024px) 352px, 100vw"
+                  className="aspect-[4/3] w-full object-cover object-top"
+                  placeholder="blur"
+                />
+              </div>
+              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                OpenAI Codex Nightline · Top 10 of 100 builders · Kochi, July
+                2026
+              </figcaption>
+            </figure>
+          </div>
+
+          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+            {proofPoints.map((point) => {
+              const content = (
+                <>
+                  <p className="stat-number font-serif text-3xl tracking-tight">
+                    {point.value}
+                  </p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted">
+                    {point.label}
+                  </p>
+                </>
+              );
+
+              return point.href.startsWith("http") ? (
+                <a
+                  key={point.label}
+                  href={point.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-background p-5 transition-colors hover:bg-surface"
+                >
+                  {content}
+                </a>
+              ) : (
+                <Link
+                  key={point.label}
+                  href={point.href}
+                  className="bg-background p-5 transition-colors hover:bg-surface"
+                >
+                  {content}
+                </Link>
+              );
+            })}
           </div>
         </section>
 

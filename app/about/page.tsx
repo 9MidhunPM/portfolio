@@ -4,6 +4,9 @@ import { PageHeader } from "@/components/PageHeader";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
+import portrait from "@/public/images/midhun-pm.jpg";
+import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
+import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
 
 export const revalidate = 86400;
 
@@ -215,12 +218,11 @@ export default async function AboutPage() {
           <figure className="space-y-3 lg:pt-1">
             <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
               <Image
-                src="/images/midhun-pm.jpg"
+                src={portrait}
                 alt="Midhun P M — software developer from Kerala"
-                width={1200}
-                height={1600}
                 sizes="(max-width: 768px) 100vw, 300px"
                 className="aspect-[4/5] w-full object-cover"
+                placeholder="blur"
                 priority
               />
             </div>
@@ -315,12 +317,11 @@ export default async function AboutPage() {
                 {item.image && (
                   <div className="w-28 shrink-0 overflow-hidden rounded-md border border-border sm:w-36">
                     <Image
-                      src="/images/midhun-pm-codex-badge.jpg"
+                      src={codexBadge}
                       alt="Midhun P M builder badge from OpenAI Codex Nightline hackathon"
-                      width={1200}
-                      height={1600}
                       sizes="(max-width: 640px) 112px, 144px"
                       className="aspect-[3/4] w-full object-cover"
+                      placeholder="blur"
                     />
                   </div>
                 )}
@@ -374,12 +375,11 @@ export default async function AboutPage() {
               <figure className="mt-4 max-w-[280px] space-y-2">
                 <div className="overflow-hidden rounded-lg border border-border">
                   <Image
-                    src="/images/midhun-pm-codex-presenting.jpg"
+                    src={codexPresenting}
                     alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
-                    width={1200}
-                    height={1600}
                     sizes="(max-width: 768px) 100vw, 280px"
                     className="aspect-[4/5] w-full object-cover"
+                    placeholder="blur"
                   />
                 </div>
                 <figcaption className="font-mono text-[11px] leading-relaxed text-muted">

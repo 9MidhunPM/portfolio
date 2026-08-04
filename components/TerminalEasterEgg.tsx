@@ -33,8 +33,8 @@ const LINES: { kind: "cmd" | "out" | "gap"; text: string }[] = [
 const TYPE_MS = 14;
 const LINE_PAUSE_MS = 90;
 
-export function TerminalEasterEgg() {
-  const [open, setOpen] = useState(false);
+export function TerminalEasterEgg({ initiallyOpen = false }: { initiallyOpen?: boolean }) {
+  const [open, setOpen] = useState(initiallyOpen);
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
   const [done, setDone] = useState(false);
   const buffer = useRef("");
@@ -96,6 +96,10 @@ export function TerminalEasterEgg() {
     setOpen(true);
     runTypewriter();
   }, [runTypewriter]);
+
+  useEffect(() => {
+    if (initiallyOpen) runTypewriter();
+  }, [initiallyOpen, runTypewriter]);
 
   // Global "sudo" key sequence + footer trigger event
   useEffect(() => {

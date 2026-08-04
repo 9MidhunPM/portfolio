@@ -81,6 +81,13 @@
   .dark .stat-number {
     color: rgb(var(--accent));
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-up,
+    .animate-page-enter {
+      animation: none;
+    }
+  }
 }
 
 /* Shiki dual theme (light default, dark overrides) */

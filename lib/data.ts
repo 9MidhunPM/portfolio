@@ -3,14 +3,14 @@ import type { NavItem } from "@/lib/types";
 export const SITE = {
   name: "Midhun P M",
   url: "https://midhunpm.in",
-  role: "CS undergrad at Sahrdaya. I build AI agents, mobile apps, and whatever seems interesting.",
-  tagline: "I build things for the web.",
+  role: "CS sophomore at Sahrdaya · Kerala · Open to internships",
+  tagline: "A full-stack developer building AI agents.",
   email: "midhun.titan@gmail.com",
   github: "https://github.com/9MidhunPM",
   linkedin: "https://linkedin.com/in/midhun-pm-b947a1279",
   description:
-    "Midhun P M is a CS undergrad at Sahrdaya building AI agents, mobile apps, and low-level systems. Based in Kerala, India.",
-  bio: "I'm a CS undergrad at Sahrdaya College in Kerala, currently in semester five. I build AI agents, mobile apps, and occasionally games in raw C++ — my metro-booking agent made Top 10 at the Kochi Metro AI Sprint, and 58+ students bet real points on my World Cup prediction platform. When I'm not in class, I'm running quantized LLMs on an Intel Arc GPU or babysitting my Ubuntu home server.",
+    "Midhun P M is a Kerala-based full-stack developer and AI systems builder creating AI agents with Next.js, Python, FastAPI, LangChain, n8n, and Docker.",
+  bio: "I'm a CS sophomore at Sahrdaya in Kerala. I build practical AI systems with Next.js, Python, FastAPI, LangChain, and n8n, and I'm open to internships.",
 } as const;
 
 export const NAV_ITEMS: NavItem[] = [

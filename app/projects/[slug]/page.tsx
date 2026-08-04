@@ -7,6 +7,8 @@ import { MDXContent } from "@/components/MDXContent";
 import { GithubIcon } from "@/components/icons";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { SITE } from "@/lib/data";
+import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
+import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
 
 type Props = {
   params: { slug: string };
@@ -168,12 +170,11 @@ export default function ProjectPage({ params }: Props) {
               <figure className="space-y-2">
                 <div className="overflow-hidden rounded-lg border border-border">
                   <Image
-                    src="/images/midhun-pm-codex-presenting.jpg"
+                    src={codexPresenting}
                     alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
-                    width={1200}
-                    height={1600}
                     sizes="(max-width: 640px) 100vw, 320px"
                     className="aspect-[4/5] w-full object-cover"
+                    placeholder="blur"
                   />
                 </div>
                 <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
@@ -183,12 +184,11 @@ export default function ProjectPage({ params }: Props) {
               <figure className="space-y-2">
                 <div className="overflow-hidden rounded-lg border border-border">
                   <Image
-                    src="/images/midhun-pm-codex-badge.jpg"
+                    src={codexBadge}
                     alt="Midhun P M builder badge from OpenAI Codex Nightline hackathon"
-                    width={1200}
-                    height={1600}
                     sizes="(max-width: 640px) 100vw, 320px"
                     className="aspect-[4/5] w-full object-cover"
+                    placeholder="blur"
                   />
                 </div>
                 <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
