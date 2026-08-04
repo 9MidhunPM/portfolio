@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
+import codexPhoto from "@/public/images/midhun-pm-codex-presenting-card.webp";
 import { Hero } from "@/components/Hero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProjectCard } from "@/components/ProjectCard";
@@ -189,9 +189,10 @@ export default async function HomePage() {
                 <Image
                   src={codexPhoto}
                   alt="Midhun P M presenting MetroMind at OpenAI Codex Nightline in Kochi"
-                  sizes="(min-width: 1024px) 352px, 100vw"
-                  className="aspect-[4/3] w-full object-cover object-top"
+                  sizes="(min-width: 1024px) 352px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
+                  className="h-auto w-full"
                   placeholder="blur"
+                  loading="lazy"
                 />
               </div>
               <figcaption className="font-mono text-[11px] leading-relaxed text-muted">

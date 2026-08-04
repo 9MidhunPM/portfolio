@@ -172,8 +172,8 @@ export default function ProjectPage({ params }: Props) {
                   <Image
                     src={codexPresenting}
                     alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
-                    sizes="(max-width: 640px) 100vw, 320px"
-                    className="aspect-[4/5] w-full object-cover"
+                    sizes="(max-width: 640px) calc(100vw - 2.5rem), 320px"
+                    className="h-auto w-full"
                     placeholder="blur"
                   />
                 </div>
@@ -186,8 +186,8 @@ export default function ProjectPage({ params }: Props) {
                   <Image
                     src={codexBadge}
                     alt="Midhun P M builder badge from OpenAI Codex Nightline hackathon"
-                    sizes="(max-width: 640px) 100vw, 320px"
-                    className="aspect-[4/5] w-full object-cover"
+                    sizes="(max-width: 640px) calc(100vw - 2.5rem), 320px"
+                    className="h-auto w-full"
                     placeholder="blur"
                   />
                 </div>

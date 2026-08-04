@@ -221,7 +221,7 @@ export default async function AboutPage() {
                 src={portrait}
                 alt="Midhun P M — software developer from Kerala"
                 sizes="(max-width: 768px) 100vw, 300px"
-                className="aspect-[4/5] w-full object-cover"
+                className="h-auto w-full"
                 placeholder="blur"
                 priority
               />
@@ -320,7 +320,7 @@ export default async function AboutPage() {
                       src={codexBadge}
                       alt="Midhun P M builder badge from OpenAI Codex Nightline hackathon"
                       sizes="(max-width: 640px) 112px, 144px"
-                      className="aspect-[3/4] w-full object-cover"
+                      className="h-auto w-full"
                       placeholder="blur"
                     />
                   </div>
@@ -377,8 +377,8 @@ export default async function AboutPage() {
                   <Image
                     src={codexPresenting}
                     alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
-                    sizes="(max-width: 768px) 100vw, 280px"
-                    className="aspect-[4/5] w-full object-cover"
+                    sizes="(max-width: 768px) calc(100vw - 5.5rem), 280px"
+                    className="h-auto w-full"
                     placeholder="blur"
                   />
                 </div>
