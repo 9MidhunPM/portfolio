@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { GitHubProfile } from "@/components/GitHubProfile";
 import { GitHubRepositories } from "@/components/GitHubRepositories";
+import { GitHubLanguages } from "@/components/GitHubLanguages";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 
@@ -72,24 +73,7 @@ export default async function OpenPage() {
             <>
               <GitHubProfile stats={stats} />
 
-              <div className="space-y-3">
-                <h3 className="text-sm font-medium text-foreground">
-                  Top languages
-                </h3>
-                <ul className="flex flex-wrap gap-2">
-                  {stats.topLanguages.slice(0, 6).map((lang) => (
-                    <li
-                      key={lang.name}
-                      className="rounded border border-border px-2.5 py-1 font-mono text-[11px] text-muted"
-                    >
-                      {lang.name}
-                      <span className="ml-1.5 text-foreground">
-                        ×{lang.count}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <GitHubLanguages languages={stats.topLanguages} />
 
               <ContributionGraph
                 activity={stats.activity}
