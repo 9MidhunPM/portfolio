@@ -8,15 +8,15 @@ import type { Project } from "@/lib/types";
 
 export function ProjectsGrid({
   projects,
-  tags,
+  categories,
 }: {
   projects: Project[];
-  tags: string[];
+  categories: Project["category"][];
 }) {
-  const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<Project["category"] | null>(null);
 
-  const visible = activeTag
-    ? projects.filter((p) => p.tech.includes(activeTag))
+  const visible = activeCategory
+    ? projects.filter((project) => project.category === activeCategory)
     : projects;
 
   return (
@@ -24,19 +24,21 @@ export function ProjectsGrid({
       <div
         className="flex flex-wrap gap-2"
         role="group"
-        aria-label="Filter projects by technology"
+        aria-label="Filter projects by category"
       >
         <FilterButton
           label="All"
-          active={activeTag === null}
-          onClick={() => setActiveTag(null)}
+          active={activeCategory === null}
+          onClick={() => setActiveCategory(null)}
         />
-        {tags.map((tag) => (
+        {categories.map((category) => (
           <FilterButton
-            key={tag}
-            label={tag}
-            active={activeTag === tag}
-            onClick={() => setActiveTag(activeTag === tag ? null : tag)}
+            key={category}
+            label={category}
+            active={activeCategory === category}
+            onClick={() =>
+              setActiveCategory(activeCategory === category ? null : category)
+            }
           />
         ))}
       </div>

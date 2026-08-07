@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { ProjectsGrid } from "@/components/ProjectsGrid";
-import { getAllProjects, getAllTags } from "@/lib/projects";
+import { getAllProjects, getProjectCategories } from "@/lib/projects";
 import { SITE } from "@/lib/data";
 
 const title = "Projects";
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   const projects = getAllProjects();
-  const tags = getAllTags();
+  const categories = getProjectCategories();
 
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
@@ -41,7 +41,7 @@ export default function ProjectsPage() {
           title="Things I've built"
           description="Web apps, AI agents, and infrastructure I run myself. Each project has a full case study — the problem, the build, and what went wrong."
         />
-        <ProjectsGrid projects={projects} tags={tags} />
+        <ProjectsGrid projects={projects} categories={categories} />
       </div>
     </div>
   );
