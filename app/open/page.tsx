@@ -97,7 +97,7 @@ export default async function OpenPage() {
 
               <ContributionGraph
                 activity={stats.activity}
-                caption={`GitHub activity — ${stats.recentEvents} public events in the last 90 days (the window the API exposes).`}
+                eventCount={stats.recentEvents}
               />
             </>
           ) : (

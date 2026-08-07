@@ -288,8 +288,8 @@ export default async function AboutPage() {
           <section aria-label="GitHub activity">
             <ContributionGraph
               activity={gh.activity}
+              eventCount={gh.recentEvents}
               size="sm"
-              caption="GitHub activity — public events, last 90 days"
             />
           </section>
         )}
