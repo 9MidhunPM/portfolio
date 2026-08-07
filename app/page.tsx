@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
 import { Hero } from "@/components/Hero";
+import { GitHubProfile } from "@/components/GitHubProfile";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProjectCard } from "@/components/ProjectCard";
 import { PostCard } from "@/components/PostCard";
@@ -11,7 +12,7 @@ import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Full-Stack Developer & AI Systems Builder",
@@ -239,12 +240,21 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {gh && (
+          <section className="py-16 sm:py-20" aria-label="Live GitHub profile">
+            <div className="space-y-8">
+              <SectionHeading index="02" title="Open source, live" />
+              <GitHubProfile stats={gh} compact />
+            </div>
+          </section>
+        )}
+
         {/* Recent posts — only when real posts exist */}
         {recentPosts.length > 0 && (
           <section className="py-16 sm:py-20" aria-label="Recent blog posts">
             <div className="space-y-8">
               <SectionHeading
-                index="02"
+                index="03"
                 title="Writing"
                 linkHref="/blog"
                 linkLabel="All posts"

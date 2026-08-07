@@ -1,81 +1,110 @@
 import { cn } from "@/lib/utils";
 
-// GitHub's public events API only exposes the last ~90 days, so the grid
-// covers exactly that window — 13 weeks. Anything older would be empty
-// cells pretending to be inactivity, which would be a lie.
-const WEEKS = 13;
+const WEEKS = 5;
 const DAYS = 7;
 
 function cellClass(count: number): string {
-  if (count === 0) return "bg-muted/20";
+  if (count === 0) return "bg-muted/15";
   if (count <= 2) return "bg-accent/30";
   if (count <= 5) return "bg-accent/60";
   return "bg-accent";
 }
 
+function formatDay(date: Date): string {
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(date);
+}
+
 /**
- * Renders a 13×7 activity grid from real GitHub public-events data —
- * exactly the ~90-day window the API exposes. Weeks (columns) × days
- * (rows), oldest → newest left to right.
+ * Displays the rolling 30-day window exposed by GitHub's public-events API.
+ * Events are not equivalent to the profile contribution calendar.
  */
 export function ContributionGraph({
   activity,
+  eventCount,
   size = "md",
-  caption,
 }: {
   activity: Record<string, number>;
+  eventCount: number;
   size?: "sm" | "md";
-  caption?: string;
 }) {
-  // Align grid so the last column's last row is today (UTC).
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
+
   const end = new Date(today);
-  end.setUTCDate(end.getUTCDate() + (6 - end.getUTCDay())); // end of this week (Sat)
+  end.setUTCDate(end.getUTCDate() + (6 - end.getUTCDay()));
 
-  const start = new Date(end);
-  start.setUTCDate(start.getUTCDate() - (WEEKS * DAYS - 1));
+  const gridStart = new Date(end);
+  gridStart.setUTCDate(gridStart.getUTCDate() - (WEEKS * DAYS - 1));
 
-  const weeks: { date: Date; count: number }[][] = [];
-  const cursor = new Date(start);
-  for (let w = 0; w < WEEKS; w++) {
-    const week: { date: Date; count: number }[] = [];
-    for (let d = 0; d < DAYS; d++) {
+  const windowStart = new Date(today);
+  windowStart.setUTCDate(windowStart.getUTCDate() - 29);
+
+  const weeks: { date: Date; count: number; inWindow: boolean }[][] = [];
+  const cursor = new Date(gridStart);
+
+  for (let weekIndex = 0; weekIndex < WEEKS; weekIndex++) {
+    const week: { date: Date; count: number; inWindow: boolean }[] = [];
+
+    for (let dayIndex = 0; dayIndex < DAYS; dayIndex++) {
       const iso = cursor.toISOString().slice(0, 10);
+      const inWindow = cursor >= windowStart && cursor <= today;
       week.push({
         date: new Date(cursor),
-        count: cursor > today ? -1 : (activity[iso] ?? 0),
+        count: inWindow ? (activity[iso] ?? 0) : -1,
+        inWindow,
       });
       cursor.setUTCDate(cursor.getUTCDate() + 1);
     }
+
     weeks.push(week);
   }
 
-  const cell = size === "sm" ? "h-2.5 w-2.5" : "h-3.5 w-3.5";
-  const gap = size === "sm" ? "gap-[3px]" : "gap-1";
+  const cell = size === "sm" ? "h-3 w-3" : "h-4 w-4";
+  const gap = size === "sm" ? "gap-1" : "gap-1.5";
 
   return (
-    <figure className="space-y-3">
-      <div className="overflow-x-auto pb-1">
+    <figure className="rounded-lg border border-border bg-surface/40 p-5 sm:p-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-wider text-muted">
+            Public activity
+          </p>
+          <p className="mt-1 text-sm text-foreground">
+            {formatDay(windowStart)}–{formatDay(today)}
+          </p>
+        </div>
+        <p className="font-mono text-xs text-muted">
+          <span className="text-foreground">{eventCount}</span> public events
+        </p>
+      </div>
+
+      <div className="mt-5 overflow-x-auto pb-1">
         <div
           className={cn("flex w-max", gap)}
           role="img"
-          aria-label="GitHub activity grid, last 90 days"
+          aria-label={`GitHub public activity from ${formatDay(windowStart)} to ${formatDay(today)}, ${eventCount} events`}
         >
-          {weeks.map((week, wi) => (
-            <div key={wi} className={cn("flex flex-col", gap)}>
+          {weeks.map((week) => (
+            <div
+              key={week[0]?.date.toISOString()}
+              className={cn("flex flex-col", gap)}
+            >
               {week.map((day) => (
                 <span
                   key={day.date.toISOString()}
                   title={
-                    day.count < 0
-                      ? undefined
-                      : `${day.date.toISOString().slice(0, 10)} — ${day.count} public event${day.count === 1 ? "" : "s"}`
+                    day.inWindow
+                      ? `${day.date.toISOString().slice(0, 10)} — ${day.count} public event${day.count === 1 ? "" : "s"}`
+                      : undefined
                   }
                   className={cn(
                     cell,
-                    "rounded-[3px]",
-                    day.count < 0 ? "bg-transparent" : cellClass(day.count)
+                    "rounded-[3px] border border-transparent",
+                    day.inWindow ? cellClass(day.count) : "bg-transparent"
                   )}
                 />
               ))}
@@ -83,11 +112,24 @@ export function ContributionGraph({
           ))}
         </div>
       </div>
-      {caption && (
-        <figcaption className="font-mono text-[11px] text-muted">
-          {caption}
-        </figcaption>
-      )}
+
+      <figcaption className="mt-4 flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+        <span className="max-w-md text-xs leading-relaxed text-muted">
+          Public events update hourly. GitHub exposes this rolling window, not
+          the full contribution calendar.
+        </span>
+        <span className="flex items-center gap-1.5 font-mono text-[10px] text-muted">
+          Less
+          {[0, 1, 3, 6].map((count) => (
+            <span
+              key={count}
+              className={cn("h-2.5 w-2.5 rounded-[2px]", cellClass(count))}
+              aria-hidden="true"
+            />
+          ))}
+          More
+        </span>
+      </figcaption>
     </figure>
   );
 }
