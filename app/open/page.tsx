@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { GitHubProfile } from "@/components/GitHubProfile";
+import { GitHubRepositories } from "@/components/GitHubRepositories";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 
@@ -94,6 +95,8 @@ export default async function OpenPage() {
                 activity={stats.activity}
                 eventCount={stats.recentEvents}
               />
+
+              <GitHubRepositories repositories={stats.repositories} />
             </>
           ) : (
             <p className="text-sm text-muted">
