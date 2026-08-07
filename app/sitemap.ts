@@ -16,7 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/resume", priority: 0.7, changeFrequency: "monthly" as const },
   ].map((route) => ({
     url: `${SITE.url}${route.path}`,
-    lastModified: "2026-08-07",
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));

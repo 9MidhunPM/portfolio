@@ -38,11 +38,13 @@ export function generateMetadata({ params }: Props): Metadata {
       publishedTime: post.date,
       authors: [SITE.name],
       tags: post.tags,
+      images: [SITE.ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [SITE.ogImage],
     },
     alternates: {
       canonical: url,

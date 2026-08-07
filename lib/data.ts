@@ -8,6 +8,7 @@ export const SITE = {
   email: "midhun.titan@gmail.com",
   github: "https://github.com/9MidhunPM",
   linkedin: "https://linkedin.com/in/midhun-pm-b947a1279",
+  ogImage: "https://midhunpm.in/images/midhun-pm-og.jpg",
   description:
     "Midhun P M is a Kerala-based full-stack developer and AI systems builder creating AI agents with Next.js, Python, FastAPI, LangChain, n8n, and Docker.",
   bio: "I'm a CS undergrad at Sahrdaya in Kerala. I build practical AI systems with Next.js, Python, FastAPI, LangChain, and n8n, and I'm open to internships.",

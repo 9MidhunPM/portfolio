@@ -39,6 +39,12 @@ export function Hero() {
           >
             Contact me
           </Link>
+          <Link
+            href="/resume"
+            className="inline-flex min-h-11 items-center px-2 py-2 font-mono text-sm text-muted underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-accent"
+          >
+            Résumé
+          </Link>
         </div>
       </div>
 

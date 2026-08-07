@@ -22,11 +22,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: [SITE.ogImage],
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} | ${SITE.name}`,
     description,
+    images: [SITE.ogImage],
   },
   alternates: {
     canonical: `${SITE.url}/open`,
