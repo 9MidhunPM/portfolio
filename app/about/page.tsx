@@ -6,7 +6,6 @@ import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 import portrait from "@/public/images/midhun-pm.jpg";
 import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
-import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
 
 export const revalidate = 3600;
 
@@ -26,7 +25,7 @@ export const metadata: Metadata = {
     type: "profile",
     images: [
       {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
+        url: `${SITE.url}/images/midhun-pm-og.jpg`,
         width: 1200,
         height: 630,
         alt: "Midhun P M — Software Developer from Kerala",
@@ -37,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${title} | ${SITE.name}`,
     description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
+    images: [`${SITE.url}/images/midhun-pm-og.jpg`],
   },
   alternates: {
     canonical: `${SITE.url}/about`,
@@ -116,33 +115,6 @@ const ACHIEVEMENTS: { title: string; detail: string; image?: boolean }[] = [
   },
 ];
 
-const TIMELINE: { period: string; title: string; detail: string }[] = [
-  {
-    period: "S1",
-    title: "RyMeds and a first hackathon win",
-    detail:
-      "Team RYNEM built a pharmacy inventory system in Python and Tkinter at PYHACK — expiry tracking, stock alerts, SQLite. We won the hackathon, and the project was later named Best S1 Project.",
-  },
-  {
-    period: "S2",
-    title: "Foundations",
-    detail:
-      "Went deeper on the unglamorous stuff — Java, data structures, and my first real React apps. Landed the Narrowlabs internship off the back of it.",
-  },
-  {
-    period: "S3",
-    title: "ETLab+",
-    detail:
-      "Built a full student companion for our college ERP — React Native app, Spring Boot backend, real-time scraping, AI query answering. Classmates installed the APK. Best S3 Project.",
-  },
-  {
-    period: "S4",
-    title: "Internship, IEEE, and WC Predict",
-    detail:
-      "Shipped production UI at Narrowlabs, became IEEE Technical Coordinator, and launched WC Predict '26 — 58+ players, 737+ bets. Built Thursday, a local-first AI assistant, on the side.",
-  },
-];
-
 export default async function AboutPage() {
   const gh = await getGitHubStats();
 
@@ -216,7 +188,7 @@ export default async function AboutPage() {
           </div>
 
           <figure className="space-y-3 lg:pt-1">
-            <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+            <div className="overflow-hidden rounded-lg border border-border">
               <Image
                 src={portrait}
                 alt="Midhun P M — software developer from Kerala"
@@ -284,7 +256,7 @@ export default async function AboutPage() {
         </section>
 
         {/* GitHub activity */}
-        {gh && (
+        {gh?.activity && gh.recentEvents !== null && (
           <section aria-label="GitHub activity">
             <ContributionGraph
               activity={gh.activity}
@@ -330,66 +302,6 @@ export default async function AboutPage() {
           </ul>
         </section>
 
-        {/* Timeline */}
-        <section aria-label="Timeline">
-          <h2 className="mb-8 text-xl font-medium tracking-tight text-foreground sm:text-2xl">
-            <span className="mr-3 font-mono text-sm text-muted">04</span>
-            The semesters so far
-          </h2>
-          <ol className="max-w-prose space-y-10 border-l border-border pl-8">
-            {TIMELINE.map((entry) => (
-              <li key={entry.period} className="relative">
-                <span
-                  className="absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-muted"
-                  aria-hidden="true"
-                />
-                <p className="font-mono text-[13px] text-muted">
-                  {entry.period}
-                </p>
-                <h3 className="mt-1.5 font-medium text-foreground">
-                  {entry.title}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                  {entry.detail}
-                </p>
-              </li>
-            ))}
-
-            {/* Codex Nightline — with photo evidence */}
-            <li className="relative">
-              <span
-                className="absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-accent"
-                aria-hidden="true"
-              />
-              <p className="font-mono text-[13px] text-muted">
-                S4 · Jul 2026
-              </p>
-              <h3 className="mt-1.5 font-medium text-foreground">
-                Top 10 at Codex Nightline
-              </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                Presented MetroMind at the OpenAI Codex Nightline Hackathon
-                — the Kochi Metro AI Sprint — and finished Top 10 among 100
-                curated builders.
-              </p>
-              <figure className="mt-4 max-w-[280px] space-y-2">
-                <div className="overflow-hidden rounded-lg border border-border">
-                  <Image
-                    src={codexPresenting}
-                    alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
-                    sizes="(max-width: 768px) calc(100vw - 5.5rem), 280px"
-                    className="h-auto w-full"
-                    placeholder="blur"
-                  />
-                </div>
-                <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-                  Presenting MetroMind at Codex Nightline, Kochi Metro, July
-                  2026
-                </figcaption>
-              </figure>
-            </li>
-          </ol>
-        </section>
       </div>
     </div>
   );

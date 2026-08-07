@@ -64,7 +64,7 @@ export function GitHubProfile({
           <Metric value={stats.publicRepos} label="Public repos" />
         </div>
         <div className="bg-background p-5">
-          <Metric value={stats.totalStars} label="Stars earned" />
+          <Metric value={stats.totalStars ?? "—"} label="Stars earned" />
         </div>
         <div className="bg-background p-5">
           <Metric value={stats.followers} label="Followers" />
@@ -75,7 +75,7 @@ export function GitHubProfile({
         {!compact && (
           <>
             <div className="bg-background p-5">
-              <Metric value={stats.recentEvents} label="30-day events" />
+              <Metric value={stats.recentEvents ?? "—"} label="30-day events" />
             </div>
             <div className="bg-background p-5">
               <Metric value={formatYear(stats.memberSince)} label="Member since" />
@@ -84,7 +84,7 @@ export function GitHubProfile({
         )}
       </div>
 
-      {!compact && stats.repositories.length > 0 && (
+      {!compact && stats.repositories && stats.repositories.length > 0 && (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border px-5 py-3 font-mono text-[10px] text-muted sm:px-6">
           <span className="flex items-center gap-1.5">
             <Star size={12} strokeWidth={1.75} aria-hidden="true" />

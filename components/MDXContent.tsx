@@ -13,7 +13,7 @@ const prettyCodeOptions: Partial<Options> = {
 
 const components: MDXComponents = {
   h1: (props) => (
-    <h1
+    <h2
       className="mt-12 text-3xl font-medium tracking-tight text-foreground first:mt-0"
       {...props}
     />

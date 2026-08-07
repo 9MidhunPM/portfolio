@@ -19,11 +19,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: [SITE.ogImage],
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} | ${SITE.name}`,
     description,
+    images: [SITE.ogImage],
   },
   alternates: {
     canonical: `${SITE.url}/contact`,
@@ -54,8 +56,7 @@ export default function ContactPage() {
               <CopyEmailButton email={SITE.email} />
             </div>
             <p className="text-sm leading-relaxed text-muted">
-              Based in Kerala, India (IST). Usually replies within a day or
-              two.
+              Based in Kerala, India (IST). Usually replies {SITE.replyTime}.
             </p>
           </div>
 

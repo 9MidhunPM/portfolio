@@ -22,11 +22,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: [SITE.ogImage],
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} | ${SITE.name}`,
     description,
+    images: [SITE.ogImage],
   },
   alternates: {
     canonical: `${SITE.url}/open`,
@@ -49,8 +51,8 @@ export default async function OpenPage() {
 
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
-      <div className="max-w-prose space-y-16">
-        <header className="space-y-4">
+      <div className="space-y-16">
+        <header className="max-w-prose space-y-4">
           <h1 className="text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
             <span className="mb-4 block font-mono text-[13px] font-normal text-muted">
               {SITE.name} — {title}
@@ -73,19 +75,25 @@ export default async function OpenPage() {
             <>
               <GitHubProfile stats={stats} />
 
-              <GitHubLanguages languages={stats.topLanguages} />
+              {stats.topLanguages && (
+                <GitHubLanguages languages={stats.topLanguages} />
+              )}
 
-              <ContributionGraph
-                activity={stats.activity}
-                eventCount={stats.recentEvents}
-              />
+              {stats.activity && stats.recentEvents !== null && (
+                <ContributionGraph
+                  activity={stats.activity}
+                  eventCount={stats.recentEvents}
+                />
+              )}
 
-              <GitHubRepositories repositories={stats.repositories} />
+              {stats.repositories && (
+                <GitHubRepositories repositories={stats.repositories} />
+              )}
             </>
           ) : (
             <p className="text-sm text-muted">
-              GitHub stats couldn&apos;t be fetched right now. They refresh
-              daily — check back soon, or browse{" "}
+              GitHub profile data couldn&apos;t be fetched right now. It refreshes
+              hourly — check back soon, or browse{" "}
               <a
                 href={SITE.github}
                 target="_blank"
@@ -100,7 +108,7 @@ export default async function OpenPage() {
         </section>
 
         {/* Projects */}
-        <section aria-label="Project numbers" className="space-y-6">
+        <section aria-label="Project numbers" className="max-w-prose space-y-6">
           <h2 className="font-mono text-[13px] uppercase tracking-wider text-muted">
             Projects
           </h2>
@@ -127,7 +135,7 @@ export default async function OpenPage() {
         </section>
 
         {/* Recognition */}
-        <section aria-label="Recognition" className="space-y-6">
+        <section aria-label="Recognition" className="max-w-prose space-y-6">
           <h2 className="font-mono text-[13px] uppercase tracking-wider text-muted">
             Recognition
           </h2>
@@ -140,7 +148,7 @@ export default async function OpenPage() {
         </section>
 
         {/* Academic */}
-        <section aria-label="Academic record" className="space-y-6">
+        <section aria-label="Academic record" className="max-w-prose space-y-6">
           <h2 className="font-mono text-[13px] uppercase tracking-wider text-muted">
             Academic
           </h2>

@@ -22,10 +22,10 @@ export function GitHubRepositories({
       <div className="flex items-end justify-between gap-4">
         <div>
           <h3 className="text-sm font-medium text-foreground">
-            Recently updated repositories
+            Selected repositories
           </h3>
           <p className="mt-1 text-xs text-muted">
-            Original public repositories, sorted by the latest push.
+            Portfolio projects with live GitHub details.
           </p>
         </div>
       </div>

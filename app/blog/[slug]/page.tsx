@@ -38,11 +38,13 @@ export function generateMetadata({ params }: Props): Metadata {
       publishedTime: post.date,
       authors: [SITE.name],
       tags: post.tags,
+      images: [SITE.ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: [SITE.ogImage],
     },
     alternates: {
       canonical: url,
@@ -63,7 +65,8 @@ export default function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated,
+    image: `${SITE.url}/images/midhun-pm-og.jpg`,
     url,
     author: {
       "@type": "Person",

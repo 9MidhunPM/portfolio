@@ -34,11 +34,13 @@ export function generateMetadata({ params }: Props): Metadata {
       siteName: SITE.name,
       locale: "en_US",
       type: "article",
+      images: [SITE.ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title: `${project.title} | ${SITE.name}`,
       description: project.description,
+      images: [SITE.ogImage],
     },
     alternates: {
       canonical: url,

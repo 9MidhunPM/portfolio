@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { NAV_ITEMS, SITE } from "@/lib/data";
+import { NAV_ITEMS, SECONDARY_NAV_ITEMS, SITE } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 function AvailabilityBadge({ mobileOnly = false }: { mobileOnly?: boolean }) {
@@ -19,11 +19,14 @@ function AvailabilityBadge({ mobileOnly = false }: { mobileOnly?: boolean }) {
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
       </span>
-      {!mobileOnly && (
-        <span className="font-mono text-[13px] text-muted transition-colors hover:text-foreground">
-          Open to internships
-        </span>
-      )}
+      <span
+        className={cn(
+          "font-mono text-[13px] text-muted transition-colors hover:text-foreground",
+          mobileOnly && "text-[11px]"
+        )}
+      >
+        {mobileOnly ? "Available" : "Open to internships"}
+      </span>
     </Link>
   );
 }
@@ -32,6 +35,7 @@ export function Header() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -43,6 +47,18 @@ export function Header() {
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
   return (
     <header
@@ -69,6 +85,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "relative font-mono text-[13px] text-muted transition-colors hover:text-foreground",
                   isActive && "text-foreground"
@@ -92,10 +109,12 @@ export function Header() {
           <AvailabilityBadge mobileOnly />
           <ThemeToggle />
           <button
+            ref={menuButtonRef}
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             className="flex h-9 w-9 items-center justify-center rounded-md border border-border text-foreground"
             aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
             aria-label="Toggle navigation menu"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
@@ -105,6 +124,7 @@ export function Header() {
 
       {menuOpen && (
         <nav
+          id="mobile-navigation"
           className="animate-page-enter overflow-hidden border-b border-border bg-background md:hidden"
           aria-label="Mobile navigation"
         >
@@ -116,6 +136,30 @@ export function Header() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "block rounded-md px-3 py-2.5 font-mono text-sm text-muted transition-colors hover:bg-surface hover:text-foreground",
+                      isActive && "bg-surface text-foreground"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+            <li className="mt-3 border-t border-border pt-3">
+              <span className="block px-3 pb-2 font-mono text-[10px] uppercase tracking-wider text-muted">
+                More
+              </span>
+            </li>
+            {SECONDARY_NAV_ITEMS.map((item) => {
+              const isActive =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
                     className={cn(
                       "block rounded-md px-3 py-2.5 font-mono text-sm text-muted transition-colors hover:bg-surface hover:text-foreground",
                       isActive && "bg-surface text-foreground"

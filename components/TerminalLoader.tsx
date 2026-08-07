@@ -14,9 +14,13 @@ const TerminalEasterEgg = dynamic(
 export function TerminalLoader() {
   const [activated, setActivated] = useState(false);
   const buffer = useRef("");
+  const trigger = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const activate = () => setActivated(true);
+    const activate = () => {
+      trigger.current = document.activeElement as HTMLElement | null;
+      setActivated(true);
+    };
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
       if (
@@ -42,5 +46,13 @@ export function TerminalLoader() {
     };
   }, []);
 
-  return activated ? <TerminalEasterEgg initiallyOpen /> : null;
+  return activated ? (
+    <TerminalEasterEgg
+      initiallyOpen
+      onClose={() => {
+        setActivated(false);
+        requestAnimationFrame(() => trigger.current?.focus());
+      }}
+    />
+  ) : null;
 }

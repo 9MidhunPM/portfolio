@@ -3,12 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
 import { Hero } from "@/components/Hero";
-import { GitHubProfile } from "@/components/GitHubProfile";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ProjectCard } from "@/components/ProjectCard";
 import { PostCard } from "@/components/PostCard";
 import { getAllProjects } from "@/lib/projects";
-import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 
@@ -26,7 +24,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
+        url: `${SITE.url}/images/midhun-pm-og.jpg`,
         width: 1200,
         height: 630,
         alt: "Midhun P M — Software Developer from Kerala",
@@ -37,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
+    images: [`${SITE.url}/images/midhun-pm-og.jpg`],
   },
   alternates: {
     canonical: SITE.url,
@@ -49,34 +47,6 @@ export default async function HomePage() {
     .filter((p) => p.featured)
     .slice(0, 3);
   const recentPosts = getAllPosts().slice(0, 2);
-  const gh = await getGitHubStats();
-
-  const proofPoints: { value: string; label: string; href: string }[] = [
-    {
-      value: "Top 10 / 100",
-      label: "MetroMind at OpenAI Codex Nightline",
-      href: "/projects/metromind",
-    },
-    {
-      value: "737+ bets",
-      label: "placed by 58+ players on WC Predict '26",
-      href: "/projects/wc-predict-26",
-    },
-    {
-      value: "1,000+",
-      label: "weekly users on the IEEE Sahrdaya site",
-      href: "/projects/ieee-sahrdaya-website",
-    },
-    ...(gh
-      ? [
-          {
-            value: String(gh.publicRepos),
-            label: "public repositories on GitHub",
-            href: SITE.github,
-          },
-        ]
-      : []),
-  ];
 
   const personSchema = {
     "@context": "https://schema.org",
@@ -121,8 +91,27 @@ export default async function HomePage() {
 
       <div className="mx-auto max-w-content px-5 sm:px-8">
         {/* Hero */}
-        <section className="py-24 sm:py-32 lg:py-40" aria-label="Introduction">
+        <section className="py-16 sm:py-24 lg:py-32" aria-label="Introduction">
           <Hero />
+        </section>
+
+        <section
+          className="grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-3"
+          aria-label="Experience and education"
+        >
+          {[
+            ["Experience", "Frontend Developer Intern", "Narrowlabs · 2025"],
+            ["Leadership", "Technical Coordinator", "IEEE Sahrdaya · Present"],
+            ["Education", "B.Tech Computer Science", "Sahrdaya · Class of 2028"],
+          ].map(([label, value, detail]) => (
+            <div key={label} className="bg-background p-5 sm:p-6">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
+                {label}
+              </p>
+              <p className="mt-2 text-sm font-medium text-foreground">{value}</p>
+              <p className="mt-1 text-xs text-muted">{detail}</p>
+            </div>
+          ))}
         </section>
 
         {/* Featured projects */}
@@ -186,7 +175,7 @@ export default async function HomePage() {
             </div>
 
             <figure className="space-y-3">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+              <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border">
                 <Image
                   src={codexPhoto}
                   alt="Midhun P M presenting MetroMind at OpenAI Codex Nightline in Kochi"
@@ -204,57 +193,14 @@ export default async function HomePage() {
             </figure>
           </div>
 
-          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {proofPoints.map((point) => {
-              const content = (
-                <>
-                  <p className="stat-number font-serif text-3xl tracking-tight">
-                    {point.value}
-                  </p>
-                  <p className="mt-2 text-xs leading-relaxed text-muted">
-                    {point.label}
-                  </p>
-                </>
-              );
-
-              return point.href.startsWith("http") ? (
-                <a
-                  key={point.label}
-                  href={point.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-background p-5 transition-colors hover:bg-surface"
-                >
-                  {content}
-                </a>
-              ) : (
-                <Link
-                  key={point.label}
-                  href={point.href}
-                  className="bg-background p-5 transition-colors hover:bg-surface"
-                >
-                  {content}
-                </Link>
-              );
-            })}
-          </div>
         </section>
-
-        {gh && (
-          <section className="py-16 sm:py-20" aria-label="Live GitHub profile">
-            <div className="space-y-8">
-              <SectionHeading index="02" title="Open source, live" />
-              <GitHubProfile stats={gh} compact />
-            </div>
-          </section>
-        )}
 
         {/* Recent posts — only when real posts exist */}
         {recentPosts.length > 0 && (
           <section className="py-16 sm:py-20" aria-label="Recent blog posts">
             <div className="space-y-8">
               <SectionHeading
-                index="03"
+                index="02"
                 title="Writing"
                 linkHref="/blog"
                 linkLabel="All posts"
@@ -279,7 +225,7 @@ export default async function HomePage() {
             </p>
             <p className="max-w-prose text-base leading-relaxed text-muted">
               My inbox is always open. I read everything, and I usually reply
-              within a day.
+              {" "}{SITE.replyTime}.
             </p>
             <Link
               href="/contact"
