@@ -13,9 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/open", priority: 0.7, changeFrequency: "weekly" as const },
     { path: "/uses", priority: 0.5, changeFrequency: "yearly" as const },
     { path: "/contact", priority: 0.7, changeFrequency: "yearly" as const },
+    { path: "/resume", priority: 0.7, changeFrequency: "monthly" as const },
   ].map((route) => ({
     url: `${SITE.url}${route.path}`,
-    lastModified: new Date(),
+    lastModified: "2026-08-07",
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
@@ -23,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const projectRoutes: MetadataRoute.Sitemap = getAllProjects().map(
     (project) => ({
       url: `${SITE.url}/projects/${project.slug}`,
-      lastModified: new Date(),
+       lastModified: project.updated,
       changeFrequency: "monthly",
       priority: 0.7,
     })
@@ -31,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const postRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: `${SITE.url}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: post.updated,
     changeFrequency: "monthly",
     priority: 0.8,
   }));

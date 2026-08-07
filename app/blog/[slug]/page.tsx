@@ -63,7 +63,8 @@ export default function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated,
+    image: `${SITE.url}/images/midhun-pm-og.jpg`,
     url,
     author: {
       "@type": "Person",

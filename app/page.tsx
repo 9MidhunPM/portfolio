@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
+        url: `${SITE.url}/images/midhun-pm-og.jpg`,
         width: 1200,
         height: 630,
         alt: "Midhun P M — Software Developer from Kerala",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
+    images: [`${SITE.url}/images/midhun-pm-og.jpg`],
   },
   alternates: {
     canonical: SITE.url,

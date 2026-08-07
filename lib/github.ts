@@ -55,6 +55,13 @@ const USER = "9MidhunPM";
 const API_URL = "https://api.github.com";
 const REVALIDATE_SECONDS = 3600;
 const EVENTS_WINDOW_DAYS = 30;
+const FEATURED_REPOSITORIES = new Set([
+  "MetroMind",
+  "thursday-local-assistant",
+  "EtlabPro",
+  "CalculusDash",
+  "ETLAB-Plus",
+]);
 
 function requestHeaders(): HeadersInit {
   const headers: HeadersInit = {
@@ -218,6 +225,9 @@ export async function getGitHubStats(): Promise<GitHubStats | null> {
       ? activeRepos
       .filter((repo) => repo.pushed_at)
       .sort((a, b) =>
+        Number(FEATURED_REPOSITORIES.has(b.name)) -
+          Number(FEATURED_REPOSITORIES.has(a.name)) ||
+        b.stargazers_count - a.stargazers_count ||
         (b.pushed_at ?? "").localeCompare(a.pushed_at ?? "")
       )
       .slice(0, 6)

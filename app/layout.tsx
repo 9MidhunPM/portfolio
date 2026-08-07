@@ -32,11 +32,20 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/images/midhun-pm-og.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Midhun P M — Full-stack developer and AI systems builder",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
+    images: ["/images/midhun-pm-og.jpg"],
   },
   alternates: {
     canonical: SITE.url,
