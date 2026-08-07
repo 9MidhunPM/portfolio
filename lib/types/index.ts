@@ -13,6 +13,11 @@ export interface Project {
   featured: boolean;
   order: number;
   award?: string;
+  category: "AI systems" | "Production apps" | "Mobile" | "Systems & C++";
+  outcome: string;
+  role: string;
+  status: string;
+  updated: string;
 }
 
 export interface PostMeta {
@@ -22,6 +27,7 @@ export interface PostMeta {
   description: string;
   tags: string[];
   readingTime: string;
+  updated: string;
 }
 
 export interface TocItem {

@@ -284,7 +284,7 @@ export default async function AboutPage() {
         </section>
 
         {/* GitHub activity */}
-        {gh && (
+        {gh?.activity && gh.recentEvents !== null && (
           <section aria-label="GitHub activity">
             <ContributionGraph
               activity={gh.activity}

@@ -14,15 +14,15 @@ export interface GitHubStats {
   publicRepos: number;
   followers: number;
   following: number;
-  totalStars: number;
+  totalStars: number | null;
   memberSince: string;
   profileUpdatedAt: string;
-  topLanguages: { name: string; count: number }[];
+  topLanguages: { name: string; count: number }[] | null;
   /** Public activity buckets keyed by ISO date (YYYY-MM-DD). */
-  activity: Record<string, number>;
+  activity: Record<string, number> | null;
   /** Total public events returned in GitHub's rolling 30-day window. */
-  recentEvents: number;
-  repositories: GitHubRepository[];
+  recentEvents: number | null;
+  repositories: GitHubRepository[] | null;
 }
 
 interface GitHubUserResponse {
@@ -131,7 +131,7 @@ function isGitHubEvent(value: unknown): value is GitHubEventResponse {
   return event.created_at === null || isString(event.created_at);
 }
 
-async function getRepositories(publicRepoCount: number): Promise<GitHubRepoResponse[]> {
+async function getRepositories(publicRepoCount: number): Promise<GitHubRepoResponse[] | null> {
   const pageCount = Math.max(1, Math.ceil(publicRepoCount / 100));
   const pages = await Promise.all(
     Array.from({ length: pageCount }, (_, index) =>
@@ -141,8 +141,20 @@ async function getRepositories(publicRepoCount: number): Promise<GitHubRepoRespo
     )
   );
 
+  if (pages.some((page) => !Array.isArray(page))) return null;
+  return pages.flatMap((page) => (page as unknown[]).filter(isGitHubRepo));
+}
+
+async function getPublicEvents(): Promise<GitHubEventResponse[] | null> {
+  const pages = await Promise.all(
+    [1, 2, 3].map((page) =>
+      fetchJson(`${API_URL}/users/${USER}/events/public?per_page=100&page=${page}`)
+    )
+  );
+  if (pages[0] === null || !Array.isArray(pages[0])) return null;
+
   return pages.flatMap((page) =>
-    Array.isArray(page) ? page.filter(isGitHubRepo) : []
+    Array.isArray(page) ? page.filter(isGitHubEvent) : []
   );
 }
 
@@ -154,21 +166,24 @@ export async function getGitHubStats(): Promise<GitHubStats | null> {
   const userResponse = await fetchJson(`${API_URL}/users/${USER}`);
   if (!isGitHubUser(userResponse)) return null;
 
-  const [repos, eventsResponse] = await Promise.all([
+  const [repos, events] = await Promise.all([
     getRepositories(userResponse.public_repos),
-    fetchJson(`${API_URL}/users/${USER}/events/public?per_page=100`),
+    getPublicEvents(),
   ]);
 
-  const ownedRepos = repos.filter((repo) => !repo.fork);
-  const activeRepos = ownedRepos.filter((repo) => !repo.archived);
-  const events = Array.isArray(eventsResponse)
-    ? eventsResponse.filter(isGitHubEvent)
-    : [];
+  const ownedRepos = repos?.filter((repo) => !repo.fork) ?? null;
+  const activeRepos = ownedRepos?.filter((repo) => !repo.archived) ?? null;
+  const cutoff = new Date();
+  cutoff.setUTCDate(cutoff.getUTCDate() - (EVENTS_WINDOW_DAYS - 1));
+  cutoff.setUTCHours(0, 0, 0, 0);
+  const windowEvents = events?.filter(
+    (event) => event.created_at && new Date(event.created_at) >= cutoff
+  ) ?? null;
 
   const languageCounts = new Map<string, number>();
   let totalStars = 0;
 
-  for (const repo of ownedRepos) {
+  for (const repo of ownedRepos ?? []) {
     totalStars += repo.stargazers_count;
     if (repo.language) {
       languageCounts.set(
@@ -178,26 +193,29 @@ export async function getGitHubStats(): Promise<GitHubStats | null> {
     }
   }
 
-  const activity: Record<string, number> = {};
-  for (const event of events) {
+  const activity: Record<string, number> | null = windowEvents ? {} : null;
+  for (const event of windowEvents ?? []) {
     if (!event.created_at) continue;
     const day = event.created_at.slice(0, 10);
-    activity[day] = (activity[day] ?? 0) + 1;
+    if (activity) activity[day] = (activity[day] ?? 0) + 1;
   }
 
   return {
     publicRepos: userResponse.public_repos,
     followers: userResponse.followers,
     following: userResponse.following,
-    totalStars,
+    totalStars: ownedRepos ? totalStars : null,
     memberSince: userResponse.created_at,
     profileUpdatedAt: userResponse.updated_at,
-    topLanguages: Array.from(languageCounts.entries())
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)),
+    topLanguages: ownedRepos
+      ? Array.from(languageCounts.entries())
+          .map(([name, count]) => ({ name, count }))
+          .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+      : null,
     activity,
-    recentEvents: events.length,
+    recentEvents: windowEvents?.length ?? null,
     repositories: activeRepos
+      ? activeRepos
       .filter((repo) => repo.pushed_at)
       .sort((a, b) =>
         (b.pushed_at ?? "").localeCompare(a.pushed_at ?? "")
@@ -213,7 +231,8 @@ export async function getGitHubStats(): Promise<GitHubStats | null> {
         forks: repo.forks_count,
         topics: repo.topics.slice(0, 4),
         pushedAt: repo.pushed_at as string,
-      })),
+      }))
+      : null,
   };
 }
 

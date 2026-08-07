@@ -73,14 +73,20 @@ export default async function OpenPage() {
             <>
               <GitHubProfile stats={stats} />
 
-              <GitHubLanguages languages={stats.topLanguages} />
+              {stats.topLanguages && (
+                <GitHubLanguages languages={stats.topLanguages} />
+              )}
 
-              <ContributionGraph
-                activity={stats.activity}
-                eventCount={stats.recentEvents}
-              />
+              {stats.activity && stats.recentEvents !== null && (
+                <ContributionGraph
+                  activity={stats.activity}
+                  eventCount={stats.recentEvents}
+                />
+              )}
 
-              <GitHubRepositories repositories={stats.repositories} />
+              {stats.repositories && (
+                <GitHubRepositories repositories={stats.repositories} />
+              )}
             </>
           ) : (
             <p className="text-sm text-muted">
