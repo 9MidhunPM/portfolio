@@ -54,8 +54,7 @@ export default function ContactPage() {
               <CopyEmailButton email={SITE.email} />
             </div>
             <p className="text-sm leading-relaxed text-muted">
-              Based in Kerala, India (IST). Usually replies within a day or
-              two.
+              Based in Kerala, India (IST). Usually replies {SITE.replyTime}.
             </p>
           </div>
 

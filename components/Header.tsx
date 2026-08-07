@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { NAV_ITEMS, SITE } from "@/lib/data";
+import { NAV_ITEMS, SECONDARY_NAV_ITEMS, SITE } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 function AvailabilityBadge({ mobileOnly = false }: { mobileOnly?: boolean }) {
@@ -19,11 +19,14 @@ function AvailabilityBadge({ mobileOnly = false }: { mobileOnly?: boolean }) {
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
       </span>
-      {!mobileOnly && (
-        <span className="font-mono text-[13px] text-muted transition-colors hover:text-foreground">
-          Open to internships
-        </span>
-      )}
+      <span
+        className={cn(
+          "font-mono text-[13px] text-muted transition-colors hover:text-foreground",
+          mobileOnly && "text-[11px]"
+        )}
+      >
+        {mobileOnly ? "Available" : "Open to internships"}
+      </span>
     </Link>
   );
 }
@@ -127,6 +130,29 @@ export function Header() {
         >
           <ul className="space-y-1 px-5 py-4">
             {NAV_ITEMS.map((item) => {
+              const isActive =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "block rounded-md px-3 py-2.5 font-mono text-sm text-muted transition-colors hover:bg-surface hover:text-foreground",
+                      isActive && "bg-surface text-foreground"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+            <li className="mt-3 border-t border-border pt-3">
+              <span className="block px-3 pb-2 font-mono text-[10px] uppercase tracking-wider text-muted">
+                More
+              </span>
+            </li>
+            {SECONDARY_NAV_ITEMS.map((item) => {
               const isActive =
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (

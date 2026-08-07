@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import portrait from "@/public/images/midhun-pm.jpg";
 import { SITE } from "@/lib/data";
 
@@ -24,9 +25,24 @@ export function Hero() {
         <p className="animate-fade-up max-w-2xl text-base leading-relaxed text-muted [animation-delay:200ms] sm:text-lg">
           {SITE.bio}
         </p>
+
+        <div className="animate-fade-up flex flex-wrap gap-3 [animation-delay:250ms]">
+          <Link
+            href="/projects"
+            className="inline-flex min-h-11 items-center rounded-md border border-foreground bg-foreground px-4 py-2 font-mono text-sm text-background transition-opacity hover:opacity-85"
+          >
+            View selected work
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex min-h-11 items-center rounded-md border border-border px-4 py-2 font-mono text-sm text-foreground transition-colors hover:border-muted"
+          >
+            Contact me
+          </Link>
+        </div>
       </div>
 
-      <figure className="animate-fade-up hidden w-64 [animation-delay:250ms] lg:block xl:w-72">
+      <figure className="animate-fade-up w-36 [animation-delay:300ms] sm:w-44 lg:w-64 xl:w-72">
         <div className="rotate-2 rounded-xl border border-accent/50 p-1.5 transition-transform duration-300 hover:rotate-1">
           <div className="rounded-lg border border-border bg-surface p-2 pb-1 shadow-lg">
             <Image

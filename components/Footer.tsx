@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { TerminalTrigger } from "@/components/TerminalTrigger";
-import { NAV_ITEMS, SITE } from "@/lib/data";
+import { NAV_ITEMS, SECONDARY_NAV_ITEMS, SITE } from "@/lib/data";
 
 export function Footer() {
   return (
@@ -19,7 +19,7 @@ export function Footer() {
 
         <nav aria-label="Footer navigation">
           <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {NAV_ITEMS.map((item) => (
+            {[...NAV_ITEMS, ...SECONDARY_NAV_ITEMS].map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
