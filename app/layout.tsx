@@ -55,6 +55,12 @@ export default function RootLayout({
       className={`${GeistSans.variable} ${GeistMono.variable} ${instrumentSerif.variable}`}
     >
       <body className="flex min-h-screen flex-col bg-background font-sans text-foreground">
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[200] -translate-y-20 rounded-md bg-foreground px-4 py-2 font-mono text-xs text-background transition-transform focus:translate-y-0"
+        >
+          Skip to main content
+        </a>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -62,7 +68,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" tabIndex={-1} className="flex-1">
+            {children}
+          </main>
           <Footer />
           <ScrollToTop />
           <TerminalLoader />

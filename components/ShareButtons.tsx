@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Link2 } from "lucide-react";
 import { LinkedinIcon } from "@/components/icons";
 
@@ -12,14 +12,21 @@ export function ShareButtons({
   title: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
+  const timeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => {
+    if (timeout.current) clearTimeout(timeout.current);
+  }, []);
 
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(url);
+      setCopyFailed(false);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      timeout.current = setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Clipboard unavailable — no-op
+      setCopyFailed(true);
     }
   };
 
@@ -32,7 +39,7 @@ export function ShareButtons({
   )}`;
 
   const buttonClass =
-    "flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-muted hover:text-foreground";
+    "flex h-11 w-11 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-muted hover:text-foreground";
 
   return (
     <div className="flex items-center gap-2" aria-label="Share this post">
@@ -64,6 +71,13 @@ export function ShareButtons({
       >
         {copied ? <Check size={15} /> : <Link2 size={15} />}
       </button>
+      <span className="sr-only" aria-live="polite">
+        {copied
+          ? "Link copied to clipboard"
+          : copyFailed
+            ? "Could not copy the link"
+            : ""}
+      </span>
     </div>
   );
 }

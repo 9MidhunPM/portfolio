@@ -83,8 +83,14 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
     .animate-fade-up,
-    .animate-page-enter {
+    .animate-page-enter,
+    .animate-ping,
+    .animate-pulse {
       animation: none;
     }
   }

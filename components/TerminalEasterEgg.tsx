@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
 
 const LINES: { kind: "cmd" | "out" | "gap"; text: string }[] = [
   { kind: "cmd", text: "sudo access --user=midhunpm" },
@@ -33,12 +34,20 @@ const LINES: { kind: "cmd" | "out" | "gap"; text: string }[] = [
 const TYPE_MS = 14;
 const LINE_PAUSE_MS = 90;
 
-export function TerminalEasterEgg({ initiallyOpen = false }: { initiallyOpen?: boolean }) {
+export function TerminalEasterEgg({
+  initiallyOpen = false,
+  onClose,
+}: {
+  initiallyOpen?: boolean;
+  onClose?: () => void;
+}) {
   const [open, setOpen] = useState(initiallyOpen);
   const [visibleLines, setVisibleLines] = useState<string[]>([]);
   const [done, setDone] = useState(false);
   const buffer = useRef("");
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const clearTimers = () => {
     timers.current.forEach(clearTimeout);
@@ -50,7 +59,8 @@ export function TerminalEasterEgg({ initiallyOpen = false }: { initiallyOpen?: b
     setOpen(false);
     setVisibleLines([]);
     setDone(false);
-  }, []);
+    onClose?.();
+  }, [onClose]);
 
   const runTypewriter = useCallback(() => {
     clearTimers();
@@ -148,6 +158,31 @@ export function TerminalEasterEgg({ initiallyOpen = false }: { initiallyOpen?: b
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    closeButtonRef.current?.focus();
+
+    const trapFocus = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const focusable = dialogRef.current?.querySelectorAll<HTMLElement>(
+        "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+      );
+      if (!focusable || focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", trapFocus);
+    return () => document.removeEventListener("keydown", trapFocus);
+  }, [open]);
+
   return (
     <AnimatePresence>
       {open && (
@@ -163,6 +198,7 @@ export function TerminalEasterEgg({ initiallyOpen = false }: { initiallyOpen?: b
           aria-label="Hidden terminal"
         >
           <motion.div
+            ref={dialogRef}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 12 }}
@@ -177,6 +213,15 @@ export function TerminalEasterEgg({ initiallyOpen = false }: { initiallyOpen?: b
               <span className="ml-2 font-mono text-[11px] text-muted">
                 visitor@midhunpm.in — zsh
               </span>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                onClick={close}
+                className="ml-auto flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-white/5 hover:text-[#EDEDED]"
+                aria-label="Close terminal"
+              >
+                <X size={16} aria-hidden="true" />
+              </button>
             </div>
             <div className="min-h-[320px] p-5 font-mono text-[13px] leading-relaxed">
               {visibleLines.map((line, i) =>
