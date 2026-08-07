@@ -3,7 +3,7 @@ import { ContributionGraph } from "@/components/ContributionGraph";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 const title = "Open";
 const description =

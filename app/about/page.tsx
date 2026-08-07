@@ -8,7 +8,7 @@ import portrait from "@/public/images/midhun-pm.jpg";
 import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
 import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 const title = "About";
 const description =

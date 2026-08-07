@@ -11,7 +11,7 @@ import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "Full-Stack Developer & AI Systems Builder",
