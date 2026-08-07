@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContributionGraph } from "@/components/ContributionGraph";
+import { GitHubProfile } from "@/components/GitHubProfile";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 
@@ -43,7 +44,6 @@ function Stat({ value, label }: { value: string; label: string }) {
 
 export default async function OpenPage() {
   const stats = await getGitHubStats();
-  const sinceYear = stats ? new Date(stats.memberSince).getFullYear() : null;
 
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
@@ -69,12 +69,7 @@ export default async function OpenPage() {
           </h2>
           {stats ? (
             <>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
-                <Stat value={String(stats.publicRepos)} label="public repos" />
-                <Stat value={String(stats.totalStars)} label="stars earned" />
-                <Stat value={String(stats.followers)} label="followers" />
-                <Stat value={sinceYear ? String(sinceYear) : "—"} label="on GitHub since" />
-              </div>
+              <GitHubProfile stats={stats} />
 
               <div className="space-y-3">
                 <h3 className="text-sm font-medium text-foreground">
