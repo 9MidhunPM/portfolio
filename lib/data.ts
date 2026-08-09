@@ -10,7 +10,7 @@ export const SITE = {
   linkedin: "https://linkedin.com/in/midhun-pm-b947a1279",
   description:
     "Midhun P M is a Kerala-based full-stack developer and AI systems builder creating AI agents with Next.js, Python, FastAPI, LangChain, n8n, and Docker.",
-  bio: "I'm a CS sophomore at Sahrdaya in Kerala, a full-stack developer building AI agents with Next.js, Python, FastAPI, LangChain, and n8n. I'm open to internships.",
+  bio: "I'm Midhun P M, a software developer and CS sophomore at Sahrdaya in Kerala. I build AI agents with Next.js, Python, FastAPI, LangChain, and n8n. I'm open to internships.",
 } as const;
 
 export const HOME_APPROACH = {
