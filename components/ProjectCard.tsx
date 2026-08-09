@@ -25,6 +25,9 @@ export function ProjectCard({ project }: { project: Project }) {
                 aria-label={`${project.title} on GitHub`}
                 className="flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:text-foreground"
               >
+                <span className="sr-only">
+                  View {project.title} source on GitHub
+                </span>
                 <GithubIcon width={16} height={16} />
               </a>
             )}
@@ -36,6 +39,7 @@ export function ProjectCard({ project }: { project: Project }) {
                 aria-label={`${project.title} live site`}
                 className="flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:text-foreground"
               >
+                <span className="sr-only">Visit the {project.title} live site</span>
                 <ArrowUpRight size={16} strokeWidth={1.75} />
               </a>
             )}

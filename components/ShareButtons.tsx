@@ -7,9 +7,11 @@ import { LinkedinIcon } from "@/components/icons";
 export function ShareButtons({
   url,
   title,
+  ariaLabel = "Share this page",
 }: {
   url: string;
   title: string;
+  ariaLabel?: string;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -35,15 +37,16 @@ export function ShareButtons({
     "flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-muted hover:text-foreground";
 
   return (
-    <div className="flex items-center gap-2" aria-label="Share this post">
+    <div className="flex items-center gap-2" aria-label={ariaLabel}>
       <a
         href={twitterUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on X"
         className={buttonClass}
-      >
-        <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden="true">
+        >
+          <span className="sr-only">Share {title} on X</span>
+          <svg viewBox="0 0 24 24" width={15} height={15} fill="currentColor" aria-hidden="true">
           <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
         </svg>
       </a>
@@ -53,8 +56,9 @@ export function ShareButtons({
         rel="noopener noreferrer"
         aria-label="Share on LinkedIn"
         className={buttonClass}
-      >
-        <LinkedinIcon width={15} height={15} />
+        >
+          <span className="sr-only">Share {title} on LinkedIn</span>
+          <LinkedinIcon width={15} height={15} />
       </a>
       <button
         type="button"

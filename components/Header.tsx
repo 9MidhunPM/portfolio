@@ -19,7 +19,9 @@ function AvailabilityBadge({ mobileOnly = false }: { mobileOnly?: boolean }) {
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
         <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
       </span>
-      {!mobileOnly && (
+      {mobileOnly ? (
+        <span className="sr-only">Open to internships - contact Midhun P M</span>
+      ) : (
         <span className="font-mono text-[13px] text-muted transition-colors hover:text-foreground">
           Open to internships
         </span>

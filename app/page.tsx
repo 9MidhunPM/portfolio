@@ -5,11 +5,12 @@ import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
 import { Hero } from "@/components/Hero";
 import { GitHubProfile } from "@/components/GitHubProfile";
 import { SectionHeading } from "@/components/SectionHeading";
+import { ShareButtons } from "@/components/ShareButtons";
 import { ProjectCard } from "@/components/ProjectCard";
 import { PostCard } from "@/components/PostCard";
 import { getAllProjects } from "@/lib/projects";
 import { getGitHubStats } from "@/lib/github";
-import { SITE } from "@/lib/data";
+import { HOME_APPROACH, SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 
 export const revalidate = 3600;
@@ -249,6 +250,28 @@ export default async function HomePage() {
           </section>
         )}
 
+        <section
+          className="border-t border-border py-16 sm:py-20"
+          aria-labelledby="approach-heading"
+        >
+          <div className="max-w-2xl space-y-6">
+            <p className="font-mono text-xs uppercase tracking-[0.18em] text-muted">
+              {HOME_APPROACH.eyebrow}
+            </p>
+            <h2
+              id="approach-heading"
+              className="font-serif text-4xl leading-tight tracking-tight text-foreground sm:text-5xl"
+            >
+              {HOME_APPROACH.title}
+            </h2>
+            <div className="space-y-5 text-base leading-relaxed text-muted">
+              {HOME_APPROACH.paragraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Recent posts — only when real posts exist */}
         {recentPosts.length > 0 && (
           <section className="py-16 sm:py-20" aria-label="Recent blog posts">
@@ -291,6 +314,14 @@ export default async function HomePage() {
                 aria-hidden="true"
               />
             </Link>
+            <div className="flex items-center gap-3 pt-2">
+              <span className="font-mono text-xs text-muted">Share this site</span>
+              <ShareButtons
+                url={SITE.url}
+                title="Midhun P M - Full-Stack Developer and AI Systems Builder"
+                ariaLabel="Share Midhun P M's portfolio"
+              />
+            </div>
           </div>
         </section>
       </div>

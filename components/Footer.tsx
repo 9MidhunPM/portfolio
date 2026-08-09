@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { TerminalTrigger } from "@/components/TerminalTrigger";
-import { NAV_ITEMS, SITE } from "@/lib/data";
+import { SITE } from "@/lib/data";
 
 export function Footer() {
   return (
@@ -17,30 +16,14 @@ export function Footer() {
           </p>
         </div>
 
-        <nav aria-label="Footer navigation">
-          <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {NAV_ITEMS.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="font-mono text-xs text-muted transition-colors hover:text-foreground"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <a
-                href={SITE.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs text-muted transition-colors hover:text-foreground"
-              >
-                GitHub
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <a
+          href={SITE.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono text-xs text-muted transition-colors hover:text-foreground"
+        >
+          Browse my GitHub profile
+        </a>
       </div>
     </footer>
   );
