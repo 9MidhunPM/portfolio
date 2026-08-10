@@ -15,7 +15,10 @@ export function Hero() {
         </p>
 
         <h1 className="animate-fade-up max-w-4xl font-serif text-5xl leading-[1.08] tracking-tight text-foreground [animation-delay:100ms] sm:text-6xl lg:text-7xl">
-          {SITE.name} - Software Developer
+          I&apos;m {SITE.name},{" "}
+          <span className="italic text-muted">
+            a full-stack developer building AI agents.
+          </span>
         </h1>
 
         <p className="animate-fade-up max-w-2xl text-base leading-relaxed text-muted [animation-delay:200ms] sm:text-lg">

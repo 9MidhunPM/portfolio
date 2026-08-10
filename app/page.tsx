@@ -16,10 +16,10 @@ import { getAllPosts } from "@/lib/blog";
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "Full-Stack Developer & AI Systems Builder",
+  title: "Midhun P M - Software Developer",
   description: SITE.description,
   openGraph: {
-    title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
+    title: "Midhun P M - Software Developer",
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
+    title: "Midhun P M - Software Developer",
     description: SITE.description,
     images: [`${SITE.url}/images/midhun-pm.jpg`],
   },
