@@ -17,7 +17,8 @@ export function getAllPosts(): PostMeta[] {
     .readdirSync(BLOG_DIR)
     .filter((file) => file.endsWith(".mdx"))
     .map((file) => {
-      const raw = fs.readFileSync(path.join(BLOG_DIR, file), "utf8");
+      const filePath = path.join(BLOG_DIR, file);
+      const raw = fs.readFileSync(filePath, "utf8");
       const { data, content } = matter(raw);
 
       return {
@@ -27,6 +28,7 @@ export function getAllPosts(): PostMeta[] {
         description: data.description as string,
         tags: (data.tags ?? []) as string[],
         readingTime: readingTime(content).text,
+        lastModified: fs.statSync(filePath).mtime,
       } satisfies PostMeta;
     })
     .sort((a, b) => +new Date(b.date) - +new Date(a.date));
@@ -46,6 +48,7 @@ export function getPost(slug: string): Post | null {
     description: data.description as string,
     tags: (data.tags ?? []) as string[],
     readingTime: readingTime(content).text,
+    lastModified: fs.statSync(filePath).mtime,
     content,
   };
 }

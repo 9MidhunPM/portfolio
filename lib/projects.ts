@@ -10,7 +10,8 @@ export interface ProjectWithContent extends Project {
 }
 
 function parseProject(file: string): ProjectWithContent {
-  const raw = fs.readFileSync(path.join(PROJECTS_DIR, file), "utf8");
+  const filePath = path.join(PROJECTS_DIR, file);
+  const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
 
   return {
@@ -23,6 +24,7 @@ function parseProject(file: string): ProjectWithContent {
     featured: Boolean(data.featured),
     order: typeof data.order === "number" ? data.order : 99,
     award: data.award as string | undefined,
+    lastModified: fs.statSync(filePath).mtime,
     content,
   };
 }

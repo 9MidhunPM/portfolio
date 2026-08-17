@@ -13,6 +13,7 @@ export interface Project {
   featured: boolean;
   order: number;
   award?: string;
+  lastModified: Date;
 }
 
 export interface PostMeta {
@@ -22,6 +23,7 @@ export interface PostMeta {
   description: string;
   tags: string[];
   readingTime: string;
+  lastModified: Date;
 }
 
 export interface TocItem {
