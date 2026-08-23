@@ -1,34 +1,15 @@
-import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { CopyEmailButton } from "@/components/CopyEmailButton";
 import { GithubIcon, LinkedinIcon } from "@/components/icons";
 import { SITE } from "@/lib/data";
+import { createPageMetadata } from "@/lib/seo";
 
 const title = "Contact";
 const description =
   "Get in touch with Midhun P M — internships, collaboration, or questions about a project. Email midhun.titan@gmail.com; replies within a day or two.";
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title: `${title} | ${SITE.name}`,
-    description,
-    url: `${SITE.url}/contact`,
-    siteName: SITE.name,
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${title} | ${SITE.name}`,
-    description,
-  },
-  alternates: {
-    canonical: `${SITE.url}/contact`,
-  },
-};
+export const metadata = createPageMetadata({ title, description, path: "/contact" });
 
 export default function ContactPage() {
   return (

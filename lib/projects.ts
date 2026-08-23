@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { parseContentImage } from "@/lib/content-image";
 import type { Project } from "@/lib/types";
 
 const PROJECTS_DIR = path.join(process.cwd(), "content", "projects");
@@ -24,6 +25,7 @@ function parseProject(file: string): ProjectWithContent {
     featured: Boolean(data.featured),
     order: typeof data.order === "number" ? data.order : 99,
     award: data.award as string | undefined,
+    image: parseContentImage(data.image),
     lastModified: fs.statSync(filePath).mtime,
     content,
   };

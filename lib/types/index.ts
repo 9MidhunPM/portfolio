@@ -3,6 +3,13 @@ export interface NavItem {
   href: string;
 }
 
+export interface ContentImage {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -13,6 +20,7 @@ export interface Project {
   featured: boolean;
   order: number;
   award?: string;
+  image?: ContentImage;
   lastModified: Date;
 }
 
@@ -23,6 +31,7 @@ export interface PostMeta {
   description: string;
   tags: string[];
   readingTime: string;
+  image?: ContentImage;
   lastModified: Date;
 }
 

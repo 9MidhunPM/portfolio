@@ -48,6 +48,11 @@ export function ProjectCard({ project }: { project: Project }) {
         <p className="text-sm leading-relaxed text-muted">
           {project.description}
         </p>
+        {project.award && (
+          <p className="font-mono text-[11px] leading-relaxed text-foreground">
+            {project.award}
+          </p>
+        )}
       </div>
       <ul className="mt-5 flex flex-wrap gap-1.5" aria-label="Tech stack">
         {project.tech.map((tech) => (

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
@@ -10,6 +11,7 @@ import { getAllPosts, getPost } from "@/lib/blog";
 import { formatDate } from "@/lib/utils";
 import { extractToc } from "@/lib/toc";
 import { SITE } from "@/lib/data";
+import { getSocialImages } from "@/lib/seo";
 
 type Props = {
   params: { slug: string };
@@ -24,6 +26,7 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!post) return {};
 
   const url = `${SITE.url}/blog/${post.slug}`;
+  const images = getSocialImages(post.image);
 
   return {
     title: post.title,
@@ -38,11 +41,13 @@ export function generateMetadata({ params }: Props): Metadata {
       publishedTime: post.date,
       authors: [SITE.name],
       tags: post.tags,
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.description,
+      images: images.map((image) => image.url),
     },
     alternates: {
       canonical: url,
@@ -63,8 +68,9 @@ export default function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.lastModified.toISOString(),
     url,
+    ...(post.image ? { image: `${SITE.url}${post.image.src}` } : {}),
     author: {
       "@type": "Person",
       name: SITE.name,
@@ -138,6 +144,25 @@ export default function BlogPostPage({ params }: Props) {
               ))}
             </ul>
           </header>
+
+          {post.image && (
+            <figure className="mt-10 space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+                <Image
+                  src={post.image.src}
+                  alt={post.image.alt}
+                  width={post.image.width}
+                  height={post.image.height}
+                  sizes="(max-width: 768px) calc(100vw - 2.5rem), 680px"
+                  className="h-auto w-full"
+                  priority
+                />
+              </div>
+              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                Field note from Midhun P M&apos;s workbench
+              </figcaption>
+            </figure>
+          )}
 
           <div className="mt-12">
             <MDXContent source={post.content} />

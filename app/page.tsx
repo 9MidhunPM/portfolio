@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import codexPhoto from "@/public/images/midhun-pm-codex-presenting.jpg";
+import codexBengaluru from "@/public/images/midhun-pm-codex-bangalore.jpeg";
 import { Hero } from "@/components/Hero";
 import { GitHubProfile } from "@/components/GitHubProfile";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -12,8 +12,11 @@ import { getAllProjects } from "@/lib/projects";
 import { getGitHubStats } from "@/lib/github";
 import { HOME_APPROACH, SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
+import { getSocialImages } from "@/lib/seo";
 
 export const revalidate = 3600;
+
+const socialImages = getSocialImages();
 
 export const metadata: Metadata = {
   title: "Midhun P M - Software Developer",
@@ -25,20 +28,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "Midhun P M — Software Developer from Kerala",
-      },
-    ],
+    images: socialImages,
   },
   twitter: {
     card: "summary_large_image",
     title: "Midhun P M - Software Developer",
     description: SITE.description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
+    images: socialImages.map((image) => image.url),
   },
   alternates: {
     canonical: SITE.url,
@@ -49,14 +45,19 @@ export default async function HomePage() {
   const featuredProjects = getAllProjects()
     .filter((p) => p.featured)
     .slice(0, 3);
-  const recentPosts = getAllPosts().slice(0, 2);
+  const recentPosts = getAllPosts().slice(0, 3);
   const gh = await getGitHubStats();
 
   const proofPoints: { value: string; label: string; href: string }[] = [
     {
-      value: "Top 10 / 100",
-      label: "MetroMind at OpenAI Codex Nightline",
-      href: "/projects/metromind",
+      value: "≈3%",
+      label: "selected for the Codex Community Hackathon in Bengaluru",
+      href: "/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru",
+    },
+    {
+      value: "2nd place",
+      label: "for PRISM at ASIET's AI Innovation Hackathon",
+      href: "/projects/prism",
     },
     {
       value: "737+ bets",
@@ -94,6 +95,12 @@ export default async function HomePage() {
       addressCountry: "IN",
     },
     sameAs: [SITE.github, SITE.linkedin],
+    knowsAbout: ["AI systems", "Full-stack development", "Python", "Rust", "Next.js", "FastAPI"],
+    award: [
+      "Second Place — AI Innovation Hackathon 2026, ASIET",
+      "Selected participant — OpenAI Codex Community Hackathon, Bengaluru",
+      "Top 10 Finalist — OpenAI Codex Nightline Hackathon 2026",
+    ],
   };
 
   const websiteSchema = {
@@ -143,7 +150,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Recognition and project evidence */}
+        {/* Recent recognition */}
         <section
           className="border-y border-border py-16 sm:py-20"
           aria-labelledby="recognition-heading"
@@ -157,50 +164,49 @@ export default async function HomePage() {
                 id="recognition-heading"
                 className="font-serif text-4xl leading-tight tracking-tight text-foreground sm:text-5xl"
               >
-                Built on a moving metro.{" "}
+                Selected to build in Bengaluru.{" "}
                 <span className="italic text-muted">
-                  Finished in the Top 10.
+                  Kept shipping after the room cleared.
                 </span>
               </h2>
               <p className="max-w-prose text-base leading-relaxed text-muted">
-                I built MetroMind during OpenAI Codex Nightline, a build sprint
-                inside a moving Kochi Metro train. The WhatsApp agent plans
-                routes, finds nearby stations, and handles ticket-booking
-                flows. It finished in the Top 10 out of 100 builders.
+                I took Thursday to the OpenAI Codex Community Hackathon in
+                Bengaluru after selection from nearly 2,000 applications into
+                around 60 seats. It was a chance to put a local-first desktop
+                assistant in front of other builders, trade ideas, and keep
+                improving the parts that make an agent trustworthy on a real
+                computer.
               </p>
               <div className="flex flex-wrap gap-x-6 gap-y-3 font-mono text-xs">
                 <Link
-                  href="/projects/metromind"
+                  href="/projects/thursday"
                   className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
                 >
-                  Read the MetroMind case study
+                  Read the Thursday case study
                 </Link>
-                <a
-                  href="https://github.com/9MidhunPM/MetroMind"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru"
                   className="text-muted underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-accent"
                 >
-                  View the source on GitHub
-                </a>
+                  Read the Bengaluru build note
+                </Link>
               </div>
             </div>
 
             <figure className="space-y-3">
               <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
                 <Image
-                  src={codexPhoto}
-                  alt="Midhun P M presenting MetroMind at OpenAI Codex Nightline in Kochi"
+                  src={codexBengaluru}
+                  alt="Midhun P M at the OpenAI Codex Community Hackathon in Bengaluru"
                   fill
                   sizes="(min-width: 1024px) 448px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
-                  className="object-cover object-[center_60%]"
+                  className="object-cover object-[center_45%]"
                   placeholder="blur"
                   loading="lazy"
                 />
               </div>
               <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-                OpenAI Codex Nightline · Top 10 of 100 builders · Kochi, July
-                2026
+                OpenAI Codex Community Hackathon · Bengaluru · August 2026
               </figcaption>
             </figure>
           </div>
@@ -282,7 +288,7 @@ export default async function HomePage() {
                 linkHref="/blog"
                 linkLabel="All posts"
               />
-              <div className="grid gap-4 sm:grid-cols-2 lg:max-w-[calc(66.666%-0.5rem)]">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {recentPosts.map((post) => (
                   <PostCard key={post.slug} post={post} />
                 ))}

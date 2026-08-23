@@ -1,0 +1,47 @@
+---
+title: "PRISM"
+description: "Evidence-first AI-assisted review for handwritten examination papers. Teachers keep final authority while PRISM maps evidence, rubrics, confidence, and overrides."
+tech: ["Next.js", "FastAPI", "SQLite", "Alembic", "OpenAI", "Docker"]
+github: "https://github.com/9MidhunPM/prism"
+featured: true
+order: 1
+award: "Second Place — AI Innovation Hackathon 2026, Adi Shankara Institute of Engineering and Technology"
+image:
+  src: "/images/midhun-pm-ai-innovation-hackathon-adi-shankara.jpeg"
+  alt: "Midhun P M with the PRISM team at the AI Innovation Hackathon at Adi Shankara Institute of Engineering and Technology"
+  width: 1280
+  height: 960
+---
+
+## The problem
+
+Teachers do more than add marks when they read handwritten exam papers. They reconstruct what a student wrote, map it to a rubric, assign partial credit, explain the decision, and find patterns across a class. A final score hides most of that work.
+
+I built PRISM at the 24-hour AI Innovation Hackathon at Adi Shankara Institute of Engineering and Technology. The goal was not autonomous grading. It was giving teachers a review workspace that keeps every useful decision tied to evidence.
+
+## What I built
+
+PRISM starts with a photographed or scanned paper and moves through a careful review path:
+
+- **Conservative paper processing** keeps the original document while preparing pages for AI-assisted reading.
+- **Question mapping and criterion suggestions** separate understanding the paper from assigning marks.
+- **Evidence and confidence review** show the writing, rubric criterion, suggested score, and uncertainty together.
+- **Teacher overrides** retain the AI suggestion and record the person’s final decision instead of hiding the disagreement.
+- **Learning signals** turn saved criterion evaluations into student and class-level patterns without inventing personality or ability claims.
+
+I built a Next.js frontend, FastAPI service, SQLite development store, Alembic migrations, and durable media handling. Every runtime AI operation uses an explicit typed contract. Backend code validates score bounds and calculates totals so a model never quietly does the arithmetic.
+
+## The guardrail that mattered
+
+Handwriting is uncertain. So is partial credit. PRISM preserves visible mistakes and uses structured uncertainty when the paper does not support a confident reading. A low-confidence suggestion asks for review. It never becomes an automatic verdict.
+
+That was the part I cared about most during the sprint. An assessment tool should make a teacher’s reasoning easier to inspect, not make a student’s future depend on a black box.
+
+## The result
+
+PRISM won second place at the hackathon, along with a cash prize and an internship opportunity. The event’s top two teams were offered an internship with Enlight Wisdom, Chennai. The better outcome was leaving with a product direction I want to keep building: AI that gives people more evidence, not less control.
+
+## Links
+
+- [Read how I built PRISM in 24 hours](/blog/building-prism-at-adi-shankara-ai-innovation-hackathon)
+- [Explore PRISM on GitHub](https://github.com/9MidhunPM/prism)

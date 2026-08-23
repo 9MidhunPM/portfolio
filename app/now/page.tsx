@@ -1,30 +1,11 @@
-import type { Metadata } from "next";
 import { SITE } from "@/lib/data";
+import { createPageMetadata } from "@/lib/seo";
 
 const title = "Now";
 const description =
-  "What Midhun P M is currently working on, learning, and thinking about.";
+  "What Midhun P M is working on in August 2026: PRISM, Thursday, IEEE Sahrdaya, Rust, and practical AI systems that show their work.";
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title: `${title} | ${SITE.name}`,
-    description,
-    url: `${SITE.url}/now`,
-    siteName: SITE.name,
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${title} | ${SITE.name}`,
-    description,
-  },
-  alternates: {
-    canonical: `${SITE.url}/now`,
-  },
-};
+export const metadata = createPageMetadata({ title, description, path: "/now" });
 
 export default function NowPage() {
   return (
@@ -38,7 +19,7 @@ export default function NowPage() {
             What I&apos;m up to now
           </h1>
           <p className="font-serif text-sm italic text-muted">
-            Last updated: July 2026
+            Last updated: August 2026
           </p>
         </header>
 
@@ -48,18 +29,16 @@ export default function NowPage() {
           </h2>
           <div className="space-y-4 text-base leading-relaxed text-muted">
             <p>
-              Semester five of my B.Tech in CSE at Sahrdaya. Most of my
-              energy outside class goes to the IEEE student branch, where
-              I&apos;m Technical Coordinator — WC Predict &apos;26 just
-              wrapped with 58+ players and 737+ bets, and there&apos;s
-              always something on ieeesahrdaya.com that needs fixing.
+              Semester five of my B.Tech in CSE at Sahrdaya. I&apos;m keeping
+              PRISM moving after its second-place finish at ASIET&apos;s AI
+              Innovation Hackathon, while still shipping work for the IEEE
+              student branch as Technical Coordinator.
             </p>
             <p>
-              On the side-project bench: keeping EtlabPro alive for the
-              students using it (the portal changes shape more often than
-              you&apos;d think), and slowly turning Thursday from
-              &quot;works on my machine&quot; into something I&apos;d hand
-              to another person.
+              I&apos;m also making Thursday feel more native to my Linux setup:
+              visible desktop actions, a voice overlay, personal workflows,
+              and contained Codex project sessions. I brought that build to
+              the OpenAI Codex Community Hackathon in Bengaluru this month.
             </p>
           </div>
         </section>
@@ -70,16 +49,15 @@ export default function NowPage() {
           </h2>
           <div className="space-y-4 text-base leading-relaxed text-muted">
             <p>
-              LLM deployment beyond the happy path — quantization trade-offs,
-              Vulkan backends, and what it actually costs to serve models
-              yourself. Building Thursday on an Intel Arc GPU has been a
-              forced education in all three.
+              AI systems beyond the happy path — local and cloud model
+              trade-offs, typed outputs, and where a model should stop and
+              deterministic code should take over. PRISM and Probe Interview
+              have made that boundary impossible to ignore.
             </p>
             <p>
-              Systems programming in C++, because Calculus Dash showed me how
-              much I don&apos;t know. And backend architecture the honest
-              way: by having EtlabPro break in production and reading the
-              logs.
+              Rust, because mcpd is teaching me what safe configuration tools
+              owe their users. And systems programming in C++, because
+              Calculus Dash showed me how much I still do not know.
             </p>
           </div>
         </section>

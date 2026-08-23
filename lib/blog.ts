@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import readingTime from "reading-time";
+import { parseContentImage } from "@/lib/content-image";
 import type { PostMeta } from "@/lib/types";
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
@@ -28,6 +29,7 @@ export function getAllPosts(): PostMeta[] {
         description: data.description as string,
         tags: (data.tags ?? []) as string[],
         readingTime: readingTime(content).text,
+        image: parseContentImage(data.image),
         lastModified: fs.statSync(filePath).mtime,
       } satisfies PostMeta;
     })
@@ -48,6 +50,7 @@ export function getPost(slug: string): Post | null {
     description: data.description as string,
     tags: (data.tags ?? []) as string[],
     readingTime: readingTime(content).text,
+    image: parseContentImage(data.image),
     lastModified: fs.statSync(filePath).mtime,
     content,
   };

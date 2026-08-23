@@ -1,0 +1,35 @@
+---
+title: "mcpd"
+description: "A Rust control plane for configuring MCP servers once and safely synchronizing them across AI clients, without deleting configuration it does not own."
+tech: ["Rust", "TOML", "JSONC", "Linux Keyring", "Systemd", "MCP"]
+github: "https://github.com/9MidhunPM/mcpd"
+featured: false
+order: 4
+---
+
+## The problem
+
+Every AI coding client has its own MCP configuration format. Copying a server into several files is tedious. Automating that copy can be worse if a tool decides it owns settings the user never gave it permission to change.
+
+I built mcpd to make the safe path the easy path: define a server once, choose exactly which clients mcpd may manage, and inspect the change before it writes anything.
+
+## What I built
+
+mcpd is a local Rust CLI that manages canonical MCP definitions and projects them into Codex, Claude Code, Cursor, Antigravity, and OpenCode.
+
+- **Explicit ownership** means unmanaged entries stay informational and are never deleted by sync.
+- **Safe imports** inspect existing client definitions before adopting only entries that can round-trip losslessly.
+- **Dry runs and diffs** separate managed drift, canonical-only servers, and untouched client configuration.
+- **Secret references** stay symbolic in canonical config and are injected from the operating-system keyring only when a child process starts.
+- **Trusted project overlays** let a repository add or replace MCP configuration only after the project is explicitly trusted.
+- **Watch mode and systemd support** keep enabled targets synchronized without turning discovery into permission to edit.
+
+## The failure mode I designed around
+
+An empty canonical file should never silently mean “delete every managed server.” If ownership remains but canonical data disappears, mcpd fails closed and asks for recovery. Normal synchronization also blocks removals until they are explicitly authorized.
+
+That constraint shaped the whole tool. A configuration helper should reduce the chance that convenience becomes data loss.
+
+## Links
+
+- [Explore mcpd on GitHub](https://github.com/9MidhunPM/mcpd)

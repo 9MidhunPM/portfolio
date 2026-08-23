@@ -1,7 +1,7 @@
 ---
 title: "Thursday"
-description: "Local-first, JARVIS-style AI assistant — quantized 8B LLMs on an Intel Arc GPU via Vulkan, a full toolset, SQLite long-term memory, and a React web UI. Fully offline if you want it to be."
-tech: ["Python", "LLaMA.cpp", "Vulkan", "React", "SQLite", "SSE"]
+description: "Local-first Linux desktop assistant with visible tool calls, memory, voice, and a Codex project studio. It can run on local Vulkan models or an OpenAI-compatible cloud provider."
+tech: ["Python", "OpenAI", "LLaMA.cpp", "Vulkan", "React", "SQLite", "Codex CLI"]
 github: "https://github.com/9MidhunPM/thursday-local-assistant"
 featured: true
 order: 2
@@ -13,24 +13,27 @@ Every assistant I used wanted my data in someone else's cloud. My notes, my file
 
 ## What I built
 
-Thursday is a local-first, JARVIS-style assistant. It talks to any OpenAI-compatible endpoint — llama.cpp on my own machine by default, or cloud providers like OpenAI, OpenRouter, and Groq when I want a smarter model and don't mind the data leaving.
+Thursday is a local-first Linux desktop assistant. It talks to any OpenAI-compatible endpoint — llama.cpp on my own machine by default, or cloud providers when I need more capability and accept the trade-off.
 
 It's a real tool-using agent, not a chat wrapper:
 
 - **Files, apps, and shell** — reads and writes inside sandboxed roots, launches apps, runs shell commands behind a denylist policy.
-- **Web and Spotify** — searches, fetches pages, controls playback.
+- **Desktop and personal workflows** — searches and reviews the web, controls Spotify, drafts Gmail, prepares Calendar changes behind confirmation, and reports live system health.
 - **Memory** — SQLite long-term storage with automatic fact extraction, plus session history. Tell it something once and it remembers across restarts.
 - **Voice** — Edge TTS for speech out, SpeechRecognition for speech in. Optional, but talking to your machine is fun.
+- **Codex project studio** — turns a brief into an isolated Codex CLI session in its own workspace, with model selection and a visible Kitty terminal as the source of truth.
 
-Two interfaces: a fast CLI for the terminal, and a React web UI over HTTP with server-sent events — streaming tokens, tool cards showing what the agent is doing, and confirmation prompts for dangerous actions.
+Two interfaces: a fast CLI for the terminal, and a React web UI over HTTP with server-sent events — streaming tokens, tool cards showing what the agent is doing, and confirmation prompts for dangerous actions. It also has desktop entries, Hyprland hotkeys, and a Quickshell push-to-talk overlay.
 
 ## Tech decisions
 
 **One OpenAI-compatible abstraction.** Every provider — local llama-server or a dozen cloud APIs — speaks the same protocol. Swapping brains is an env var, not a refactor. The local path runs `llama-server` built with Vulkan support, which is what makes an Intel Arc GPU usable for inference.
 
-**Smart tool filtering.** Sending every tool definition every turn eats context fast, and context is the scarce resource on a 8B local model. Thursday sends only the tools relevant to the current turn. Faster, cheaper, and the model picks the right tool more often.
+**Smart tool filtering.** Sending every tool definition every turn eats context fast. Thursday sends only the tools relevant to the current turn, so local models receive a smaller and more useful context.
 
 **Safety by default, not by documentation.** Loopback-only binding unless you explicitly allow remote. Path tools restricted to `read_roots` and `write_roots`. Shell commands go through a denylist, and destructive ones can require a confirmation click in the web UI. An API token guards the port if you expose it. An agent that can touch your filesystem has to earn trust architecturally.
+
+**Contained Codex workspaces.** Thursday validates project names, launches Codex in a separate workspace with a workspace-write sandbox, and keeps its own provider key out of the child session. Generated work does not silently land inside the assistant source tree.
 
 ## What I learned
 
@@ -38,6 +41,11 @@ Context budget is the whole game with local models. A 7-8B model with smart tool
 
 I also learned that memory is harder than it looks. Automatic fact extraction sounds simple until the model confidently stores "user's favorite language is Java" because you asked it to debug one Spring Boot file. Extraction needs conservative prompts and easy ways to forget.
 
+## Taking it to Bengaluru
+
+I brought Thursday to the OpenAI Codex Community Hackathon in Bengaluru in August 2026. The selection email said the organizers received nearly 2,000 applications and selected around 60 people. I was there to ship, but the conversations with other builders mattered just as much. They sharpened the question I keep asking with Thursday: how can an assistant do useful work on a computer while staying legible to the person in front of it?
+
 ## Links
 
-- [GitHub](https://github.com/9MidhunPM/thursday-local-assistant)
+- [Read the Bengaluru build note](/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru)
+- [Explore Thursday on GitHub](https://github.com/9MidhunPM/thursday-local-assistant)

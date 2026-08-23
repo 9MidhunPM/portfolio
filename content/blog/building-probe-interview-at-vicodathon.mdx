@@ -1,0 +1,53 @@
+---
+title: "Building an adaptive interview system at VicoDathon"
+date: "2026-08-09"
+description: "I built Probe Interview for ABTalks' 48-hour VicoDathon sprint: a LangGraph system that turns learning history into grounded technical interview practice."
+tags: ["ai", "hackathon", "langgraph", "fastapi", "interviews", "openai"]
+published: true
+---
+
+Most interview practice tools start with a list of questions. That is useful until you give the same list to everyone. A person who passed a topic on the first attempt, someone who retried it three times, and someone who skipped it entirely should not all get the same next question.
+
+That was the problem I took into VicoDathon, ABTalks’ 48-hour online AI build sprint. The event asked for a public repository, live deployment, and an AI-usage log. It judged projects on originality, polish, and how well the builder directed AI.
+
+## Start from evidence
+
+Probe Interview takes a candidate’s real learning history as input. First-try passes become evidence-backed strengths. Failed or skipped missions become areas to investigate. Retries become a signal that the candidate might need a different kind of question.
+
+The point is not to reduce a person to a score. It is to give the interview a reason for its next move.
+
+I called the interviewer Dr. Probey. It asks one direct question at a time, then reacts to the answer instead of moving through a static script. It can simplify a question, raise the difficulty, ask one targeted follow-up, check in when engagement falls, advance, or finish naturally.
+
+## The graph, not a supervisor prompt
+
+I built the orchestration in LangGraph. Seven agents each have a narrow job:
+
+- Strengths Finder, Weaknesses Finder, and Topic Planner build the initial interview plan.
+- Dr. Probey asks the current question.
+- Response Reviewer grades depth, correctness, vagueness, and engagement.
+- Consistency Checker records only material contradictions between earlier and later claims.
+- Evaluator returns a closing, grounded strengths, gaps, and next steps.
+
+The routing between those steps is deterministic. The model gives structured output, but ordinary code decides which allowed path to take next. That made the conversation easier to reason about and stopped a vague “agent supervisor” from inventing states I had not designed.
+
+Each session uses its ID as a LangGraph thread ID. Checkpoints let a later request continue the same interview with its transcript, review history, topic index, and contradiction record intact.
+
+## Two ways to use it
+
+The main interface is Scene Mode: an interview room, live agent status, reasoning trail, tutorial, transcript, and feedback summary. Some people just want a focused chat, so I also built Classic Mode on the same backend.
+
+The shared engine matters. I did not want the polished interface to be a separate demo with different behavior. Both modes use the same interview endpoint, candidate setup, simulated answer helper, traces, and final feedback contract.
+
+## The parts that are easy to skip
+
+An interview tool handles personal answers. That means the public demo needs boring safety work before it needs more personality. I added strict Pydantic schemas, caps on output and payload size, bounded retries, rate limits, safe handling of missing or completed sessions, and prompt-injection boundaries that treat candidate text as data.
+
+The demo also sends no-index headers and disallows crawling. An interview transcript should not become search content because somebody opened a public link.
+
+## What I learned in 48 hours
+
+The useful interview question is rarely the cleverest one. It is the one that reveals what the person understands next. Building the graph pushed me to make every transition explainable: why did this answer lead to a follow-up instead of a harder topic? Why did the tool call it a gap instead of a failure?
+
+That discipline made Probe better. It also made the sprint feel less like a race to add agent names and more like a chance to make one conversation earn its next question.
+
+Try the [live Probe Interview demo](https://probe.midhunpm.in), read the [case study](/projects/probe-interview), or inspect the [GitHub repository](https://github.com/9MidhunPM/probe-interview).

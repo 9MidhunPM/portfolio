@@ -1,0 +1,30 @@
+---
+title: "AniReminder"
+description: "A private anime release tracker that pairs AniList schedules with ntfy pushes, encrypted preferences, and a Dockerized Next.js and PostgreSQL deployment."
+tech: ["Next.js 15", "React 19", "Auth.js", "Prisma", "PostgreSQL", "ntfy", "Docker"]
+github: "https://github.com/9MidhunPM/ani-reminder"
+featured: false
+order: 6
+---
+
+## The problem
+
+Seasonal anime schedules are messy. Some episodes release at a regular time every week. Others move around. I wanted a small personal tracker that could tell me what is coming up without turning into another tab I had to remember to open.
+
+## What I built
+
+AniReminder lets me search AniList, follow a show, see live countdowns, and receive two kinds of private ntfy notifications: a morning release-day reminder and a push at the exact airtime.
+
+- **AniList GraphQL search** supplies show metadata and air dates.
+- **Per-show controls** pause or delete a reminder without affecting the rest of a watchlist.
+- **Private encrypted notification topics** keep ntfy preferences protected at rest.
+- **A minute-level scheduler** checks release times through an authenticated cron endpoint.
+- **Docker and PostgreSQL** make deployment predictable while keeping the database on a private network.
+
+## What I learned
+
+Notifications are easy to demo and hard to trust. A reminder that arrives late is worse than none. The app separates authentication, cron authorization, and data-encryption keys, and it treats the encryption key as a durable piece of state that needs backup.
+
+## Links
+
+- [Explore AniReminder on GitHub](https://github.com/9MidhunPM/ani-reminder)

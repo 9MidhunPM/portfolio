@@ -1,0 +1,50 @@
+---
+title: "Building PRISM in 24 hours at ASIET's AI Innovation Hackathon"
+date: "2026-08-19"
+description: "I built PRISM, an evidence-first handwritten-paper assessment workspace, in 24 hours at ASIET and won second place, a cash prize, and an internship offer."
+tags: ["ai", "hackathon", "education", "nextjs", "fastapi", "openai"]
+published: true
+image:
+  src: "/images/midhun-pm-ai-innovation-hackathon-adi-shankara.jpeg"
+  alt: "Midhun P M with the PRISM team at the AI Innovation Hackathon at Adi Shankara Institute of Engineering and Technology"
+  width: 1280
+  height: 960
+---
+
+Handwritten papers are one of those problems that look easy from the outside. Take a photo. Read the answer. Give a mark. But that skips the actual work teachers do: deciding what the student wrote, which rubric criterion applies, where partial credit belongs, how certain the reading is, and how to explain the final decision.
+
+I built PRISM around that work during the 24-hour AI Innovation Hackathon at Adi Shankara Institute of Engineering and Technology. We finished second, received a cash prize, and earned an internship opportunity. The event was run by ASIET’s AI and Data Science department with CSI and IEDC, and the top two teams received internship offers from Enlight Wisdom, Chennai.
+
+## The boundary I did not want to cross
+
+I did not want to build “AI grades students.” That is a bad sentence, and it is an even worse product promise.
+
+PRISM is an evidence-first workspace for AI-assisted review. A teacher is still the person who makes the final call. The system should make that call easier to inspect by putting the original paper, transcription, rubric criterion, suggested marks, supporting evidence, and uncertainty in the same review path.
+
+## What fits in a day
+
+The time limit forced a small architecture. I built a Next.js frontend for the workspace and a FastAPI backend for the review operations. SQLite kept local development simple. Alembic made the schema intentional. Uploaded papers use durable media storage with an optional S3-compatible adapter.
+
+The review flow is deliberately split into smaller operations:
+
+1. Preserve the original JPEG, PNG, or PDF and normalize pages conservatively for inspection.
+2. Read the visible handwriting and map it to questions while recording uncertainty instead of repairing the student’s answer.
+3. Evaluate one rubric criterion at a time with marks, reasoning, evidence quotes, page references, and confidence.
+4. Validate every score in backend code. The model never calculates totals.
+5. Let a teacher accept, reject, or explicitly override a suggestion while the history stays visible.
+
+That separation was not ceremony. It stopped a transcription mistake from quietly becoming a grading decision. It also gave the UI a way to show where a recommendation came from.
+
+## What the AI is allowed to do
+
+PRISM uses typed AI operations for perception, grading, review, student profiles, class analysis, teacher chat, and exam import. The model can suggest. It cannot infer intelligence, honesty, motivation, mental health, or cheating from a paper.
+
+When the writing is not clear, PRISM uses `[ILLEGIBLE]` or a structured uncertainty value. A low-confidence result becomes a review signal, not an automatic failure. That was a harder constraint to keep than adding another feature, but it was the reason the project made sense.
+
+## The result
+
+Second place felt good. So did the cash prize and internship offer. I am happier that the product held onto its central idea through the sprint: more AI does not have to mean less human authority.
+
+PRISM left the hackathon as more than a slide deck. The repository documents the data flow, API contract, teacher and student workflows, safety boundaries, demo setup, and known gaps. That gives me a real place to continue from when the 24-hour timer is no longer an excuse.
+
+Read the [PRISM case study](/projects/prism) or [explore the repository on GitHub](https://github.com/9MidhunPM/prism).

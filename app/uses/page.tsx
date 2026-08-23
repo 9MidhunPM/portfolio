@@ -1,31 +1,11 @@
-import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
-import { SITE } from "@/lib/data";
+import { createPageMetadata } from "@/lib/seo";
 
 const title = "Uses";
 const description =
   "The hardware, software, and tools Midhun P M uses daily — Arch Linux, VS Code, FastAPI, LLaMA.cpp on an Intel Arc, and an Ubuntu home server.";
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title: `${title} | ${SITE.name}`,
-    description,
-    url: `${SITE.url}/uses`,
-    siteName: SITE.name,
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${title} | ${SITE.name}`,
-    description,
-  },
-  alternates: {
-    canonical: `${SITE.url}/uses`,
-  },
-};
+export const metadata = createPageMetadata({ title, description, path: "/uses" });
 
 const CATEGORIES: { name: string; items: { name: string; note: string }[] }[] =
   [
@@ -61,6 +41,10 @@ const CATEGORIES: { name: string; items: { name: string; note: string }[] }[] =
           name: "C++",
           note: "For game dev and understanding what the frameworks are hiding. Raylib, no engine.",
         },
+        {
+          name: "Rust",
+          note: "For tools where ownership, configuration safety, and clear failure modes are part of the product.",
+        },
       ],
     },
     {
@@ -69,6 +53,14 @@ const CATEGORIES: { name: string; items: { name: string; note: string }[] }[] =
         {
           name: "LLaMA.cpp + Vulkan",
           note: "Runs quantized 8B models on my Intel Arc GPU. Local inference, no API keys.",
+        },
+        {
+          name: "OpenAI + Codex CLI",
+          note: "For cloud-backed reasoning and contained project sessions when a local model is not the right tool.",
+        },
+        {
+          name: "LangGraph",
+          note: "The explicit state graph behind Probe Interview's adaptive technical conversations.",
         },
         {
           name: "LangChain",

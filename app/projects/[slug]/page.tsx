@@ -7,6 +7,7 @@ import { MDXContent } from "@/components/MDXContent";
 import { GithubIcon } from "@/components/icons";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { SITE } from "@/lib/data";
+import { getSocialImages } from "@/lib/seo";
 import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
 import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
 
@@ -23,6 +24,7 @@ export function generateMetadata({ params }: Props): Metadata {
   if (!project) return {};
 
   const url = `${SITE.url}/projects/${project.slug}`;
+  const images = getSocialImages(project.image);
 
   return {
     title: project.title,
@@ -34,11 +36,13 @@ export function generateMetadata({ params }: Props): Metadata {
       siteName: SITE.name,
       locale: "en_US",
       type: "article",
+      images,
     },
     twitter: {
       card: "summary_large_image",
       title: `${project.title} | ${SITE.name}`,
       description: project.description,
+      images: images.map((image) => image.url),
     },
     alternates: {
       canonical: url,
@@ -65,6 +69,7 @@ export default function ProjectPage({ params }: Props) {
     },
     ...(project.github ? { codeRepository: project.github } : {}),
     ...(project.award ? { award: project.award } : {}),
+    ...(project.image ? { image: `${SITE.url}${project.image.src}` } : {}),
   };
 
   const breadcrumbSchema = {
@@ -120,7 +125,7 @@ export default function ProjectPage({ params }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[13px] text-muted transition-colors hover:text-foreground"
                 >
                   <GithubIcon width={14} height={14} />
-                  Source
+                  Explore {project.title} on GitHub
                 </a>
               )}
               {project.live && (
@@ -131,7 +136,7 @@ export default function ProjectPage({ params }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[13px] text-muted transition-colors hover:text-foreground"
                 >
                   <ArrowUpRight size={14} />
-                  Live site
+                  Try the {project.title} demo
                 </a>
               )}
             </div>
@@ -147,7 +152,31 @@ export default function ProjectPage({ params }: Props) {
               </li>
             ))}
           </ul>
+
+          {project.award && (
+            <p className="font-mono text-[12px] leading-relaxed text-foreground">
+              {project.award}
+            </p>
+          )}
         </header>
+
+        {project.image && (
+          <figure className="mt-10 space-y-3">
+            <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+              <Image
+                src={project.image.src}
+                alt={project.image.alt}
+                width={project.image.width}
+                height={project.image.height}
+                sizes="(max-width: 768px) calc(100vw - 2.5rem), 680px"
+                className="h-auto w-full"
+              />
+            </div>
+            <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+              PRISM at the AI Innovation Hackathon · ASIET · August 2026
+            </figcaption>
+          </figure>
+        )}
 
         <div className="mt-12">
           <MDXContent source={project.content} />

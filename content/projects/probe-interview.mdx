@@ -1,0 +1,44 @@
+---
+title: "Probe Interview"
+description: "Adaptive technical interview practice built with LangGraph. It turns a candidate's real learning history into grounded questions, targeted follow-ups, and useful feedback."
+tech: ["Python", "FastAPI", "LangGraph", "OpenAI", "React", "Vite", "Docker"]
+github: "https://github.com/9MidhunPM/probe-interview"
+live: "https://probe.midhunpm.in"
+featured: true
+order: 3
+---
+
+## The problem
+
+Most interview practice is either a memorized question bank or an unstructured chat. Neither one knows what a person has actually learned, where they struggled, or when a follow-up would be more useful than another generic question.
+
+I built Probe Interview for VicoDathon, ABTalks’ 48-hour online AI build sprint. The brief rewarded originality, polish, and how well participants directed AI tools. I wanted the interview to react to evidence, not pretend every candidate starts from the same blank page.
+
+## What I built
+
+Probe turns a candidate’s learning history into an adaptive technical conversation with Dr. Probey. First-try passes become calibration strengths. Retries, failures, and skipped missions become explicit areas to investigate.
+
+The interview graph has seven focused agents:
+
+- **Strengths Finder, Weaknesses Finder, and Topic Planner** build a short evidence-backed interview plan.
+- **Dr. Probey** asks one focused question at a time.
+- **Response Reviewer and Consistency Checker** assess depth, correctness, vagueness, engagement, and material contradictions.
+- **Evaluator** returns grounded strengths, gaps, next steps, and a recap of the session.
+
+LangGraph owns the state machine. Deterministic routing decides whether to simplify, escalate, probe one claim, check in, move on, or finish. Each session checkpoints after a question, so the next message resumes the same interview instead of starting over.
+
+## Making the system inspectable
+
+The app has a Scene Mode with an animated interview room and a reasoning trail, plus a focused Classic Mode. Both use the same engine. The user can inspect safe structured outputs from the agents without exposing hidden prompts.
+
+I also added strict Pydantic schemas, output caps, payload limits, prompt-injection boundaries, bounded retries, and per-IP rate limits. Public responses carry no-index headers because an interview transcript is not search content.
+
+## What I learned
+
+The useful part of an interview assistant is not asking more questions. It is choosing the next question for a reason, then being honest about what the answer did and did not demonstrate. Keeping that logic visible made the product better and made the graph easier to debug.
+
+## Links
+
+- [Read the VicoDathon build note](/blog/building-probe-interview-at-vicodathon)
+- [Try the Probe Interview demo](https://probe.midhunpm.in)
+- [Explore Probe Interview on GitHub](https://github.com/9MidhunPM/probe-interview)

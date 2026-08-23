@@ -1,7 +1,16 @@
+import Image from "next/image";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import type { MDXComponents } from "mdx/types";
+
+type PortfolioImageProps = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  caption?: string;
+};
 
 const prettyCodeOptions: Partial<Options> = {
   theme: {
@@ -91,13 +100,24 @@ const components: MDXComponents = {
   td: (props) => (
     <td className="border-b border-border px-4 py-2.5 text-muted" {...props} />
   ),
-  img: (props) => (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      className="mt-6 rounded-lg border border-border"
-      alt={props.alt ?? ""}
-      {...props}
-    />
+  PortfolioImage: ({ src, alt, width, height, caption }: PortfolioImageProps) => (
+    <figure className="mt-8 space-y-3">
+      <div className="overflow-hidden rounded-lg border border-border">
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          sizes="(max-width: 768px) calc(100vw - 2.5rem), 680px"
+          className="h-auto w-full"
+        />
+      </div>
+      {caption && (
+        <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
   ),
 };
 

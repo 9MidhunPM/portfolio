@@ -1,37 +1,18 @@
-import type { Metadata } from "next";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { GitHubProfile } from "@/components/GitHubProfile";
 import { GitHubRepositories } from "@/components/GitHubRepositories";
 import { GitHubLanguages } from "@/components/GitHubLanguages";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
+import { createPageMetadata } from "@/lib/seo";
 
 export const revalidate = 3600;
 
 const title = "Open";
 const description =
-  "Open stats and numbers from Midhun P M's projects, GitHub, and academic record.";
+  "Open, source-backed numbers from Midhun P M's projects, GitHub activity, hackathon recognition, and academic record — without inflated metrics.";
 
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph: {
-    title: `${title} | ${SITE.name}`,
-    description,
-    url: `${SITE.url}/open`,
-    siteName: SITE.name,
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${title} | ${SITE.name}`,
-    description,
-  },
-  alternates: {
-    canonical: `${SITE.url}/open`,
-  },
-};
+export const metadata = createPageMetadata({ title, description, path: "/open" });
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
@@ -132,10 +113,10 @@ export default async function OpenPage() {
             Recognition
           </h2>
           <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
-            <Stat value="Top 10" label="of 100 builders, Codex Nightline 2026" />
+            <Stat value="≈3%" label="selected for the Codex Community Hackathon, Bengaluru" />
+            <Stat value="2nd" label="place, PRISM at ASIET's AI Innovation Hackathon" />
             <Stat value="2×" label="best semester project — S1 and S3" />
-            <Stat value="1st" label="place, college hackathon (PYHACK)" />
-            <Stat value="1" label="moving metro built on, so far" />
+            <Stat value="Top 10" label="of 100 builders, Codex Nightline 2026" />
           </div>
         </section>
 

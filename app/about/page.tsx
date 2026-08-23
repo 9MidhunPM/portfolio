@@ -4,15 +4,20 @@ import { PageHeader } from "@/components/PageHeader";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
+import { getSocialImages } from "@/lib/seo";
 import portrait from "@/public/images/midhun-pm.jpg";
 import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
 import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
+import codexBengaluru from "@/public/images/midhun-pm-codex-bangalore.jpeg";
+import prismTeam from "@/public/images/midhun-pm-ai-innovation-hackathon-adi-shankara.jpeg";
 
 export const revalidate = 3600;
 
 const title = "About";
 const description =
-  "About Midhun P M — CS undergrad at Sahrdaya building AI agents, mobile apps, and low-level C++ projects. IEEE Technical Coordinator, hackathon winner.";
+  "About Midhun P M, a third-year CS student at Sahrdaya who builds practical AI systems, mobile apps, developer tools, and self-hosted software.";
+
+const socialImages = getSocialImages();
 
 export const metadata: Metadata = {
   title,
@@ -24,20 +29,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "profile",
-    images: [
-      {
-        url: `${SITE.url}/images/midhun-pm.jpg`,
-        width: 1200,
-        height: 630,
-        alt: "Midhun P M — Software Developer from Kerala",
-      },
-    ],
+    images: socialImages,
   },
   twitter: {
     card: "summary_large_image",
     title: `${title} | ${SITE.name}`,
     description,
-    images: [`${SITE.url}/images/midhun-pm.jpg`],
+    images: socialImages.map((image) => image.url),
   },
   alternates: {
     canonical: `${SITE.url}/about`,
@@ -47,7 +45,7 @@ export const metadata: Metadata = {
 const SKILLS: { group: string; items: string[] }[] = [
   {
     group: "Languages",
-    items: ["Python", "C", "C++", "Java", "JavaScript", "Dart"],
+    items: ["Python", "Rust", "C", "C++", "Java", "JavaScript", "Dart"],
   },
   {
     group: "Frontend",
@@ -59,7 +57,7 @@ const SKILLS: { group: string; items: string[] }[] = [
   },
   {
     group: "Tools",
-    items: ["Git", "Arch Linux", "LangChain", "n8n", "Playwright", "LLaMA.cpp", "Raylib", "Twilio"],
+    items: ["Git", "Arch Linux", "LangGraph", "LangChain", "n8n", "Playwright", "LLaMA.cpp", "Codex CLI", "Raylib", "Twilio"],
   },
   {
     group: "Cloud & Infra",
@@ -90,6 +88,16 @@ const EXPERIENCE: {
 ];
 
 const ACHIEVEMENTS: { title: string; detail: string; image?: boolean }[] = [
+  {
+    title: "Second Place — AI Innovation Hackathon, ASIET",
+    detail:
+      "Built PRISM, an evidence-first workspace for AI-assisted handwritten-paper review, in 24 hours. Won a cash prize and an internship opportunity.",
+  },
+  {
+    title: "Selected — OpenAI Codex Community Hackathon, Bengaluru",
+    detail:
+      "One of around 60 participants selected from nearly 2,000 applications. Took Thursday, my local-first Linux desktop assistant, into the room.",
+  },
   {
     title: "Top 10 Finalist — OpenAI Codex Nightline Hackathon",
     detail:
@@ -141,6 +149,12 @@ const TIMELINE: { period: string; title: string; detail: string }[] = [
     detail:
       "Shipped production UI at Narrowlabs, became IEEE Technical Coordinator, and launched WC Predict '26 — 58+ players, 737+ bets. Built Thursday, a local-first AI assistant, on the side.",
   },
+  {
+    period: "S5 · Aug 2026",
+    title: "Three hackathons, three kinds of AI work",
+    detail:
+      "Built Probe Interview during VicoDathon, took Thursday to the OpenAI Codex Community Hackathon in Bengaluru, and placed second with PRISM at ASIET's 24-hour AI Innovation Hackathon.",
+  },
 ];
 
 export default async function AboutPage() {
@@ -158,11 +172,30 @@ export default async function AboutPage() {
     },
   };
 
+  const profileSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    url: `${SITE.url}/about`,
+    mainEntity: {
+      "@type": "Person",
+      name: SITE.name,
+      url: SITE.url,
+      image: `${SITE.url}/images/midhun-pm.jpg`,
+      jobTitle: "Full-Stack Developer and AI Systems Builder",
+      sameAs: [SITE.github, SITE.linkedin],
+      knowsAbout: ["AI systems", "Full-stack development", "Python", "Rust", "Next.js", "FastAPI"],
+    },
+  };
+
   return (
     <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(imageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profileSchema) }}
       />
 
       <div className="space-y-20">
@@ -175,7 +208,7 @@ export default async function AboutPage() {
         >
           <div className="max-w-prose space-y-5 text-base leading-relaxed text-muted">
             <p>
-              I&apos;m a CS undergrad at Sahrdaya College of Engineering and
+              I&apos;m a third-year CS undergrad at Sahrdaya College of Engineering and
               Technology, class of 2028, currently in semester five with a
               9.70 CGPA. I got here by building things — my first real
               software was RyMeds, a pharmacy inventory system my team hacked
@@ -195,10 +228,10 @@ export default async function AboutPage() {
               Somewhere along the way I fell down the AI rabbit hole. I
               started running quantized 8B models on an Intel Arc GPU via
               Vulkan and built Thursday, a local-first assistant with tools,
-              memory, and a voice. Then came the OpenAI Codex Nightline
-              Hackathon — a build sprint inside a moving Kochi Metro train —
-              where MetroMind, my WhatsApp agent that plans routes and books
-              real tickets, finished Top 10 among 100 builders.
+              memory, voice, and a Codex project studio. This year it took me
+              from Codex Nightline in Kochi to the OpenAI Codex Community
+              Hackathon in Bengaluru, where I got to learn from a room full of
+              builders.
             </p>
             <p>
               Between classes I&apos;m the IEEE student branch&apos;s
@@ -236,10 +269,47 @@ export default async function AboutPage() {
           </figure>
         </section>
 
+        <section aria-label="Recent hackathon work" className="space-y-8">
+          <h2 className="text-xl font-medium tracking-tight text-foreground sm:text-2xl">
+            <span className="mr-3 font-mono text-sm text-muted">01</span>
+            Recent build season
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            <figure className="space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+                <Image
+                  src={codexBengaluru}
+                  alt="Midhun P M at the OpenAI Codex Community Hackathon in Bengaluru"
+                  sizes="(max-width: 768px) calc(100vw - 2.5rem), 420px"
+                  className="h-auto w-full"
+                  placeholder="blur"
+                />
+              </div>
+              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                OpenAI Codex Community Hackathon · Bengaluru · August 2026
+              </figcaption>
+            </figure>
+            <figure className="space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border">
+                <Image
+                  src={prismTeam}
+                  alt="Midhun P M with the PRISM team at the AI Innovation Hackathon at ASIET"
+                  sizes="(max-width: 768px) calc(100vw - 2.5rem), 420px"
+                  className="h-auto w-full"
+                  placeholder="blur"
+                />
+              </div>
+              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                PRISM · Second place at ASIET&apos;s AI Innovation Hackathon · August 2026
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
         {/* Experience */}
         <section aria-label="Experience">
           <h2 className="mb-8 text-xl font-medium tracking-tight text-foreground sm:text-2xl">
-            <span className="mr-3 font-mono text-sm text-muted">01</span>
+            <span className="mr-3 font-mono text-sm text-muted">02</span>
             Experience
           </h2>
           <div className="max-w-prose space-y-10">
@@ -262,7 +332,7 @@ export default async function AboutPage() {
         {/* Skills */}
         <section aria-label="Skills">
           <h2 className="mb-8 text-xl font-medium tracking-tight text-foreground sm:text-2xl">
-            <span className="mr-3 font-mono text-sm text-muted">02</span>
+            <span className="mr-3 font-mono text-sm text-muted">03</span>
             What I work with
           </h2>
           <div className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -297,7 +367,7 @@ export default async function AboutPage() {
         {/* Achievements */}
         <section aria-label="Achievements">
           <h2 className="mb-8 text-xl font-medium tracking-tight text-foreground sm:text-2xl">
-            <span className="mr-3 font-mono text-sm text-muted">03</span>
+            <span className="mr-3 font-mono text-sm text-muted">04</span>
             Proof of work
           </h2>
           <ul className="max-w-prose space-y-6">
@@ -333,7 +403,7 @@ export default async function AboutPage() {
         {/* Timeline */}
         <section aria-label="Timeline">
           <h2 className="mb-8 text-xl font-medium tracking-tight text-foreground sm:text-2xl">
-            <span className="mr-3 font-mono text-sm text-muted">04</span>
+            <span className="mr-3 font-mono text-sm text-muted">05</span>
             The semesters so far
           </h2>
           <ol className="max-w-prose space-y-10 border-l border-border pl-8">

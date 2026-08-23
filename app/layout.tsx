@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { TerminalLoader } from "@/components/TerminalLoader";
 import { SITE } from "@/lib/data";
+import { getSocialImages } from "@/lib/seo";
 import "./globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -17,6 +18,8 @@ const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument-serif",
   display: "swap",
 });
+
+const socialImages = getSocialImages();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
@@ -32,11 +35,13 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     locale: "en_US",
     type: "website",
+    images: socialImages,
   },
   twitter: {
     card: "summary_large_image",
     title: `Full-Stack Developer & AI Systems Builder | ${SITE.name}`,
     description: SITE.description,
+    images: socialImages.map((image) => image.url),
   },
   alternates: {
     canonical: SITE.url,
