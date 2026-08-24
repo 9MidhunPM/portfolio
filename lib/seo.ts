@@ -22,6 +22,24 @@ export function getSocialImages(image?: ContentImage) {
   ];
 }
 
+export function getImageObject(image: ContentImage) {
+  return {
+    "@type": "ImageObject",
+    contentUrl: `${SITE.url}${image.src}`,
+    url: `${SITE.url}${image.src}`,
+    caption: image.alt,
+    width: image.width,
+    height: image.height,
+    creator: {
+      "@type": "Person",
+      name: SITE.name,
+      url: SITE.url,
+    },
+    creditText: SITE.name,
+    copyrightNotice: SITE.name,
+  };
+}
+
 export function createPageMetadata({
   title,
   description,

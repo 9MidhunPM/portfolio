@@ -11,7 +11,7 @@ import { getAllPosts, getPost } from "@/lib/blog";
 import { formatDate } from "@/lib/utils";
 import { extractToc } from "@/lib/toc";
 import { SITE } from "@/lib/data";
-import { getSocialImages } from "@/lib/seo";
+import { getImageObject, getSocialImages } from "@/lib/seo";
 
 type Props = {
   params: { slug: string };
@@ -70,7 +70,7 @@ export default function BlogPostPage({ params }: Props) {
     datePublished: post.date,
     dateModified: post.lastModified.toISOString(),
     url,
-    ...(post.image ? { image: `${SITE.url}${post.image.src}` } : {}),
+    ...(post.image ? { image: getImageObject(post.image) } : {}),
     author: {
       "@type": "Person",
       name: SITE.name,

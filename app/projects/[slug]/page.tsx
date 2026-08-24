@@ -7,7 +7,7 @@ import { MDXContent } from "@/components/MDXContent";
 import { GithubIcon } from "@/components/icons";
 import { getAllProjects, getProject } from "@/lib/projects";
 import { SITE } from "@/lib/data";
-import { getSocialImages } from "@/lib/seo";
+import { getImageObject, getSocialImages } from "@/lib/seo";
 import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
 import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
 
@@ -69,7 +69,7 @@ export default function ProjectPage({ params }: Props) {
     },
     ...(project.github ? { codeRepository: project.github } : {}),
     ...(project.award ? { award: project.award } : {}),
-    ...(project.image ? { image: `${SITE.url}${project.image.src}` } : {}),
+    ...(project.image ? { image: getImageObject(project.image) } : {}),
   };
 
   const breadcrumbSchema = {
