@@ -25,12 +25,13 @@ export function generateMetadata({ params }: Props): Metadata {
 
   const url = `${SITE.url}/projects/${project.slug}`;
   const images = getSocialImages(project.image);
+  const pageTitle = `${SITE.name} — ${project.title}`;
 
   return {
-    title: project.title,
+    title: pageTitle,
     description: project.description,
     openGraph: {
-      title: `${project.title} | ${SITE.name}`,
+      title: pageTitle,
       description: project.description,
       url,
       siteName: SITE.name,
@@ -40,7 +41,7 @@ export function generateMetadata({ params }: Props): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${project.title} | ${SITE.name}`,
+      title: pageTitle,
       description: project.description,
       images: images.map((image) => image.url),
     },
@@ -59,8 +60,9 @@ export default function ProjectPage({ params }: Props) {
     "@type": "SoftwareApplication",
     name: project.title,
     description: project.description,
-    applicationCategory: "WebApplication",
-    operatingSystem: "Any",
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Linux",
+    softwareVersion: "1.0.0",
     url: project.live ?? `${SITE.url}/projects/${project.slug}`,
     author: {
       "@type": "Person",
@@ -136,7 +138,7 @@ export default function ProjectPage({ params }: Props) {
                   className="inline-flex items-center gap-1.5 font-mono text-[13px] text-muted transition-colors hover:text-foreground"
                 >
                   <ArrowUpRight size={14} />
-                  Try the {project.title} demo
+                  Open the {project.title} site
                 </a>
               )}
             </div>
