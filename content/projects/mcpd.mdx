@@ -1,35 +1,59 @@
 ---
-title: "mcpd"
-description: "A Rust control plane for configuring MCP servers once and safely synchronizing them across AI clients, without deleting configuration it does not own."
-tech: ["Rust", "TOML", "JSONC", "Linux Keyring", "Systemd", "MCP"]
-github: "https://github.com/9MidhunPM/mcpd"
-featured: false
-order: 4
+title: "Syncplane"
+description: "Midhun P M built Syncplane, a local-first Rust CLI that safely projects one canonical MCP configuration into five AI clients."
+tech: ["Rust", "MCP", "TOML", "JSONC", "OS Keyring", "Systemd"]
+github: "https://github.com/9MidhunPM/syncplane"
+live: "https://syncplane.midhunpm.in"
+featured: true
+order: 3
 ---
 
 ## The problem
 
-Every AI coding client has its own MCP configuration format. Copying a server into several files is tedious. Automating that copy can be worse if a tool decides it owns settings the user never gave it permission to change.
+Every AI coding client stores MCP configuration in a different file and format. Copying one server into five clients is tedious. A broad sync can be worse when it edits settings it does not own.
 
-I built mcpd to make the safe path the easy path: define a server once, choose exactly which clients mcpd may manage, and inspect the change before it writes anything.
+I built Syncplane to make the safe path practical: define a server once, choose exactly which clients it may manage, and inspect the plan before anything is written.
 
 ## What I built
 
-mcpd is a local Rust CLI that manages canonical MCP definitions and projects them into Codex, Claude Code, Cursor, Antigravity, and OpenCode.
+Syncplane is a local-first Rust CLI and configuration control plane. It keeps one canonical MCP definition, then projects it into Codex, Claude Code, Cursor, Antigravity, and OpenCode.
+
+The Linux 1.0.0 release supports global configuration and trusted project overlays. It handles stdio and Streamable HTTP servers, while keeping the scope narrow: Syncplane configures client files. It does not proxy MCP traffic, run agents, install packages, or act as a cloud service.
+
+## How it works
+
+The workflow has four deliberate stages:
+
+1. **Define** a server in `~/.config/syncplane/config.toml`, or import a readable definition after reviewing it.
+2. **Enable** the targets Syncplane is allowed to manage. Detection is informational and never grants ownership.
+3. **Review** `syncplane diff` or `syncplane sync --dry-run` to see managed drift, canonical-only servers, and target-only entries.
+4. **Sync** each enabled target through its native adapter. Syncplane validates the input, creates a private backup, writes a temporary file, and atomically replaces the target before committing ownership state.
 
 - **Explicit ownership** means unmanaged entries stay informational and are never deleted by sync.
-- **Safe imports** inspect existing client definitions before adopting only entries that can round-trip losslessly.
-- **Dry runs and diffs** separate managed drift, canonical-only servers, and untouched client configuration.
-- **Secret references** stay symbolic in canonical config and are injected from the operating-system keyring only when a child process starts.
-- **Trusted project overlays** let a repository add or replace MCP configuration only after the project is explicitly trusted.
+- **Safe imports and adoption** inspect existing client definitions before accepting only entries that can round-trip without losing meaning.
+- **JSONC-aware adapters** retain comments, unrelated settings, and target entries outside the owned scope.
+- **Secret references** stay symbolic in canonical config. Supported stdio servers receive values from the operating-system keyring only when `syncplane exec` starts the child process.
+- **Trusted project overlays** let a repository add or replace MCP configuration only after its path is explicitly trusted.
 - **Watch mode and systemd support** keep enabled targets synchronized without turning discovery into permission to edit.
 
 ## The failure mode I designed around
 
-An empty canonical file should never silently mean “delete every managed server.” If ownership remains but canonical data disappears, mcpd fails closed and asks for recovery. Normal synchronization also blocks removals until they are explicitly authorized.
+An empty canonical file should never silently mean “delete every managed server.” If ownership remains but canonical data disappears, Syncplane fails closed and asks for recovery. Normal synchronization also blocks removals until they are explicitly authorized.
+
+Malformed files, duplicate JSONC keys, unsupported schemas, and unmanaged name collisions stop before a target write. Imports never modify the source target. Dry runs do not create files, locks, backups, state, or keyring entries.
 
 That constraint shaped the whole tool. A configuration helper should reduce the chance that convenience becomes data loss.
 
+## Release
+
+Syncplane 1.0.0 is available for Linux x86_64 through a checksum-verified GitHub release and the project installer:
+
+```sh
+curl -fsSL https://syncplane.midhunpm.in/install.sh | sh
+```
+
 ## Links
 
-- [Explore mcpd on GitHub](https://github.com/9MidhunPM/mcpd)
+- [Open Syncplane](https://syncplane.midhunpm.in)
+- [Read the Syncplane documentation](https://syncplane.midhunpm.in/docs/getting-started/)
+- [Explore Syncplane on GitHub](https://github.com/9MidhunPM/syncplane)
