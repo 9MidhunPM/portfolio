@@ -8,6 +8,8 @@ export interface ContentImage {
   alt: string;
   width: number;
   height: number;
+  license?: string;
+  acquireLicensePage?: string;
 }
 
 export interface Project {

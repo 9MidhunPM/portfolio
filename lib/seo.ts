@@ -37,6 +37,10 @@ export function getImageObject(image: ContentImage) {
     },
     creditText: SITE.name,
     copyrightNotice: SITE.name,
+    ...(image.license ? { license: image.license } : {}),
+    ...(image.acquireLicensePage
+      ? { acquireLicensePage: image.acquireLicensePage }
+      : {}),
   };
 }
 

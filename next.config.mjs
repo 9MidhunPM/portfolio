@@ -6,6 +6,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/projects/syncplane",
+        destination: "/projects/mcpd",
+        permanent: true,
+      },
+      {
         source: "/:path*",
         has: [{ type: "host", value: "www.midhunpm.in" }],
         destination: "https://midhunpm.in/:path*",

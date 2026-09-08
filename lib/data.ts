@@ -35,3 +35,30 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Uses", href: "/uses" },
   { label: "Contact", href: "/contact" },
 ];
+
+export const OPEN_CASE_STUDIES = [
+  {
+    href: "/projects/mcpd",
+    title: "Syncplane",
+    description:
+      "A Rust CLI that keeps MCP configuration deliberate across five AI clients.",
+  },
+  {
+    href: "/projects/ani-reminder",
+    title: "AniReminder",
+    description:
+      "A private release tracker with encrypted preferences and timed ntfy reminders.",
+  },
+  {
+    href: "/projects/probe-interview",
+    title: "Probe Interview",
+    description:
+      "A LangGraph interview practice app with grounded follow-ups and useful feedback.",
+  },
+  {
+    href: "/blog/building-probe-interview-at-vicodathon",
+    title: "How I built Probe at VicoDathon",
+    description:
+      "The build note behind the interview system and its evidence-first question flow.",
+  },
+] as const;

@@ -3,8 +3,9 @@ import { GitHubProfile } from "@/components/GitHubProfile";
 import { GitHubRepositories } from "@/components/GitHubRepositories";
 import { GitHubLanguages } from "@/components/GitHubLanguages";
 import { getGitHubStats } from "@/lib/github";
-import { SITE } from "@/lib/data";
+import { OPEN_CASE_STUDIES, SITE } from "@/lib/data";
 import { createPageMetadata } from "@/lib/seo";
+import Link from "next/link";
 
 export const revalidate = 3600;
 
@@ -104,6 +105,29 @@ export default async function OpenPage() {
               <span className="text-foreground">IEEE Sahrdaya</span> — the
               branch site I help keep fast as Technical Coordinator.
             </li>
+          </ul>
+        </section>
+
+        <section aria-label="Recent case studies" className="space-y-6">
+          <h2 className="font-mono text-[13px] uppercase tracking-wider text-muted">
+            Recent case studies
+          </h2>
+          <ul className="space-y-3">
+            {OPEN_CASE_STUDIES.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="group block border-l-2 border-border py-1 pl-4 transition-colors hover:border-accent"
+                >
+                  <span className="text-sm text-foreground group-hover:underline">
+                    {item.title}
+                  </span>
+                  <span className="mt-1 block text-sm leading-relaxed text-muted">
+                    {item.description}
+                  </span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </section>
 

@@ -20,5 +20,9 @@ export function parseContentImage(value: unknown): ContentImage | undefined {
     alt: image.alt,
     width: image.width,
     height: image.height,
+    ...(typeof image.license === "string" ? { license: image.license } : {}),
+    ...(typeof image.acquireLicensePage === "string"
+      ? { acquireLicensePage: image.acquireLicensePage }
+      : {}),
   };
 }

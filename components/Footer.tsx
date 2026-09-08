@@ -16,14 +16,22 @@ export function Footer() {
           </p>
         </div>
 
-        <a
-          href={SITE.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-xs text-muted transition-colors hover:text-foreground"
-        >
-          Browse my GitHub profile
-        </a>
+        <div className="flex gap-4 font-mono text-xs text-muted">
+          <a
+            href="/image-usage"
+            className="transition-colors hover:text-foreground"
+          >
+            Image usage
+          </a>
+          <a
+            href={SITE.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-foreground"
+          >
+            Browse my GitHub profile
+          </a>
+        </div>
       </div>
     </footer>
   );
