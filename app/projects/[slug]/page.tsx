@@ -28,7 +28,7 @@ export function generateMetadata({ params }: Props): Metadata {
   const pageTitle = `${project.title} | ${SITE.name}`;
 
   return {
-    title: pageTitle,
+    title: project.title,
     description: project.description,
     openGraph: {
       title: pageTitle,
