@@ -1,0 +1,53 @@
+---
+title: "Noolu Pidichaal Mathi"
+description: "I turned an idiyappam photograph into a fictional, routeable metro system with OpenCV, FastAPI, Next.js, and a 3D NoolVerse explorer."
+tech: ["Next.js", "React", "FastAPI", "OpenCV", "PostgreSQL", "Three.js", "Docker"]
+github: "https://github.com/9MidhunPM/NooluPidichaalMathii"
+live: "https://idiyappam.midhunpm.in"
+featured: true
+order: 1
+image:
+  src: "/images/noolu-pidichaal-mathi-noolverse.webp"
+  alt: "NoolVerse operations map showing a fictional metro network traced over an idiyappam photograph"
+  width: 2000
+  height: 1176
+  acquireLicensePage: "https://midhunpm.in/image-usage"
+---
+
+## The idea
+
+At TinkerHub Useless Projects, I asked a question that absolutely did not need an answer: what if an idiyappam photograph were a metro map?
+
+Noolu Pidichaal Mathi promotes visible noodle strands to public infrastructure. A visitor uploads a photograph, the app extracts the visible paths, and NMRL — Noolu Metro Rail Limited — turns them into a fictional, routeable network with Kerala breakfast puns, service boards, and a tiny Nool Express.
+
+The joke only worked if the system took its evidence seriously. The app never claims a real train route, sells tickets, or presents the timetable as transport advice.
+
+## What I built
+
+I built the full product direction and visual system, then carried it through the deterministic image-to-graph pipeline, API, frontend, 3D explorer, testing, deployment, and documentation.
+
+- **Image intake** validates JPEG, PNG, and WebP uploads, removes metadata, bounds dimensions, and normalizes the source image.
+- **Visible-strand extraction** uses OpenCV and scikit-image to segment the idiyappam, clean the mask, and generate a one-pixel skeleton.
+- **Topology extraction** finds endpoints and junctions, traces ordered visible paths, and keeps disconnected components separate instead of inventing continuity at crossings.
+- **NMRL semantics** assign stable stations, line colours, service states, and elevation levels from a seeded deterministic model.
+- **NoolVerse** lets visitors inspect the source image, skeleton, selected paths, stations, route controls, and a source-aligned 3D metro map.
+
+The stack is Next.js and React on the web, FastAPI and PostgreSQL behind it, with Three.js for the explorer and Docker Compose for the deployed system.
+
+## The constraint that made it better
+
+A photograph cannot prove which noodle continues underneath a crossing. So the app shows its source evidence, keeps unproven connections marked as inference, and labels every timetable, service alert, and journey length as fictional entertainment data.
+
+That line kept the project playful without making its computer-vision output pretend to be more certain than it is. The best part of the build is seeing the source idiyappam remain visible under the rails while every selected path can be inspected.
+
+## Try it
+
+Start with the official NMRL demo breakfast, inspect the skeleton and selected metro paths, then enter NoolVerse and choose two stations. The selected journey glows while the Nool Express becomes unnecessarily operational.
+
+## Links
+
+- [Ride the fictional NMRL at idiyappam.midhunpm.in](https://idiyappam.midhunpm.in)
+- [Watch the NMRL inaugural service recording](https://drive.google.com/file/d/1rwYPr8LkjTjSmfGVUpbbirlhuR85sfRH/view?usp=sharing)
+- [Explore the Noolu Pidichaal Mathi source on GitHub](https://github.com/9MidhunPM/NooluPidichaalMathii)
+
+The public repository is forked from the TinkerHub event template; the product implementation and documentation above are my Team Popcorn contribution.
