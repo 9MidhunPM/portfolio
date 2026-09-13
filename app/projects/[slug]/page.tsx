@@ -25,7 +25,7 @@ export function generateMetadata({ params }: Props): Metadata {
 
   const url = `${SITE.url}/projects/${project.slug}`;
   const images = getSocialImages(project.image);
-  const pageTitle = `${SITE.name} — ${project.title}`;
+  const pageTitle = `${project.title} | ${SITE.name}`;
 
   return {
     title: pageTitle,
@@ -61,7 +61,6 @@ export default function ProjectPage({ params }: Props) {
     name: project.title,
     description: project.description,
     applicationCategory: "DeveloperApplication",
-    operatingSystem: "Linux",
     softwareVersion: "1.0.0",
     url: project.live ?? `${SITE.url}/projects/${project.slug}`,
     author: {
