@@ -174,9 +174,11 @@ export default function ProjectPage({ params }: Props) {
                 className="h-auto w-full"
               />
             </div>
-            <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-              PRISM at the AI Innovation Hackathon · ASIET · August 2026
-            </figcaption>
+            {project.slug === "prism" && (
+              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                PRISM at the AI Innovation Hackathon · ASIET · August 2026
+              </figcaption>
+            )}
           </figure>
         )}
 

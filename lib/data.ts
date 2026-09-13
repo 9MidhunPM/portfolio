@@ -38,6 +38,12 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const OPEN_CASE_STUDIES = [
   {
+    href: "/projects/noolu-pidichaal-mathi",
+    title: "Noolu Pidichaal Mathi",
+    description:
+      "A fictional metro network traced from an idiyappam photo, then made routeable in 3D.",
+  },
+  {
     href: "/projects/mcpd",
     title: "Syncplane",
     description:
@@ -54,11 +60,5 @@ export const OPEN_CASE_STUDIES = [
     title: "Probe Interview",
     description:
       "A LangGraph interview practice app with grounded follow-ups and useful feedback.",
-  },
-  {
-    href: "/blog/building-probe-interview-at-vicodathon",
-    title: "How I built Probe at VicoDathon",
-    description:
-      "The build note behind the interview system and its evidence-first question flow.",
   },
 ] as const;

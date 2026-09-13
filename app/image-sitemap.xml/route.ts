@@ -23,6 +23,10 @@ const imagePages: SitemapImage[] = [
     ],
   },
   {
+    path: "/projects/noolu-pidichaal-mathi",
+    images: ["/images/noolu-pidichaal-mathi-noolverse.webp"],
+  },
+  {
     path: "/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru",
     images: [
       "/images/midhun-pm-codex-bangalore.jpeg",
