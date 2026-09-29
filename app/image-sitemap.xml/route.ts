@@ -1,11 +1,13 @@
 import { SITE } from "@/lib/data";
+import { getAllPosts } from "@/lib/blog";
+import { getAllProjects } from "@/lib/projects";
 
 type SitemapImage = {
   path: string;
   images: string[];
 };
 
-const imagePages: SitemapImage[] = [
+const additionalImagePages: SitemapImage[] = [
   {
     path: "/about",
     images: ["/images/midhun-pm.jpg"],
@@ -35,6 +37,28 @@ const imagePages: SitemapImage[] = [
   },
 ];
 
+function getImagePages(): SitemapImage[] {
+  const pages = new Map<string, Set<string>>();
+  const addPage = (path: string, images: string[]) => {
+    const existing = pages.get(path) ?? new Set<string>();
+    images.forEach((image) => existing.add(image));
+    pages.set(path, existing);
+  };
+
+  for (const page of additionalImagePages) addPage(page.path, page.images);
+  for (const post of getAllPosts()) {
+    if (post.image) addPage(`/blog/${post.slug}`, [post.image.src]);
+  }
+  for (const project of getAllProjects()) {
+    if (project.image) addPage(`/projects/${project.slug}`, [project.image.src]);
+  }
+
+  return Array.from(pages, ([path, images]) => ({
+    path,
+    images: Array.from(images),
+  }));
+}
+
 function escapeXml(value: string) {
   return value
     .replaceAll("&", "&amp;")
@@ -45,7 +69,7 @@ function escapeXml(value: string) {
 }
 
 export function GET() {
-  const urls = imagePages
+  const urls = getImagePages()
     .map(
       ({ path, images }) => `<url>
   <loc>${escapeXml(`${SITE.url}${path}`)}</loc>
