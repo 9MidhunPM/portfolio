@@ -22,15 +22,19 @@ export function getAllPosts(): PostMeta[] {
       const raw = fs.readFileSync(filePath, "utf8");
       const { data, content } = matter(raw);
 
+      const updated = data.updated as string | undefined;
+
       return {
         slug: file.replace(/\.mdx$/, ""),
         title: data.title as string,
+        seoTitle: data.seoTitle as string | undefined,
         date: data.date as string,
+        updated,
         description: data.description as string,
         tags: (data.tags ?? []) as string[],
         readingTime: readingTime(content).text,
         image: parseContentImage(data.image),
-        lastModified: fs.statSync(filePath).mtime,
+        ...(updated ? { lastModified: new Date(`${updated}T00:00:00.000Z`) } : {}),
       } satisfies PostMeta;
     })
     .sort((a, b) => +new Date(b.date) - +new Date(a.date));
@@ -42,16 +46,19 @@ export function getPost(slug: string): Post | null {
 
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
+  const updated = data.updated as string | undefined;
 
   return {
     slug,
     title: data.title as string,
+    seoTitle: data.seoTitle as string | undefined,
     date: data.date as string,
+    updated,
     description: data.description as string,
     tags: (data.tags ?? []) as string[],
     readingTime: readingTime(content).text,
     image: parseContentImage(data.image),
-    lastModified: fs.statSync(filePath).mtime,
+    ...(updated ? { lastModified: new Date(`${updated}T00:00:00.000Z`) } : {}),
     content,
   };
 }

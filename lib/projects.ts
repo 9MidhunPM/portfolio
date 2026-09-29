@@ -18,15 +18,21 @@ function parseProject(file: string): ProjectWithContent {
   return {
     slug: file.replace(/\.mdx$/, ""),
     title: data.title as string,
+    seoTitle: data.seoTitle as string | undefined,
     description: data.description as string,
+    updated: data.updated as string | undefined,
     tech: (data.tech ?? []) as string[],
     github: data.github as string | undefined,
     live: data.live as string | undefined,
     featured: Boolean(data.featured),
     order: typeof data.order === "number" ? data.order : 99,
     award: data.award as string | undefined,
+    applicationCategory: data.applicationCategory as string | undefined,
+    softwareVersion: data.softwareVersion as string | undefined,
     image: parseContentImage(data.image),
-    lastModified: fs.statSync(filePath).mtime,
+    ...(data.updated
+      ? { lastModified: new Date(`${data.updated as string}T00:00:00.000Z`) }
+      : {}),
     content,
   };
 }

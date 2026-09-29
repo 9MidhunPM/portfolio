@@ -27,12 +27,13 @@ export function generateMetadata({ params }: Props): Metadata {
 
   const url = `${SITE.url}/blog/${post.slug}`;
   const images = getSocialImages(post.image);
+  const pageTitle = post.seoTitle ?? post.title;
 
   return {
-    title: post.title,
+    title: pageTitle,
     description: post.description,
     openGraph: {
-      title: post.title,
+      title: `${pageTitle} | ${SITE.name}`,
       description: post.description,
       url,
       siteName: SITE.name,
@@ -45,7 +46,7 @@ export function generateMetadata({ params }: Props): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
+      title: `${pageTitle} | ${SITE.name}`,
       description: post.description,
       images: images.map((image) => image.url),
     },
@@ -68,7 +69,7 @@ export default function BlogPostPage({ params }: Props) {
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.lastModified.toISOString(),
+    ...(post.updated ? { dateModified: post.updated } : {}),
     url,
     ...(post.image ? { image: getImageObject(post.image) } : {}),
     author: {

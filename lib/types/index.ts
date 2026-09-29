@@ -22,19 +22,25 @@ export interface Project {
   featured: boolean;
   order: number;
   award?: string;
+  seoTitle?: string;
+  updated?: string;
+  applicationCategory?: string;
+  softwareVersion?: string;
   image?: ContentImage;
-  lastModified: Date;
+  lastModified?: Date;
 }
 
 export interface PostMeta {
   slug: string;
   title: string;
+  seoTitle?: string;
   date: string;
+  updated?: string;
   description: string;
   tags: string[];
   readingTime: string;
   image?: ContentImage;
-  lastModified: Date;
+  lastModified?: Date;
 }
 
 export interface TocItem {

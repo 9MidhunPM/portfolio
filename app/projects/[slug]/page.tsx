@@ -25,13 +25,13 @@ export function generateMetadata({ params }: Props): Metadata {
 
   const url = `${SITE.url}/projects/${project.slug}`;
   const images = getSocialImages(project.image);
-  const pageTitle = `${project.title} | ${SITE.name}`;
+  const searchTitle = project.seoTitle ?? project.title;
 
   return {
-    title: project.title,
+    title: searchTitle,
     description: project.description,
     openGraph: {
-      title: pageTitle,
+      title: `${searchTitle} | ${SITE.name}`,
       description: project.description,
       url,
       siteName: SITE.name,
@@ -41,7 +41,7 @@ export function generateMetadata({ params }: Props): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: pageTitle,
+      title: `${searchTitle} | ${SITE.name}`,
       description: project.description,
       images: images.map((image) => image.url),
     },
@@ -60,8 +60,12 @@ export default function ProjectPage({ params }: Props) {
     "@type": "SoftwareApplication",
     name: project.title,
     description: project.description,
-    applicationCategory: "DeveloperApplication",
-    softwareVersion: "1.0.0",
+    ...(project.applicationCategory
+      ? { applicationCategory: project.applicationCategory }
+      : {}),
+    ...(project.softwareVersion
+      ? { softwareVersion: project.softwareVersion }
+      : {}),
     url: project.live ?? `${SITE.url}/projects/${project.slug}`,
     author: {
       "@type": "Person",
@@ -71,6 +75,8 @@ export default function ProjectPage({ params }: Props) {
     ...(project.github ? { codeRepository: project.github } : {}),
     ...(project.award ? { award: project.award } : {}),
     ...(project.image ? { image: getImageObject(project.image) } : {}),
+    ...(project.updated ? { dateModified: project.updated } : {}),
+    mainEntityOfPage: `${SITE.url}/projects/${project.slug}`,
   };
 
   const breadcrumbSchema = {
