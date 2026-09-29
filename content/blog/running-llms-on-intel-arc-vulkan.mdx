@@ -1,7 +1,9 @@
 ---
 title: "Running local LLMs on an Intel Arc GPU with Vulkan and LLaMA.cpp"
+seoTitle: "Local LLMs on Intel Arc with Vulkan"
 date: "2026-07-20"
-description: "Most LLM guides assume you have an NVIDIA GPU. I don't. Here's what actually works for running quantized 8B models on Intel Arc using Vulkan-accelerated LLaMA.cpp."
+description: "I run quantized 8B language models on Intel Arc with Vulkan and llama.cpp. This field note covers the setup, performance, and limits I found."
+updated: "2026-09-29"
 tags: ["ai", "llm", "llama.cpp", "intel-arc", "vulkan", "local-ai"]
 published: true
 ---
@@ -48,3 +50,5 @@ The total cost of my setup is the electricity. No API keys in my dotfiles, no us
 More than that: when the model runs on your metal, you can trust it with different work. Thursday reads my files, runs guarded shell commands, and remembers things across sessions in a local SQLite database. I'd never wire that kind of access to a cloud API comfortably. Local-first isn't just cheaper — it's what makes a real assistant possible.
 
 If you're sitting on an Intel Arc or AMD card thinking local LLMs aren't for you: they are. Compile with the Vulkan flag, grab a Q4 7B, and start. The tooling has gaps, but they're narrower than the guides would have you believe.
+
+I also use local Vulkan models in [Thursday, my Linux desktop assistant](/projects/thursday).
