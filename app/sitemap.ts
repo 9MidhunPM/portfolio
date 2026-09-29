@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const projectRoutes: MetadataRoute.Sitemap = getAllProjects().map(
     (project) => ({
       url: `${SITE.url}/projects/${project.slug}`,
-      lastModified: project.lastModified,
+      ...(project.lastModified ? { lastModified: project.lastModified } : {}),
       changeFrequency: "monthly",
       priority: 0.7,
     })
@@ -31,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const postRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
     url: `${SITE.url}/blog/${post.slug}`,
-    lastModified: post.lastModified,
+    ...(post.lastModified ? { lastModified: post.lastModified } : {}),
     changeFrequency: "monthly",
     priority: 0.8,
   }));

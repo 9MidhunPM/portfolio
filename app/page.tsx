@@ -147,6 +147,29 @@ export default async function HomePage() {
                 <ProjectCard key={project.slug} project={project} />
               ))}
             </div>
+            <nav
+              aria-label="More project case studies"
+              className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs"
+            >
+              <Link
+                className="text-muted underline decoration-border underline-offset-4 hover:text-foreground"
+                href="/projects/mcpd"
+              >
+                Read the Syncplane case study
+              </Link>
+              <Link
+                className="text-muted underline decoration-border underline-offset-4 hover:text-foreground"
+                href="/projects/probe-interview"
+              >
+                Read the Probe Interview case study
+              </Link>
+              <Link
+                className="text-muted underline decoration-border underline-offset-4 hover:text-foreground"
+                href="/projects/ani-reminder"
+              >
+                Read the AniReminder case study
+              </Link>
+            </nav>
           </div>
         </section>
 
