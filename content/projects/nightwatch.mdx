@@ -1,0 +1,61 @@
+---
+title: "NightWatch"
+seoTitle: "NightWatch — Codex Hackathon Calicut Second Prize"
+description: "I built NightWatch, an agentic infrastructure console with evidence, approval gates, and a 3D world. It won Second Prize at Codex Hackathon Calicut."
+updated: "2026-10-02"
+tech: ["Next.js", "React", "TypeScript", "Three.js", "FastAPI", "Python", "OpenAI", "SQLite", "Dokploy"]
+github: "https://github.com/9MidhunPM/NightWatch"
+live: "https://nightwatch.midhunpm.in"
+featured: true
+order: 0
+award: "🥈 Second Prize · Codex Community Hackathon, Calicut"
+applicationCategory: "DeveloperApplication"
+image:
+  src: "/images/nightwatch-world-3d.png"
+  alt: "NightWatch's live 3D infrastructure world with project islands, service health, domain gateways, and network connections"
+  width: 1600
+  height: 960
+  caption: "NightWatch turns observed infrastructure into a navigable world of projects, services, domains, and connections."
+---
+
+## The problem
+
+I run my own infrastructure. When something breaks, the explanation is usually scattered across deployment panels, containers, metrics, domains, and logs. A service can exist in Dokploy, have a running container, and still return an error through its public route.
+
+I wanted one place to inspect that evidence and work through the next action. Giving an agent infrastructure access also meant making its decisions reviewable.
+
+## What I built
+
+NightWatch is an agentic infrastructure operations console. It combines Dokploy inventory, Docker identity, Beszel telemetry, routes, and HTTP probes into one live infrastructure model. The interface includes a 3D world, a 2D operations view, incident timelines, persistent agent conversations, and deployment workflows.
+
+I built it as a solo project for the **Codex Community Hackathon, Calicut**, at TinkerSpace on **19–20 September 2026**. It won **🥈 Second Prize**, with **3 months of ChatGPT Pro and $500 in OpenAI API credits**. I have continued refining the implementation since the event.
+
+The operator can ask about a service, investigate an incident, or prepare a deployment in plain language. The agent uses typed tools to gather evidence and cite its findings. A deployment request becomes a concrete plan containing the repository, branch, Dockerfile, port, domain, and target.
+
+Changes require approval of the exact plan version. Before execution, NightWatch reads the target again and rejects a plan if relevant state has changed. It preserves the result for later inspection.
+
+## Architecture and decisions
+
+**Next.js and Three.js for the interface.** React Three Fiber renders project islands, service health, domain gateways, and connections. A 2D view makes the same infrastructure easier to read without spatial navigation. Stable graph placement keeps observation refreshes from rearranging the world.
+
+**FastAPI for the control plane.** The authenticated Next.js gateway proxies allowlisted routes. Integration credentials stay on the server. Python services own observation, reconciliation, incident records, plans, approvals, and execution.
+
+**SQLite for durable history.** Async SQLAlchemy and Alembic preserve conversations, evidence, hypotheses, timeline events, and workflow state. A private operator console needs that history when a remote operation only partially succeeds.
+
+**Bounded model work.** Codex app-server powers operator chat. A separate OpenAI investigator gathers evidence within tool, output, and time limits. Continuous monitoring runs independently, so an observation cycle does not automatically become a paid model investigation.
+
+## The hard part
+
+Matching Dokploy resources to Docker replicas and Beszel samples required explicit identity reconciliation. Missing or stale telemetry remains visible as unavailable evidence.
+
+Dokploy's start operation also behaved differently for idle applications. NightWatch now checks lifecycle state and uses deployment when an approved start needs to create the service.
+
+The result still needs careful wording. General operations verify API acceptance and target readback; public application health remains separate evidence. Shared network membership also does not prove an application dependency.
+
+## Explore NightWatch
+
+The live console controls real infrastructure and requires a private operator passphrase. The public narrated demo shows the workflow without requiring console access.
+
+- [Watch the narrated NightWatch demo](https://drive.google.com/file/d/1TDCbsb495BiY4YK6dNxIdD-WkLR4p85g/view?usp=sharing)
+- [Read the Calicut hackathon story](/blog/building-nightwatch-at-codex-community-hackathon-calicut)
+- [Explore the source and engineering notes](https://github.com/9MidhunPM/NightWatch)
