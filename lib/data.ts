@@ -1,4 +1,4 @@
-import type { NavItem } from "@/lib/types";
+import type { ContentImage, NavItem } from "@/lib/types";
 
 export const SITE = {
   name: "Midhun P M",
@@ -12,6 +12,52 @@ export const SITE = {
     "Midhun P M is a Kerala-based full-stack developer who builds practical AI systems, developer tools, and web products with Python, Rust, Next.js, and FastAPI.",
   bio: "I'm a third-year CS student at Sahrdaya in Kerala. I build practical AI systems, developer tools, and web products with Python, Rust, Next.js, and FastAPI.",
 } as const;
+
+export const CALICUT_RECOGNITION = {
+  title: "Second Prize in Calicut.",
+  subtitle: "More fuel for the next build.",
+  achievement: "🥈 Second Prize — Codex Community Hackathon, Calicut",
+  description:
+    "I built NightWatch to bring deployment panels, containers, metrics, domains, and logs into one infrastructure console. At TinkerSpace on 19–20 September 2026, it took second prize. The agent investigates and proposes; deterministic code checks the plan, waits for my approval, and records what happened.",
+  prize: "3 months of ChatGPT Pro + $500 OpenAI API credits",
+  projectHref: "/projects/nightwatch",
+  blogHref: "/blog/building-nightwatch-at-codex-community-hackathon-calicut",
+  image: {
+    src: "/images/codex-calicut-second-prize.jpeg",
+    alt: "Codex Community Hackathon Calicut winners poster listing Midhun P M and NightWatch in second place",
+    width: 1024,
+    height: 1536,
+    caption: "NightWatch · Second Prize · TinkerSpace, Calicut · 19–20 September 2026",
+  } satisfies ContentImage,
+} as const;
+
+export const HOME_PROOF_POINTS = [
+  {
+    value: "2nd prize",
+    label: "for NightWatch at the Codex Community Hackathon, Calicut",
+    href: CALICUT_RECOGNITION.projectHref,
+  },
+  {
+    value: "≈3%",
+    label: "selected for the Codex Community Hackathon in Bengaluru",
+    href: "/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru",
+  },
+  {
+    value: "2nd place",
+    label: "for PRISM at ASIET's AI Innovation Hackathon",
+    href: "/projects/prism",
+  },
+  {
+    value: "737+ bets",
+    label: "placed by 58+ players on WC Predict '26",
+    href: "/projects/wc-predict-26",
+  },
+  {
+    value: "1,000+",
+    label: "weekly users on the IEEE Sahrdaya site",
+    href: "/projects/ieee-sahrdaya-website",
+  },
+] as const;
 
 export const HOME_APPROACH = {
   eyebrow: "How I work",
@@ -37,6 +83,12 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const OPEN_CASE_STUDIES = [
+  {
+    href: "/projects/nightwatch",
+    title: "NightWatch",
+    description:
+      "An infrastructure operations console with typed plans and human approval. Second Prize at Codex Community Hackathon, Calicut.",
+  },
   {
     href: "/projects/noolu-pidichaal-mathi",
     title: "Noolu Pidichaal Mathi",

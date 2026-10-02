@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import codexBengaluru from "@/public/images/midhun-pm-codex-bangalore.jpeg";
 import { Hero } from "@/components/Hero";
 import { GitHubProfile } from "@/components/GitHubProfile";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -10,7 +9,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { PostCard } from "@/components/PostCard";
 import { getAllProjects } from "@/lib/projects";
 import { getGitHubStats } from "@/lib/github";
-import { HOME_APPROACH, SITE } from "@/lib/data";
+import { CALICUT_RECOGNITION, HOME_APPROACH, HOME_PROOF_POINTS, SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getSocialImages } from "@/lib/seo";
 
@@ -49,26 +48,7 @@ export default async function HomePage() {
   const gh = await getGitHubStats();
 
   const proofPoints: { value: string; label: string; href: string }[] = [
-    {
-      value: "≈3%",
-      label: "selected for the Codex Community Hackathon in Bengaluru",
-      href: "/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru",
-    },
-    {
-      value: "2nd place",
-      label: "for PRISM at ASIET's AI Innovation Hackathon",
-      href: "/projects/prism",
-    },
-    {
-      value: "737+ bets",
-      label: "placed by 58+ players on WC Predict '26",
-      href: "/projects/wc-predict-26",
-    },
-    {
-      value: "1,000+",
-      label: "weekly users on the IEEE Sahrdaya site",
-      href: "/projects/ieee-sahrdaya-website",
-    },
+    ...HOME_PROOF_POINTS,
     ...(gh
       ? [
           {
@@ -97,6 +77,7 @@ export default async function HomePage() {
     sameAs: [SITE.github, SITE.linkedin],
     knowsAbout: ["AI systems", "Full-stack development", "Python", "Rust", "Next.js", "FastAPI"],
     award: [
+      "Second Prize — Codex Community Hackathon, Calicut — NightWatch",
       "Second Place — AI Innovation Hackathon 2026, ASIET",
       "Selected participant — OpenAI Codex Community Hackathon, Bengaluru",
       "Top 10 Finalist — OpenAI Codex Nightline Hackathon 2026",
@@ -153,6 +134,12 @@ export default async function HomePage() {
             >
               <Link
                 className="text-muted underline decoration-border underline-offset-4 hover:text-foreground"
+                href="/projects/thursday"
+              >
+                Read the Thursday case study
+              </Link>
+              <Link
+                className="text-muted underline decoration-border underline-offset-4 hover:text-foreground"
                 href="/projects/mcpd"
               >
                 Read the Syncplane case study
@@ -185,60 +172,63 @@ export default async function HomePage() {
               </p>
               <h2
                 id="recognition-heading"
-                className="font-serif text-4xl leading-tight tracking-tight text-foreground sm:text-5xl"
+                className="text-3xl font-medium leading-tight tracking-tight text-foreground sm:text-4xl"
               >
-                Selected to build in Bengaluru.{" "}
-                <span className="italic text-muted">
-                  Kept shipping after the room cleared.
+                {CALICUT_RECOGNITION.title}{" "}
+                <span className="text-muted">
+                  {CALICUT_RECOGNITION.subtitle}
                 </span>
               </h2>
               <p className="max-w-prose text-base leading-relaxed text-muted">
-                I took Thursday to the OpenAI Codex Community Hackathon in
-                Bengaluru after selection from nearly 2,000 applications into
-                around 60 seats. It was a chance to put a local-first desktop
-                assistant in front of other builders, trade ideas, and keep
-                improving the parts that make an agent trustworthy on a real
-                computer.
+                {CALICUT_RECOGNITION.description}
               </p>
+              <div className="space-y-2 border-t border-border pt-5">
+                <p className="font-mono text-xs leading-relaxed text-foreground">
+                  {CALICUT_RECOGNITION.achievement}
+                </p>
+                <p className="text-sm leading-relaxed text-muted">
+                  {CALICUT_RECOGNITION.prize}
+                </p>
+              </div>
               <div className="flex flex-wrap gap-x-6 gap-y-3 font-mono text-xs">
                 <Link
-                  href="/projects/thursday"
+                  href={CALICUT_RECOGNITION.projectHref}
                   className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
                 >
-                  Read the Thursday case study
+                  Read the NightWatch case study
                 </Link>
                 <Link
-                  href="/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru"
+                  href={CALICUT_RECOGNITION.blogHref}
                   className="text-muted underline decoration-border underline-offset-4 transition-colors hover:text-foreground hover:decoration-accent"
                 >
-                  Read the Bengaluru build note
+                  Read the Calicut build story
                 </Link>
               </div>
             </div>
 
-            <figure className="space-y-3">
-              <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+            <figure className="max-w-md space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
                 <Image
-                  src={codexBengaluru}
-                  alt="Midhun P M at the OpenAI Codex Community Hackathon in Bengaluru"
-                  fill
+                  src={CALICUT_RECOGNITION.image.src}
+                  alt={CALICUT_RECOGNITION.image.alt}
+                  width={CALICUT_RECOGNITION.image.width}
+                  height={CALICUT_RECOGNITION.image.height}
                   sizes="(min-width: 1024px) 448px, (min-width: 640px) calc(100vw - 4rem), calc(100vw - 2.5rem)"
-                  className="object-cover object-[center_45%]"
-                  placeholder="blur"
+                  className="h-auto w-full"
                   loading="lazy"
                 />
               </div>
               <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-                OpenAI Codex Community Hackathon · Bengaluru · August 2026
+                {CALICUT_RECOGNITION.image.caption}
               </figcaption>
             </figure>
           </div>
 
-          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
             {proofPoints.map((point) => {
               const content = (
                 <>
-                  <p className="stat-number font-serif text-3xl tracking-tight">
+                  <p className="text-3xl font-medium tracking-tight text-foreground">
                     {point.value}
                   </p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
