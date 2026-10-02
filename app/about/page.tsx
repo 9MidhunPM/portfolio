@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { ContributionGraph } from "@/components/ContributionGraph";
 import { getGitHubStats } from "@/lib/github";
 import { SITE } from "@/lib/data";
 import { getSocialImages } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 import portrait from "@/public/images/midhun-pm.jpg";
 import codexBadge from "@/public/images/midhun-pm-codex-badge.jpg";
 import codexPresenting from "@/public/images/midhun-pm-codex-presenting.jpg";
@@ -87,7 +89,13 @@ const EXPERIENCE: {
   },
 ];
 
-const ACHIEVEMENTS: { title: string; detail: string; image?: boolean }[] = [
+const ACHIEVEMENTS: { title: string; detail: string; image?: boolean; href?: string }[] = [
+  {
+    title: "Second Prize — Codex Community Hackathon, Calicut",
+    detail:
+      "Built NightWatch. Won 3 months of ChatGPT Pro and $500 in OpenAI API credits.",
+    href: "/projects/nightwatch",
+  },
   {
     title: "Second Place — AI Innovation Hackathon, ASIET",
     detail:
@@ -124,7 +132,7 @@ const ACHIEVEMENTS: { title: string; detail: string; image?: boolean }[] = [
   },
 ];
 
-const TIMELINE: { period: string; title: string; detail: string }[] = [
+const TIMELINE: { period: string; title: string; detail: string; image?: boolean }[] = [
   {
     period: "S1",
     title: "RyMeds and a first hackathon win",
@@ -150,10 +158,23 @@ const TIMELINE: { period: string; title: string; detail: string }[] = [
       "Shipped production UI at Narrowlabs, became IEEE Technical Coordinator, and launched WC Predict '26 — 58+ players, 737+ bets. Built Thursday, a local-first AI assistant, on the side.",
   },
   {
+    period: "S4 · Jul 2026",
+    title: "Top 10 at Codex Nightline",
+    detail:
+      "Presented MetroMind at the OpenAI Codex Nightline Hackathon — the Kochi Metro AI Sprint — and finished Top 10 among 100 curated builders.",
+    image: true,
+  },
+  {
     period: "S5 · Aug 2026",
     title: "Three hackathons, three kinds of AI work",
     detail:
       "Built Probe Interview during VicoDathon, took Thursday to the OpenAI Codex Community Hackathon in Bengaluru, and placed second with PRISM at ASIET's 24-hour AI Innovation Hackathon.",
+  },
+  {
+    period: "S5 · Sep 2026",
+    title: "Second prize with NightWatch in Calicut",
+    detail:
+      "NightWatch won second prize at the Codex Community Hackathon in Calicut: 3 months of ChatGPT Pro and $500 in OpenAI API credits.",
   },
 ];
 
@@ -228,10 +249,11 @@ export default async function AboutPage() {
               Somewhere along the way I fell down the AI rabbit hole. I
               started running quantized 8B models on an Intel Arc GPU via
               Vulkan and built Thursday, a local-first assistant with tools,
-              memory, voice, and a Codex project studio. This year it took me
+              memory, voice, and a Codex project studio. This year&apos;s builds took me
               from Codex Nightline in Kochi to the OpenAI Codex Community
               Hackathon in Bengaluru, where I got to learn from a room full of
-              builders.
+              builders. In September, NightWatch won second prize at the Codex
+              Community Hackathon in Calicut.
             </p>
             <p>
               Between classes I&apos;m the IEEE student branch&apos;s
@@ -274,9 +296,24 @@ export default async function AboutPage() {
             <span className="mr-3 font-mono text-sm text-muted">01</span>
             Recent build season
           </h2>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-3">
             <figure className="space-y-3">
               <div className="overflow-hidden rounded-lg border border-border border-l-2 border-l-accent">
+                <Image
+                  src="/images/codex-calicut-builders.jpeg"
+                  alt="Builders gathered at the Codex Community Hackathon in Calicut"
+                  width={960}
+                  height={1280}
+                  sizes="(max-width: 768px) calc(100vw - 2.5rem), 680px"
+                  className="h-auto w-full"
+                />
+              </div>
+              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                Codex Community Hackathon · Calicut · September 2026 · NightWatch won second prize
+              </figcaption>
+            </figure>
+            <figure className="space-y-3">
+              <div className="overflow-hidden rounded-lg border border-border">
                 <Image
                   src={codexBengaluru}
                   alt="Midhun P M at the OpenAI Codex Community Hackathon in Bengaluru"
@@ -378,7 +415,16 @@ export default async function AboutPage() {
               >
                 <div className="min-w-0 flex-1">
                   <h3 className="text-sm font-medium text-foreground">
-                    {item.title}
+                    {item.href ? (
+                      <Link
+                        href={item.href}
+                        className="underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
+                      >
+                        {item.title}
+                      </Link>
+                    ) : (
+                      item.title
+                    )}
                   </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted">
                     {item.detail}
@@ -410,7 +456,10 @@ export default async function AboutPage() {
             {TIMELINE.map((entry) => (
               <li key={entry.period} className="relative">
                 <span
-                  className="absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-muted"
+                  className={cn(
+                    "absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-background",
+                    entry.image ? "bg-accent" : "bg-muted"
+                  )}
                   aria-hidden="true"
                 />
                 <p className="font-mono text-[13px] text-muted">
@@ -422,42 +471,24 @@ export default async function AboutPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-muted">
                   {entry.detail}
                 </p>
+                {entry.image && (
+                  <figure className="mt-4 max-w-[280px] space-y-2">
+                    <div className="overflow-hidden rounded-lg border border-border">
+                      <Image
+                        src={codexPresenting}
+                        alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
+                        sizes="(max-width: 768px) calc(100vw - 5.5rem), 280px"
+                        className="h-auto w-full"
+                        placeholder="blur"
+                      />
+                    </div>
+                    <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
+                      Presenting MetroMind at Codex Nightline, Kochi Metro, July 2026
+                    </figcaption>
+                  </figure>
+                )}
               </li>
             ))}
-
-            {/* Codex Nightline — with photo evidence */}
-            <li className="relative">
-              <span
-                className="absolute -left-[37px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-background bg-accent"
-                aria-hidden="true"
-              />
-              <p className="font-mono text-[13px] text-muted">
-                S4 · Jul 2026
-              </p>
-              <h3 className="mt-1.5 font-medium text-foreground">
-                Top 10 at Codex Nightline
-              </h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">
-                Presented MetroMind at the OpenAI Codex Nightline Hackathon
-                — the Kochi Metro AI Sprint — and finished Top 10 among 100
-                curated builders.
-              </p>
-              <figure className="mt-4 max-w-[280px] space-y-2">
-                <div className="overflow-hidden rounded-lg border border-border">
-                  <Image
-                    src={codexPresenting}
-                    alt="Midhun P M presenting at OpenAI Codex Nightline hackathon, Kochi, July 2026"
-                    sizes="(max-width: 768px) calc(100vw - 5.5rem), 280px"
-                    className="h-auto w-full"
-                    placeholder="blur"
-                  />
-                </div>
-                <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-                  Presenting MetroMind at Codex Nightline, Kochi Metro, July
-                  2026
-                </figcaption>
-              </figure>
-            </li>
           </ol>
         </section>
       </div>
