@@ -9,8 +9,21 @@ type SitemapImage = {
 
 const additionalImagePages: SitemapImage[] = [
   {
+    path: "/",
+    images: ["/images/codex-calicut-second-prize.jpeg"],
+  },
+  {
     path: "/about",
-    images: ["/images/midhun-pm.jpg"],
+    images: ["/images/midhun-pm.jpg", "/images/codex-calicut-builders.jpeg"],
+  },
+  {
+    path: "/blog/building-nightwatch-at-codex-community-hackathon-calicut",
+    images: [
+      "/images/nightwatch-world-3d.png",
+      "/images/codex-calicut-builders.jpeg",
+      "/images/midhun-pm-codex-calicut-badge.jpeg",
+      "/images/codex-calicut-second-prize.jpeg",
+    ],
   },
   {
     path: "/projects/prism",
