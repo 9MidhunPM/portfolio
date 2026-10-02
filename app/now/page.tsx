@@ -1,9 +1,10 @@
+import Link from "next/link";
 import { SITE } from "@/lib/data";
 import { createPageMetadata } from "@/lib/seo";
 
 const title = "Now";
 const description =
-  "What Midhun P M is working on in August 2026: PRISM, Thursday, IEEE Sahrdaya, Rust, and practical AI systems that show their work.";
+  "Midhun P M's October 2026 update: NightWatch's Calicut hackathon second prize, Thursday's desktop copilot, Syncplane, and practical AI systems.";
 
 export const metadata = createPageMetadata({ title, description, path: "/now" });
 
@@ -19,7 +20,7 @@ export default function NowPage() {
             What I&apos;m up to now
           </h1>
           <p className="font-serif text-sm italic text-muted">
-            Last updated: August 2026
+            Last updated: October 2026
           </p>
         </header>
 
@@ -29,16 +30,27 @@ export default function NowPage() {
           </h2>
           <div className="space-y-4 text-base leading-relaxed text-muted">
             <p>
-              Semester five of my B.Tech in CSE at Sahrdaya. I&apos;m keeping
-              PRISM moving after its second-place finish at ASIET&apos;s AI
-              Innovation Hackathon, while still shipping work for the IEEE
-              student branch as Technical Coordinator.
+              Semester five of my B.Tech in CSE at Sahrdaya. NightWatch won
+              second prize at the Codex Community Hackathon in Calicut in
+              September: 3 months of ChatGPT Pro and $500 in OpenAI API credits.{" "}
+              <Link
+                href="/projects/nightwatch"
+                className="text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-accent"
+              >
+                Read the NightWatch case study.
+              </Link>
             </p>
             <p>
-              I&apos;m also making Thursday feel more native to my Linux setup:
-              visible desktop actions, a voice overlay, personal workflows,
-              and contained Codex project sessions. I brought that build to
-              the OpenAI Codex Community Hackathon in Bengaluru this month.
+              Thursday now has native Hypruse desktop controls, screenshot
+              understanding, task checkpoints, and personal-memory review.
+              Its desktop profile uses GPT-6 Luna through the Responses API;
+              local llama.cpp remains configurable. I took an earlier build
+              to the Bengaluru Codex Community Hackathon in August.
+            </p>
+            <p>
+              PRISM and Probe Interview taught me to keep AI decisions tied
+              to evidence. I carry that lesson into my projects and my work
+              as IEEE student branch Technical Coordinator.
             </p>
           </div>
         </section>
@@ -55,7 +67,7 @@ export default function NowPage() {
               have made that boundary impossible to ignore.
             </p>
             <p>
-              Rust, because mcpd is teaching me what safe configuration tools
+              Rust, because Syncplane is teaching me what safe configuration tools
               owe their users. And systems programming in C++, because
               Calculus Dash showed me how much I still do not know.
             </p>
