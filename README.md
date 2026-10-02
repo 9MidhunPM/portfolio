@@ -33,7 +33,7 @@ docker run -d --name midhunpm -p 3000:3000 --restart unless-stopped midhunpm
 ```
 
 No environment variables required. GitHub stats (the `/open` page and the
-homepage numbers strip) come from the public GitHub API at request time —
+homepage numbers strip) come from the public GitHub API and are revalidated hourly —
 if the network blocks them, those sections hide themselves instead of
 showing fake numbers.
 

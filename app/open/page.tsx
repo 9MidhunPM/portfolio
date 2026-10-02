@@ -67,7 +67,7 @@ export default async function OpenPage() {
           ) : (
             <p className="text-sm text-muted">
               GitHub stats couldn&apos;t be fetched right now. They refresh
-              daily — check back soon, or browse{" "}
+              hourly — check back soon, or browse{" "}
               <a
                 href={SITE.github}
                 target="_blank"
@@ -137,11 +137,20 @@ export default async function OpenPage() {
             Recognition
           </h2>
           <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+            <Link
+              href="/projects/nightwatch"
+              className="rounded-sm transition-colors hover:text-foreground"
+            >
+              <Stat value="2nd" label="prize, NightWatch at the Codex Community Hackathon, Calicut" />
+            </Link>
             <Stat value="≈3%" label="selected for the Codex Community Hackathon, Bengaluru" />
             <Stat value="2nd" label="place, PRISM at ASIET's AI Innovation Hackathon" />
             <Stat value="2×" label="best semester project — S1 and S3" />
             <Stat value="Top 10" label="of 100 builders, Codex Nightline 2026" />
           </div>
+          <p className="text-sm leading-relaxed text-muted">
+            The Calicut prize: 3 months of ChatGPT Pro and $500 in OpenAI API credits.
+          </p>
         </section>
 
         {/* Academic */}
