@@ -179,9 +179,22 @@ export default function ProjectPage({ params }: Props) {
                 className="h-auto w-full"
               />
             </div>
-            {project.slug === "prism" && (
-              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-                PRISM at the AI Innovation Hackathon · ASIET · August 2026
+            {(project.image.caption || project.slug === "prism") && (
+              <figcaption className="space-y-2 font-mono text-[11px] leading-relaxed text-muted">
+                <span className="block">
+                  {project.image.caption ?? "PRISM at the AI Innovation Hackathon · ASIET · August 2026"}
+                </span>
+                {project.image.caption && (
+                  <a
+                    href={project.image.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block underline decoration-border underline-offset-4 hover:text-foreground"
+                    aria-label={`View full-size image: ${project.image.alt}`}
+                  >
+                    View full-size image
+                  </a>
+                )}
               </figcaption>
             )}
           </figure>

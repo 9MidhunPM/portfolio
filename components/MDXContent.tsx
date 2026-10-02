@@ -1,16 +1,75 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
 import type { MDXComponents } from "mdx/types";
+import { cn } from "@/lib/utils";
+import type { ContentImage } from "@/lib/types";
 
-type PortfolioImageProps = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  caption?: string;
+type PortfolioImageProps = Omit<ContentImage, "width" | "height"> & {
+  width: number | string;
+  height: number | string;
+  size?: "full" | "compact";
+  fullSizeLink?: boolean;
+  className?: string;
+  sizes?: string;
 };
+
+function PortfolioImage({
+  src,
+  alt,
+  width,
+  height,
+  caption,
+  size = "full",
+  fullSizeLink = false,
+  className,
+  sizes,
+}: PortfolioImageProps) {
+  return (
+    <figure
+      className={cn("mt-8 min-w-0 space-y-3", size === "compact" && "max-w-md", className)}
+    >
+      <div className="overflow-hidden rounded-lg border border-border">
+        <Image
+          src={src}
+          alt={alt}
+          width={Number(width)}
+          height={Number(height)}
+          sizes={sizes ?? (size === "compact"
+            ? "(max-width: 639px) calc(100vw - 2.5rem), 448px"
+            : "(max-width: 767px) calc(100vw - 2.5rem), 680px")}
+          className="h-auto w-full"
+        />
+      </div>
+      {(caption || fullSizeLink) && (
+        <figcaption className="space-y-2 font-mono text-[11px] leading-relaxed text-muted">
+          {caption && <span className="block">{caption}</span>}
+          {fullSizeLink && (
+            <a
+              href={src}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`View full-size image: ${alt}`}
+              className="inline-block underline decoration-border underline-offset-4 hover:text-foreground"
+            >
+              View full-size image
+            </a>
+          )}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
+function PortfolioGallery({ children }: { children: ReactNode }) {
+  return (
+    <div className="mt-8 grid min-w-0 items-start gap-6 sm:grid-cols-2 [&>figure]:mt-0">
+      {children}
+    </div>
+  );
+}
 
 const prettyCodeOptions: Partial<Options> = {
   theme: {
@@ -100,25 +159,8 @@ const components: MDXComponents = {
   td: (props) => (
     <td className="border-b border-border px-4 py-2.5 text-muted" {...props} />
   ),
-  PortfolioImage: ({ src, alt, width, height, caption }: PortfolioImageProps) => (
-    <figure className="mt-8 space-y-3">
-      <div className="overflow-hidden rounded-lg border border-border">
-        <Image
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          sizes="(max-width: 768px) calc(100vw - 2.5rem), 680px"
-          className="h-auto w-full"
-        />
-      </div>
-      {caption && (
-        <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-          {caption}
-        </figcaption>
-      )}
-    </figure>
-  ),
+  PortfolioImage,
+  PortfolioGallery,
 };
 
 export function MDXContent({ source }: { source: string }) {

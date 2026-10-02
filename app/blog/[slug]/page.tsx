@@ -159,8 +159,21 @@ export default function BlogPostPage({ params }: Props) {
                   priority
                 />
               </div>
-              <figcaption className="font-mono text-[11px] leading-relaxed text-muted">
-                Field note from Midhun P M&apos;s workbench
+              <figcaption className="space-y-2 font-mono text-[11px] leading-relaxed text-muted">
+                <span className="block">
+                  {post.image.caption ?? "Field note from Midhun P M's workbench"}
+                </span>
+                {post.image.caption && (
+                  <a
+                    href={post.image.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block underline decoration-border underline-offset-4 hover:text-foreground"
+                    aria-label={`View full-size image: ${post.image.alt}`}
+                  >
+                    View full-size image
+                  </a>
+                )}
               </figcaption>
             </figure>
           )}
