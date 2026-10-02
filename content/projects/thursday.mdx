@@ -1,8 +1,8 @@
 ---
 title: "Thursday"
-description: "Thursday is my Linux desktop assistant with visible tool calls, memory, voice, and a Codex project studio. It runs local Vulkan models or a cloud provider."
-updated: "2026-09-29"
-tech: ["Python", "OpenAI", "LLaMA.cpp", "Vulkan", "React", "SQLite", "Codex CLI"]
+description: "Thursday is my Linux desktop copilot with visible tools, task checkpoints, reviewed memory, and Hypruse controls. Local models remain configurable."
+updated: "2026-10-02"
+tech: ["Python", "OpenAI", "Hypruse", "React", "SQLite", "LLaMA.cpp", "Vulkan", "Codex CLI"]
 github: "https://github.com/9MidhunPM/thursday-local-assistant"
 featured: true
 order: 3
@@ -10,37 +10,43 @@ order: 3
 
 ## The problem
 
-Every assistant I used wanted my data in someone else's cloud. My notes, my files, my shell history — all of it flowing through an API I don't control, with rate limits on top. I run quantized 8B models on my Intel Arc GPU via Vulkan for fun anyway, so the obvious question was: how good can a fully local assistant actually get?
+Thursday started with a local-only question: could an assistant do useful work without sending every note and file through a cloud API? I already ran quantized 8B models on my Intel Arc GPU through Vulkan. I wanted that setup to do more than answer questions.
 
 ## What I built
 
-Thursday is a local-first Linux desktop assistant. It talks to any OpenAI-compatible endpoint — llama.cpp on my own machine by default, or cloud providers when I need more capability and accept the trade-off.
+Thursday is my Linux desktop copilot. The current desktop profile uses GPT-6 Luna through OpenAI's Responses API. Local llama.cpp and other compatible providers remain configurable, with the same tools, local memory, and interface.
 
-It's a real tool-using agent, not a chat wrapper:
+Its capabilities are visible in the interface:
 
-- **Files, apps, and shell** — reads and writes inside sandboxed roots, launches apps, runs shell commands behind a denylist policy.
+- **Files, apps, and shell** — reads and writes inside configured roots, launches apps, and runs shell commands through a denylist policy.
+- **Native desktop control** — an optional Hypruse bridge observes Hyprland windows, reads accessible controls, and uses cropped screenshots when text is unavailable.
 - **Desktop and personal workflows** — searches and reviews the web, controls Spotify, drafts Gmail, prepares Calendar changes behind confirmation, and reports live system health.
-- **Memory** — SQLite long-term storage with automatic fact extraction, plus session history. Tell it something once and it remembers across restarts.
+- **Task checkpoints** — preserves delivered tool outcomes, exposes Stop and Resume, and pauses when a task reaches its step or time budget.
+- **Personal memory review** — stores user-grounded facts in SQLite, with controls to inspect, correct, or forget them. Conversation history has a separate lifecycle.
 - **Voice** — Edge TTS for speech out, SpeechRecognition for speech in. Optional, but talking to your machine is fun.
 - **Codex project studio** — turns a brief into an isolated Codex CLI session in its own workspace, with model selection and a visible Kitty terminal as the source of truth.
 
-Two interfaces: a fast CLI for the terminal, and a React web UI over HTTP with server-sent events — streaming tokens, tool cards showing what the agent is doing, and confirmation prompts for dangerous actions. It also has desktop entries, Hyprland hotkeys, and a Quickshell push-to-talk overlay.
+Two interfaces: a CLI and a React web UI over HTTP with server-sent events. The web UI shows streaming responses, tool cards, task progress, memory review, and approval prompts. Desktop entries, Hyprland hotkeys, and a Quickshell push-to-talk overlay keep it close to my normal workflow.
 
 ## Tech decisions
 
-**One OpenAI-compatible abstraction.** Every provider — local llama-server or a dozen cloud APIs — speaks the same protocol. Swapping brains is an env var, not a refactor. The local path runs `llama-server` built with Vulkan support, which is what makes an Intel Arc GPU usable for inference.
+**Separate model transports, shared tools.** OpenAI uses the Responses API; local llama.cpp and compatible providers retain the Chat Completions path. Provider and model selection stay configurable. The local path uses a Vulkan-enabled `llama-server`, which lets me run inference on my Intel Arc GPU.
 
 **Smart tool filtering.** Sending every tool definition every turn eats context fast. Thursday sends only the tools relevant to the current turn, so local models receive a smaller and more useful context.
 
-**Safety by default, not by documentation.** Loopback-only binding unless you explicitly allow remote. Path tools restricted to `read_roots` and `write_roots`. Shell commands go through a denylist, and destructive ones can require a confirmation click in the web UI. An API token guards the port if you expose it. An agent that can touch your filesystem has to earn trust architecturally.
+**Observe, act, then check.** Hypruse uses window identity and accessibility for desktop actions, with screenshots as another source of evidence. After approval, Thursday rechecks the original target before delivering the action. App accessibility varies, so uncertainty can pause a task for review.
+
+**Permissions live in the application.** Filesystem tools use configured read and write roots; shell commands pass through a denylist. Remote binding requires explicit configuration and an API token. The checked-in profile reflects my personal desktop setup; the safe example keeps tighter paths and disables Hypruse.
 
 **Contained Codex workspaces.** Thursday validates project names, launches Codex in a separate workspace with a workspace-write sandbox, and keeps its own provider key out of the child session. Generated work does not silently land inside the assistant source tree.
 
 ## What I learned
 
-Context budget is the whole game with local models. A 7-8B model with smart tool filtering and tight prompts outperforms the same model with a giant system prompt and every tool attached. What you leave out matters more than what you put in.
+Local models taught me to treat context as a budget. Relevant tools and tight prompts were more useful than sending the entire catalog on every turn. That lesson still applies with a cloud model, especially when screenshots and previous tool outcomes share the same request.
 
-I also learned that memory is harder than it looks. Automatic fact extraction sounds simple until the model confidently stores "user's favorite language is Java" because you asked it to debug one Spring Boot file. Extraction needs conservative prompts and easy ways to forget.
+Memory needs evidence and a way to correct mistakes. Asking about a Spring Boot file should not become a permanent claim that Java is my favorite language. Personal facts now require literal user evidence, and the review interface lets me correct or forget them.
+
+Task completion needs the same care. A finished model response is separate from an observed result. Checkpoints preserve what was delivered so a resumed task can continue with that history visible.
 
 ## Taking it to Bengaluru
 
@@ -50,3 +56,4 @@ I brought Thursday to the OpenAI Codex Community Hackathon in Bengaluru in Augus
 
 - [Read the Bengaluru build note](/blog/taking-thursday-to-openai-codex-community-hackathon-bengaluru)
 - [Explore Thursday on GitHub](https://github.com/9MidhunPM/thursday-local-assistant)
+- [Read the desktop copilot release notes](https://github.com/9MidhunPM/thursday-local-assistant/blob/main/docs/COPILOT.md)
