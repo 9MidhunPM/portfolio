@@ -1,0 +1,136 @@
+---
+title: "Building NightWatch: Second Prize at the Codex Community Hackathon, Calicut"
+seoTitle: "NightWatch: Second Prize at Codex Hackathon Calicut"
+date: "2026-10-02"
+updated: "2026-10-02"
+description: "I built NightWatch solo and won Second Prize at Codex Community Hackathon Calicut. The story behind its 3D world, evidence, and approved operations."
+tags: ["ai", "hackathon", "codex", "openai", "devops", "fastapi", "nextjs", "threejs"]
+published: true
+image:
+  src: "/images/nightwatch-world-3d.png"
+  alt: "NightWatch's live 3D infrastructure world showing project islands, service health, domains, and network relationships"
+  width: 1600
+  height: 960
+  caption: "The NightWatch infrastructure world: a spatial view of observed projects, services, routes, and shared networks."
+---
+
+When something breaks on my infrastructure, the explanation rarely lives in one place. Dokploy has the deployment configuration. Docker has the containers. Beszel has the metrics. A domain probe tells me whether the application actually responds. Logs add another piece.
+
+I wanted to bring those pieces together and ask useful questions in plain language. That became **NightWatch**, the project I built solo for the Codex Community Hackathon, Calicut.
+
+It won **🥈 Second Prize**. The prize was **3 months of ChatGPT Pro and $500 in OpenAI API credits**. The result gave me more room to keep building. The design question stayed the same: how can an agent operate real infrastructure while keeping the human in control?
+
+## Building at TinkerSpace
+
+The event took place at **TinkerSpace, Calicut, on 19–20 September 2026**. I participated as an individual builder. Merin Elizabeth Edgar and Vishnupriya M. V were there too, each working on their own project.
+
+I came with a problem from running my own services. Infrastructure tools show different views of the same environment. Putting them beside a chat box would still leave the operator doing the difficult work of connecting evidence to action.
+
+NightWatch needed to carry that context through the entire workflow: understand the current state, investigate a problem, prepare a specific change, and record what happened.
+
+<PortfolioGallery>
+  <PortfolioImage
+    src="/images/codex-calicut-builders.jpeg"
+    alt="Builders working at the Codex Community Hackathon at TinkerSpace, Calicut"
+    width="960"
+    height="1280"
+    sizes="(max-width: 639px) calc(100vw - 2.5rem), (max-width: 1023px) calc((100vw - 5.5rem) / 2), 328px"
+    caption="The Calicut hackathon brought individual builders together at TinkerSpace."
+  />
+  <PortfolioImage
+    src="/images/midhun-pm-codex-calicut-badge.jpeg"
+    alt="Midhun P M's builder badge for Codex Community Hackathon Calicut, dated 19–20 September 2026"
+    width="1204"
+    height="1600"
+    sizes="(max-width: 639px) calc(100vw - 2.5rem), (max-width: 1023px) calc((100vw - 5.5rem) / 2), 328px"
+    caption="My builder badge from the 19–20 September event."
+  />
+</PortfolioGallery>
+
+## A world built from observations
+
+The most visible part of NightWatch is its interactive 3D infrastructure world. Projects appear as islands, with services, health states, domain gateways, and network connections. A 2D view offers another way to read the same information.
+
+The scene starts with a reconciled model of the environment. Dokploy inventory provides project and resource identities. Docker observations help identify running containers. Beszel adds telemetry. Routes and HTTP probes provide independent evidence about public reachability.
+
+Those sources can disagree. A configured service may have no fresh matching telemetry. A running container may sit behind a failing route. NightWatch preserves those distinctions instead of smoothing them into one reassuring green badge.
+
+I have continued refining NightWatch since the hackathon. The architecture and engineering lessons here describe the repository I am sharing today.
+
+## The architecture underneath
+
+The current application has three main layers:
+
+- **Next.js, React, and Three.js** handle the operator interface, the infrastructure world, streamed agent activity, and workflow review.
+- **FastAPI and typed integration adapters** collect observations, reconcile identities, manage incidents, and execute registered infrastructure operations.
+- **SQLite, async SQLAlchemy, and Alembic** preserve evidence, conversations, hypotheses, approvals, and deployment history.
+
+The browser talks to Next.js. Its gateway validates the operator session and proxies allowlisted backend routes. FastAPI holds integration credentials and owns the control plane. The frontend and backend run as separate Dokploy services.
+
+That separation matters when a deployment involves several remote calls. An operation can create a resource and fail during a later configuration step. Persisted workflow state gives the operator a record to inspect before retrying.
+
+Incident records also separate observations from hypotheses. A failed HTTP check is an observation. An explanation for that failure needs supporting evidence. Approval and verification records describe different decisions later in the workflow.
+
+The [architecture notes](https://github.com/9MidhunPM/NightWatch/blob/main/docs/architecture.md) document these boundaries and the reconciliation pipeline in more detail.
+
+## From a question to an approved change
+
+Operator chat uses the Codex app-server with a catalog of typed NightWatch tools. The model can inspect infrastructure, gather evidence, and prepare supported operations. Application code decides which actions exist and when they may run.
+
+A deployment plan includes the repository, branch, Dockerfile, port, domain, and target. Existing-resource operations have their own plans. Each plan records its version, parameters, policy reason, and relevant target state.
+
+The operator approves that exact version. Before executing, NightWatch reads the target again. If the relevant state changed after planning, the operation fails rather than applying an outdated decision.
+
+This was the part I cared about most in my [hackathon announcement](https://www.linkedin.com/posts/midhun-p-m-b947a1279_codex-openai-hackathon-ugcPost-7510949619439222784-4AZR/). The model can reason over operational context, while deterministic code enforces permissions, approvals, and execution.
+
+The outcome needs the same care. General Dokploy operations currently verify that the API accepted the action and the target was read back. Public route health remains separate evidence. Deployment workflows can run HTTP checks after execution, but management acceptance alone does not prove recovery.
+
+## Where the implementation fought back
+
+### Making metrics belong to the right service
+
+Dokploy applications, Compose children, Docker replicas, and Beszel samples do not share one universal identifier. An inventory entry can exist while its runtime metrics appear missing.
+
+I built reconciliation around the identifiers those systems expose. Docker identity helps associate telemetry with the correct resource. Missing or old samples remain unavailable. That gives an investigation a more useful starting point than a fabricated zero or guessed healthy state.
+
+### Learning what “start” means
+
+An idle Dokploy application could stall on the start path because it had no live service to resume. Repeating the request did not fix the lifecycle mismatch.
+
+NightWatch now checks the target state. For an approved application start in an idle or error state, it uses deployment to create the service. The recorded result explains that substitution.
+
+### Testing the data path in a browser
+
+One incident page passed static checks but crashed when real timestamps rendered. The formatter combined incompatible `Intl.DateTimeFormat` options. Replacing them with explicit date and time fields fixed the exception.
+
+That bug changed how I think about validation. A successful build gives useful evidence, but a populated page exercises behavior the build may never touch.
+
+The repository's [engineering story](https://github.com/9MidhunPM/NightWatch/blob/main/docs/engineering.md) records these problems and the code behind the fixes.
+
+## Keeping model work bounded
+
+Continuous monitoring runs without automatically launching an AI investigation for every observation. Manual incident investigation uses a separate OpenAI model with a three-tool-call ceiling, output limits, redacted context, and a timeout.
+
+That makes model cost an architectural decision. Health collection keeps running independently. An investigation can still end with incomplete evidence, and the result needs to say so. A budget limit constrains the work; it does not guarantee a correct diagnosis.
+
+Codex also helped me engineer NightWatch itself: shaping service boundaries, implementing typed contracts, tracing integration mismatches, debugging rendering, and checking deployments. I still had to inspect the returned evidence and correct assumptions. The same discipline belonged inside the product.
+
+## The result, and the next build
+
+Second Prize was a good result for a project rooted in something I deal with on my own infrastructure. The credits and Pro subscription give me fuel for the next build.
+
+<PortfolioImage
+  src="/images/codex-calicut-second-prize.jpeg"
+  alt="Codex Community Hackathon Calicut winners poster listing Midhun P M's NightWatch in second place at TinkerSpace on 19–20 September 2026"
+  width="1024"
+  height="1536"
+  size="compact"
+  fullSizeLink
+  caption="NightWatch placed second, alongside M Mohith's Kea in first and Mohammed Shaad N's Loop in third."
+/>
+
+Thanks to the organisers, judges, fellow builders, TinkerSpace Calicut, OpenAI Codex, and Supabase for the event.
+
+NightWatch remains a private single-operator console. Richer post-action health checks, paginated incident history, and multi-operator roles are future work. The live application requires a passphrase because it controls real infrastructure.
+
+The public [narrated demo](https://drive.google.com/file/d/1TDCbsb495BiY4YK6dNxIdD-WkLR4p85g/view?usp=sharing) shows the investigation and deployment workflow. You can also read the [NightWatch case study](/projects/nightwatch) or [explore the source on GitHub](https://github.com/9MidhunPM/NightWatch).
